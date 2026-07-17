@@ -12,7 +12,7 @@ Their shared job is to identify equipment-side signals that may become product-q
 
 ## Product Purpose
 
-TorqueGuard is a competition prototype for an AI digital employee that proactively manages equipment-related quality risk. It is intentionally limited to one final-assembly critical tightening station so the full loop can be demonstrated with engineering depth.
+质控前哨 is a competition prototype for an AI digital employee that proactively manages equipment-related quality risk. It is intentionally limited to one final-assembly critical tightening station so the full loop can be demonstrated with engineering depth.
 
 The prototype combines layered SPC checks, equipment-health signals, PFMEA and control-plan knowledge, an evidence graph, candidate-cause reasoning, and human-approved task routing. Success means that a reviewer can reproduce a hidden-risk scenario, inspect every piece of evidence behind the risk card, and follow the record through review, action, verification, and closure.
 

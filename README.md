@@ -1,4 +1,4 @@
-# TorqueGuard 矩证
+# 质控前哨
 
 [![Verify prototype](https://github.com/Gikemj/tightening-quality-guardian/actions/workflows/ci.yml/badge.svg)](https://github.com/Gikemj/tightening-quality-guardian/actions/workflows/ci.yml)
 [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-7b2f68)](https://gikemj.github.io/tightening-quality-guardian/)
@@ -8,7 +8,9 @@
 
 > 本仓库是“2026 AI 先锋未来人才大赛”赛力斯集团命题的独立参赛原型。设备、工艺、质量和历史案例均为比赛合成数据，未使用赛力斯内部数据。
 
-![TorqueGuard 风险台账演示](assets/dashboard-preview.png)
+**报名项目：质控前哨｜队伍名称：智造哨兵**
+
+![质控前哨风险台账演示](assets/dashboard-preview.png)
 
 ## 评委快速入口
 
@@ -17,9 +19,17 @@
 - [查看离线验证结果](outputs/metrics.json)，数据、标签和计算脚本均可复现。
 - [查看命题对齐表](docs/competition-alignment.md)，对应知识底座、Graph Retrieval、主动研判、证据链和飞书闭环。
 
+## 与报名材料的口径
+
+报名材料中的项目名称、试点工位和技术路线已在仓库中逐项对应。报名材料给出企业试点目标，仓库记录现阶段原型的离线结果。两类指标分别说明如下：
+
+- 报名材料中的高风险召回率 ≥85%、误报率 ≤15%、平均提前 2 小时和定位时间缩短 30%，均为进入企业带教后的试点验收目标；
+- 仓库中的召回率 94.4%、误报率 3.2%，只来自 P03 合成数据的 49 个滚动窗口，不能外推到真实工厂；
+- 材料提出曲线漂移、传感器失准和重复报警三类验证方向。当前仓库先把规格内漂移做成端到端主场景，标定漂移和历史重复问题已进入知识检索与验证任务，但未作为独立检测成绩报告。
+
 ## 为什么从拧紧工位入手
 
-方案最初考虑过预测设备何时故障。继续拆题后发现，仅判断设备会不会坏，还没有回答设备变化怎样影响整车质量。作为智能车辆工程本科生，我对连接可靠性和装配过程更熟悉，因此把范围收到了总装关键拧紧工位。这个场景的数据链清楚：工具状态影响拧紧过程，过程波动对应紧固质量，处置结果还能回到设备点检和质量追溯。
+选题初期考虑过设备故障预测，但单独判断设备是否失效，无法说明设备变化对整车质量的传导关系。结合智能车辆工程专业背景，原型将范围收敛到总装关键拧紧工位。该场景的数据链清楚：工具状态影响拧紧过程，过程波动对应紧固质量，处置结果回到设备点检和质量追溯记录。
 
 原型只验证一个关键紧固点 P03。演示数据中，扭矩仍在 43–53 N·m 规格内，但最近 24 次同时出现以下变化：
 
@@ -64,6 +74,8 @@ flowchart LR
 ```
 
 Graph Retrieval 从异常对象 P03 和 TOOL-TG-07 开始，只取回当前失效链涉及的节点、关系和文档条目，再与时序信号一起写入风险卡。原型使用可复现的确定性推理器。企业试点可沿用这套证据结构接入 Graph RAG 与受控大模型，同时保留来源定位、权限和人工审批。
+
+![质控前哨知识关系链](assets/knowledge-relationship-preview.png)
 
 详细设计见 [架构说明](docs/architecture.md) 和 [研判方法](docs/method.md)。
 

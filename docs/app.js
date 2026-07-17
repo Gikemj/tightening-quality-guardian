@@ -170,26 +170,139 @@ function renderAgentTrace() {
   });
 }
 
+const graphTypeLabels = {
+  Equipment: "设备",
+  FasteningPoint: "工艺对象",
+  FailureMode: "失效模式",
+  Cause: "候选原因",
+  Action: "验证动作",
+  QualityCharacteristic: "质量特性",
+  Role: "责任角色",
+  Station: "工位",
+};
+
+const graphRelationLabels = {
+  has_equipment: "配备",
+  executes: "执行",
+  controls: "控制",
+  may_cause: "可能导致",
+  affects: "影响",
+  verifies: "验证",
+};
+
+function createRelationNode(node, keyNode = false) {
+  const element = document.createElement("div");
+  element.className = `relation-node${keyNode ? " key-node" : ""}`;
+
+  const type = document.createElement("span");
+  type.textContent = graphTypeLabels[node.type] || node.type;
+  const name = document.createElement("strong");
+  name.textContent = node.name;
+  const id = document.createElement("code");
+  id.textContent = node.id;
+
+  element.append(type, name, id);
+  return element;
+}
+
+function createRelationGroup(nodes, keyNode = false) {
+  const group = document.createElement("div");
+  group.className = "relation-node-group";
+  nodes.filter(Boolean).forEach((node) => group.appendChild(createRelationNode(node, keyNode)));
+  return group;
+}
+
+function createRelationLink(relation) {
+  const link = document.createElement("div");
+  link.className = "relation-link";
+
+  const label = document.createElement("strong");
+  label.textContent = graphRelationLabels[relation] || relation;
+  const code = document.createElement("code");
+  code.textContent = relation;
+  const arrow = document.createElement("span");
+  arrow.className = "relation-arrow";
+  arrow.setAttribute("aria-hidden", "true");
+  arrow.textContent = "→";
+
+  link.append(label, code, arrow);
+  return link;
+}
+
+function appendRelationLane(container, title, note, segments) {
+  const lane = document.createElement("section");
+  lane.className = "relation-lane";
+
+  const heading = document.createElement("header");
+  const headingTitle = document.createElement("strong");
+  headingTitle.textContent = title;
+  const headingNote = document.createElement("span");
+  headingNote.textContent = note;
+  heading.append(headingTitle, headingNote);
+
+  const path = document.createElement("div");
+  path.className = "relation-path";
+  segments.forEach((segment) => {
+    if (segment.relation) {
+      path.appendChild(createRelationLink(segment.relation));
+    } else {
+      path.appendChild(createRelationGroup(segment.nodes, segment.keyNode));
+    }
+  });
+
+  lane.append(heading, path);
+  container.appendChild(lane);
+}
+
 function renderGraph() {
   if (!state.graph) return;
-  const nodes = $("#graph-nodes");
-  nodes.replaceChildren();
-  const typeLabels = {
-    Equipment: "设备",
-    FasteningPoint: "工艺对象",
-    FailureMode: "失效模式",
-    Cause: "候选原因",
-    Action: "验证动作",
-    QualityCharacteristic: "质量特性",
-    Role: "责任角色",
-    Station: "工位",
-  };
-  state.graph.nodes.forEach((node) => {
-    const item = document.createElement("li");
-    item.innerHTML = `<span>${typeLabels[node.type] || node.type}</span><strong>${node.name}</strong><small>${node.id}</small>`;
-    nodes.appendChild(item);
-  });
-  text("#graph-count", `${state.graph.nodes.length} 个节点 · ${state.graph.edges.length} 条关系`);
+  const container = $("#relationship-chain");
+  container.replaceChildren();
+
+  const nodesById = new Map(state.graph.nodes.map((node) => [node.id, node]));
+  const edgesByRelation = (relation) => state.graph.edges.filter((edge) => edge.relation === relation);
+  const firstEdge = (relation) => edgesByRelation(relation)[0];
+  const hasEquipment = firstEdge("has_equipment");
+  const executes = firstEdge("executes");
+  const controls = edgesByRelation("controls");
+  const mayCause = edgesByRelation("may_cause");
+  const affects = firstEdge("affects");
+  const verifies = edgesByRelation("verifies");
+
+  const requiredEdges = [hasEquipment, executes, affects];
+  if (requiredEdges.some((edge) => !edge) || !controls.length || !mayCause.length || !verifies.length) {
+    const empty = document.createElement("p");
+    empty.className = "relation-empty";
+    empty.textContent = "当前子图缺少完整关系，已停止生成推理路径。";
+    container.appendChild(empty);
+    return;
+  }
+
+  appendRelationLane(container, "生产对象", "设备、工艺与质量特性", [
+    { nodes: [nodesById.get(hasEquipment.source)] },
+    { relation: hasEquipment.relation },
+    { nodes: [nodesById.get(hasEquipment.target)] },
+    { relation: executes.relation },
+    { nodes: [nodesById.get(executes.target)], keyNode: true },
+    { relation: controls[0].relation },
+    { nodes: controls.map((edge) => nodesById.get(edge.target)), keyNode: true },
+  ]);
+
+  appendRelationLane(container, "风险解释", "候选原因、失效模式与质量影响", [
+    { nodes: mayCause.map((edge) => nodesById.get(edge.source)) },
+    { relation: mayCause[0].relation },
+    { nodes: [nodesById.get(mayCause[0].target)], keyNode: true },
+    { relation: affects.relation },
+    { nodes: [nodesById.get(affects.target)], keyNode: true },
+  ]);
+
+  appendRelationLane(container, "现场验证", "工具调用与待确认原因一一对应", [
+    { nodes: verifies.map((edge) => nodesById.get(edge.source)), keyNode: true },
+    { relation: verifies[0].relation },
+    { nodes: verifies.map((edge) => nodesById.get(edge.target)) },
+  ]);
+
+  text("#graph-count", `${state.graph.nodes.length} 个节点 · ${state.graph.edges.length} 条关系 · 3 条当前路径`);
 }
 
 function renderMetrics() {

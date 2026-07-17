@@ -1,5 +1,5 @@
 ---
-name: "TorqueGuard 矩证"
+name: "质控前哨"
 description: "面向总装关键拧紧工位的设备质量风险主动管控原型"
 colors:
   calibration-mark: "oklch(0.55 0.15 338)"
@@ -78,13 +78,13 @@ components:
 
 <!-- SEED -->
 
-# Design System: TorqueGuard 矩证
+# Design System: 质控前哨
 
 ## 1. Overview
 
 **Creative North Star: "校准台账"**
 
-TorqueGuard 像一份放在工位旁、可以随时追溯的电子校准台账。白色画布承担大部分面积，信息通过字号、间距、细线和状态标签建立层级。少量玫红色像工程师的校准印记，只用于主操作和当前选中状态；红、黄、绿专门表达风险与处理状态。
+质控前哨像一份放在工位旁、可以随时追溯的电子校准台账。白色画布承担大部分面积，信息通过字号、间距、细线和状态标签建立层级。少量玫红色像工程师的校准印记，只用于主操作和当前选中状态；红、黄、绿专门表达风险与处理状态。
 
 参考 Linear 的层级克制、Grafana Explore 的证据密度，以及 Bosch Rexroth 工业界面的操作确定性。拒绝赛博霓虹大屏、装饰性工厂照片和把所有能力塞进聊天窗口的做法。
 

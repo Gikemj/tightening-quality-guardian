@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "CASE-DEMO-017",
+    "title": "角度离散与重试同步上升",
+    "cause_ids": ["C-SOCKET-WEAR"],
+    "summary": "模拟历史案例中，扭矩仍在规格内，但角度离散和重试率连续上升。更换磨损套筒后恢复基线。",
+    "verification": "备件对比拧紧 10 次，角度标准差恢复至基线 1.2 倍以内。",
+    "source_note": "比赛合成案例，不代表赛力斯真实记录"
+  },
+  {
+    "case_id": "CASE-DEMO-026",
+    "title": "标定临期叠加扭矩均值偏移",
+    "cause_ids": ["C-CAL-DRIFT"],
+    "summary": "模拟历史案例中，工具临近标定日期且扭矩均值连续偏移。标准器复核发现输出偏差。",
+    "verification": "复核标定后以标准件完成重复性确认。",
+    "source_note": "比赛合成案例，不代表赛力斯真实记录"
+  },
+  {
+    "case_id": "CASE-DEMO-031",
+    "title": "连接件批次摩擦特性变化",
+    "cause_ids": ["C-BATCH-FRICTION"],
+    "summary": "模拟历史案例中，新批次连接件出现角度分布变化，批次对照后确认表面状态存在差异。",
+    "verification": "按批次抽样检查表面状态，并完成上一合格批次对照。",
+    "source_note": "比赛合成案例，不代表赛力斯真实记录"
+  }
+]

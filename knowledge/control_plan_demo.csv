@@ -1,0 +1,6 @@
+control_plan_id,fastening_point,tool_id,quality_characteristic,torque_target_nm,torque_lsl_nm,torque_usl_nm,angle_target_deg,angle_lsl_deg,angle_usl_deg,classification,sample_strategy,reaction_plan
+CP-TG-P01,P01,TOOL-TG-07,安装扭矩与角度,32,28,36,82,68,96,important,设备100%记录+班次抽检,"越限时锁定结果并由质量工程师确认；趋势异常时点检工具、抽检产品并追溯批次"
+CP-TG-P02,P02,TOOL-TG-07,安装扭矩与角度,40,35,45,90,75,105,important,设备100%记录+班次抽检,"越限时锁定结果并由质量工程师确认；趋势异常时点检工具、抽检产品并追溯批次"
+CP-TG-P03,P03,TOOL-TG-07,关键连接预紧力,48,43,53,95,80,110,safety_critical,设备100%记录+加强抽检,"工程师复核后决定点检、抽检、批次追溯及是否扩大隔离；系统不得自动停线或改写PLC参数"
+CP-TG-P04,P04,TOOL-TG-07,安装扭矩与角度,56,50,62,104,88,120,important,设备100%记录+班次抽检,"越限时锁定结果并由质量工程师确认；趋势异常时点检工具、抽检产品并追溯批次"
+CP-TG-P05,P05,TOOL-TG-07,安装扭矩与角度,64,57,71,112,95,129,important,设备100%记录+班次抽检,"越限时锁定结果并由质量工程师确认；趋势异常时点检工具、抽检产品并追溯批次"

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="TorqueGuard 矩证：主动管控拧紧设备质量风险的比赛原型。" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>TorqueGuard 矩证｜设备质量风险数字员工</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="TorqueGuard 矩证首页">
+        <span class="brand-mark" aria-hidden="true">矩</span>
+        <span><strong>TorqueGuard 矩证</strong><small>设备质量风险数字员工</small></span>
+      </a>
+      <div class="topbar-meta">
+        <span class="demo-badge">比赛合成数据</span>
+        <a href="https://github.com/Gikemj/tightening-quality-guardian">查看 GitHub</a>
+      </div>
+    </header>
+
+    <div class="app-shell" id="top">
+      <aside class="sidebar" aria-label="页面导航">
+        <div class="station-context">
+          <span>当前验证对象</span>
+          <strong>ST-FAS-07 · P03</strong>
+          <small>总装关键拧紧工位（模拟）</small>
+        </div>
+        <nav>
+          <a class="active" href="#overview">风险总览</a>
+          <a href="#signals">异常信号</a>
+          <a href="#evidence">证据链</a>
+          <a href="#knowledge">知识子图</a>
+          <a href="#workflow">任务闭环</a>
+          <a href="#evaluation">离线验证</a>
+        </nav>
+        <div class="sidebar-note">
+          <strong>安全边界</strong>
+          <p>只读分析。停线、隔离、参数修改和根因确认均需工程师批准。</p>
+        </div>
+      </aside>
+
+      <main id="main-content">
+        <section class="hero" id="overview" aria-labelledby="main-title">
+          <div class="hero-copy">
+            <div class="breadcrumb">风险台账 / TG-0519ED0B</div>
+            <div class="title-line">
+              <h1 id="main-title">规格内，也可能正在失稳</h1>
+              <span id="risk-chip" class="risk-chip risk-high">高风险</span>
+            </div>
+            <p id="main-lead">P03 紧固点没有出现批量越限，但扭矩中心、角度离散和重试行为同时变化。数字员工已关联 PFMEA、控制计划和相似案例，等待工程师确认。</p>
+            <div class="hero-actions">
+              <button class="button primary" id="inject-risk" type="button">重放风险识别</button>
+              <button class="button secondary" id="reset-baseline" type="button">恢复基线窗口</button>
+            </div>
+            <p class="load-state" id="load-state" aria-live="polite">正在载入可复现演示数据…</p>
+          </div>
+          <aside class="score-panel" aria-label="动态风险排序指数">
+            <span>动态风险排序指数</span>
+            <div><strong id="risk-score">78</strong><small>/100</small></div>
+            <p>用于运行期排队，不替代正式 PFMEA 的 S/O/D 或 RPN。</p>
+          </aside>
+        </section>
+
+        <section class="metric-strip" aria-label="当前风险摘要">
+          <div><span>处置状态</span><strong id="metric-state">需工程师复核</strong><small>状态由责任人确认</small></div>
+          <div><span>均值偏移</span><strong id="metric-shift">1.56σ</strong><small>基线：前 60 次</small></div>
+          <div><span>规格内比例</span><strong id="metric-in-spec">100%</strong><small>并非批量越限</small></div>
+          <div><span>最近重试</span><strong id="metric-retry">0.250 次/循环</strong><small>与角度离散同步</small></div>
+        </section>
+
+        <section class="section-block" id="signals" aria-labelledby="signals-title">
+          <div class="section-heading">
+            <div><span class="section-kicker">主动感知</span><h2 id="signals-title">组合信号先于设备报警出现</h2></div>
+            <p>扭矩没有越限，但中心位置在上移，角度波动和重试也同时增加。把这些信号放在一起，能比单点越限更早看到风险。</p>
+          </div>
+          <div class="signal-grid">
+            <article class="panel chart-panel">
+              <div class="panel-heading">
+                <div><span>扭矩趋势 · P03</span><strong id="chart-latest">49.42 N·m</strong></div>
+                <div class="chart-legend"><span class="legend-line"></span>量测值 <span class="legend-base"></span>基线 48 N·m</div>
+              </div>
+              <svg class="trend-chart" viewBox="0 0 960 340" role="img" aria-labelledby="chart-title chart-desc">
+                <title id="chart-title">P03 紧固点扭矩趋势</title>
+                <desc id="chart-desc">最近窗口的扭矩值全部位于 43 至 53 牛米规格内，但末段均值逐步上移。</desc>
+                <g transform="translate(58 28)">
+                  <line class="grid-line" x1="0" x2="880" y1="0" y2="0"></line>
+                  <line class="grid-line" x1="0" x2="880" y1="65" y2="65"></line>
+                  <line class="grid-line" x1="0" x2="880" y1="130" y2="130"></line>
+                  <line class="grid-line" x1="0" x2="880" y1="195" y2="195"></line>
+                  <line class="grid-line" x1="0" x2="880" y1="260" y2="260"></line>
+                  <rect id="risk-zone" class="risk-zone" x="620" y="0" width="260" height="260"></rect>
+                  <line id="baseline-line" class="baseline-line" x1="0" x2="880" y1="130" y2="130"></line>
+                  <path id="torque-line" class="torque-line" d=""></path>
+                  <text class="axis-label" x="-14" y="5" text-anchor="end">53</text>
+                  <text class="axis-label" x="-14" y="135" text-anchor="end">48</text>
+                  <text class="axis-label" x="-14" y="265" text-anchor="end">43</text>
+                  <text class="axis-caption" x="0" y="298">较早</text>
+                  <text class="axis-caption" x="880" y="298" text-anchor="end">最近</text>
+                </g>
+              </svg>
+              <div class="chart-foot"><span>当前分析窗口：<strong id="chart-window">14:34–15:20</strong></span><span>规格：43–53 N·m</span></div>
+            </article>
+            <aside class="panel signal-summary">
+              <div class="panel-heading"><span>机器可读摘要</span><span class="source-tag">RULE + DATA</span></div>
+              <p id="signal-summary">最近 24 次扭矩均值偏移 1.56σ，角度离散为基线的 2.17 倍，重试均值升至 0.250 次/循环。测量值仍有 100% 位于规格内。</p>
+              <dl class="compact-dl">
+                <div><dt>触发规则</dt><dd>MW-24 滚动均值偏移</dd></div>
+                <div><dt>设备上下文</dt><dd>标定到期前 9 天</dd></div>
+                <div><dt>产品影响</dt><dd>PFMEA S=9</dd></div>
+                <div><dt>需要补证</dt><dd>套筒、标准器、物料批次</dd></div>
+              </dl>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section-block" id="risk-analysis" aria-labelledby="risk-title">
+          <div class="section-heading">
+            <div><h2 id="risk-title">风险分数只决定处理顺序</h2></div>
+            <p>正式 PFMEA 不由模型改写。动态指数只把过程、设备、质量影响和上下文放在同一张风险卡中。</p>
+          </div>
+          <div class="analysis-grid">
+            <article class="panel">
+              <h3>评分构成</h3>
+              <div id="score-breakdown" class="score-breakdown"></div>
+            </article>
+            <article class="panel inference-panel">
+              <div class="fact-label">模型推断</div>
+              <h3>设备与过程信号可能指向同一项质量风险</h3>
+              <p>优先验证套筒磨损与工具标定漂移，同时保留连接件批次差异这一替代假设。</p>
+              <div class="uncertainty"><strong>不能直接下结论：</strong> 当前结果只能生成候选原因和验证路径，根因由现场工程师确认。</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block" id="evidence" aria-labelledby="evidence-title">
+          <div class="section-heading">
+            <div><h2 id="evidence-title">风险卡保留数据和文件出处</h2></div>
+            <button class="button text-button" id="copy-card" type="button">复制风险卡 JSON</button>
+          </div>
+          <div id="evidence-list" class="evidence-list"></div>
+
+          <div class="table-wrap cause-wrap">
+            <div class="table-heading"><h3>候选原因与验证路径</h3><span>根因待现场验证</span></div>
+            <table>
+              <thead><tr><th>候选原因</th><th>置信度</th><th>依据</th><th>现场验证</th></tr></thead>
+              <tbody id="cause-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section-block" id="knowledge" aria-labelledby="knowledge-title">
+          <div class="section-heading">
+            <div><span class="section-kicker">Graph Retrieval</span><h2 id="knowledge-title">只检索与当前异常相连的知识子图</h2></div>
+            <p id="graph-count">正在读取子图…</p>
+          </div>
+          <div class="knowledge-layout">
+            <article class="panel">
+              <h3>本次推理上下文</h3>
+              <ol class="knowledge-nodes" id="graph-nodes"></ol>
+            </article>
+            <article class="panel graph-note">
+              <h3>知识子图怎样参与研判</h3>
+              <p>检索从 P03 和 TOOL-TG-07 开始，只沿当前失效链查找 PFMEA、控制计划和历史案例。取回内容与最近 24 次时序数据一起写入风险卡，再用于生成验证任务。</p>
+              <dl class="compact-dl">
+                <div><dt>查询起点</dt><dd>P03 + TOOL-TG-07</dd></div>
+                <div><dt>文档证据</dt><dd>PFMEA、控制计划、历史案例</dd></div>
+                <div><dt>动作约束</dt><dd>人工审批、来源定位、结案回写</dd></div>
+              </dl>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block" id="workflow" aria-labelledby="workflow-title">
+          <div class="section-heading">
+            <div><h2 id="workflow-title">工程师确认后生成点检与追溯任务</h2></div>
+            <div class="workflow-action">
+              <span id="workflow-status" tabindex="-1" aria-live="polite">等待工程师确认</span>
+              <button class="button primary" id="create-task" type="button">人工确认并生成任务预览</button>
+            </div>
+          </div>
+
+          <ol class="agent-trace" id="agent-trace" aria-label="数字员工执行轨迹"></ol>
+
+          <div class="table-wrap task-wrap">
+            <table>
+              <thead><tr><th>编号</th><th>任务与验收依据</th><th>责任角色</th><th>时限</th><th>状态</th></tr></thead>
+              <tbody id="task-table-body"></tbody>
+            </table>
+          </div>
+          <p class="integration-note">演示按钮只生成飞书多维表格字段预览，不会发送网络请求。真实接入需由企业提供应用权限、字段映射和审批策略。</p>
+        </section>
+
+        <section class="section-block" id="evaluation" aria-labelledby="evaluation-title">
+          <div class="section-heading">
+            <div><h2 id="evaluation-title">当前只验证 P03 规格内漂移场景</h2></div>
+            <p id="eval-samples">49 个滚动窗口</p>
+          </div>
+          <div class="evaluation-grid">
+            <div><span>场景召回率</span><strong id="eval-recall">94.4%</strong><small>合成标签</small></div>
+            <div><span>误报率</span><strong id="eval-fpr">3.2%</strong><small>正常滚动窗口</small></div>
+            <div><span>证据可追溯率</span><strong id="eval-trace">100%</strong><small>来源 + 定位字段</small></div>
+          </div>
+          <div class="limitation-note">
+            <strong>这些数字不能外推到真实工厂。</strong>
+            <p>结果只说明仓库内的模拟场景可以复现、检测和生成完整风险卡。真实试点需要按车型、程序号和紧固点重新分层，并用企业数据校准阈值。</p>
+          </div>
+        </section>
+
+        <footer>
+          <div>
+            <strong>TorqueGuard 矩证</strong>
+            <p>智能车辆工程本科生的比赛原型。非赛力斯官方产品，未使用赛力斯内部数据。</p>
+          </div>
+          <div class="footer-links">
+            <a href="https://activity.feishu.cn/future-talent?detail=sailisijituan">官方命题页</a>
+            <a href="https://github.com/Gikemj/tightening-quality-guardian">源码与复现说明</a>
+          </div>
+        </footer>
+      </main>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

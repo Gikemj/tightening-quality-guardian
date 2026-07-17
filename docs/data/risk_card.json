@@ -1,0 +1,204 @@
+{
+  "card_id": "TG-0519ED0B",
+  "created_at": "2026-07-14T15:20:00+08:00",
+  "station_id": "ST-FAS-07",
+  "tool_id": "TOOL-TG-07",
+  "fastening_point": "P03",
+  "risk_level": "high",
+  "risk_score": 78,
+  "status": "awaiting_engineer_review",
+  "observed_facts": [
+    "最近 24 次拧紧均值为 49.09 N·m，较基线偏移 1.56σ",
+    "拧紧角度离散度为基线的 2.17 倍",
+    "重试均值由 0.010 次/循环升至 0.250 次/循环",
+    "本窗口规格内比例为 100.0%，当前问题属于趋势风险而非批量越限"
+  ],
+  "inference": "设备与过程信号出现同向变化，且与 PFMEA 中的预紧力不稳定失效链相连。系统将其列为需要优先验证的设备质量风险，但不直接确认根因。",
+  "uncertainty": "当前结论来自合成数据与规则验证；套筒状态、工具标定和零件批次需要现场检查后才能排除。",
+  "affected_scope": {
+    "model_code": [
+      "DEMO-A"
+    ],
+    "program_id": [
+      "PGM-A-07"
+    ],
+    "batch_ids": [
+      "BATCH-DEMO-04"
+    ],
+    "window_start": "2026-07-14T14:34:00",
+    "window_end": "2026-07-14T15:20:00",
+    "event_count": 24
+  },
+  "score_breakdown": {
+    "process_stability": 22,
+    "equipment_health": 21,
+    "quality_impact": 22,
+    "context": 13
+  },
+  "evidence": [
+    {
+      "evidence_id": "E-SPC-01",
+      "category": "spc",
+      "title": "扭矩过程中心偏移",
+      "observation": "均值偏移 1.56σ；MW-24 最近 24 点均值偏移超过 1.2σ",
+      "source": "tightening_events_demo.csv",
+      "locator": "EVT-00497..EVT-00520",
+      "strength": "direct",
+      "data": {
+        "baseline_mean_nm": 48.126,
+        "baseline_sigma_nm": 0.617,
+        "recent_mean_nm": 49.086,
+        "recent_cpk": 2.244,
+        "in_spec_rate": 1.0,
+        "rule_ids": [
+          "MW-24"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E-EQP-02",
+      "category": "equipment",
+      "title": "角度离散与重试同步上升",
+      "observation": "角度标准差比值 2.17；重试 0.010 → 0.250 次/循环",
+      "source": "tightening_events_demo.csv",
+      "locator": "tool=TOOL-TG-07, point=P03",
+      "strength": "direct",
+      "data": {
+        "angle_std_ratio": 2.17,
+        "retry_recent": 0.25
+      }
+    },
+    {
+      "evidence_id": "E-KNW-03",
+      "category": "pfmea",
+      "title": "关键连接预紧力不稳定",
+      "observation": "严重度 S=9；影响：连接可靠性下降并产生潜在安全风险",
+      "source": "pfmea_demo.csv",
+      "locator": "FM-PRELOAD-UNSTABLE",
+      "strength": "document",
+      "data": {
+        "cause_ids": [
+          "C-SOCKET-WEAR",
+          "C-CAL-DRIFT",
+          "C-BATCH-FRICTION"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E-CTL-04",
+      "category": "control_plan",
+      "title": "控制计划要求",
+      "observation": "工程师复核后决定点检、抽检、批次追溯及是否扩大隔离；系统不得自动停线或改写PLC参数",
+      "source": "control_plan_demo.csv",
+      "locator": "CP-TG-P03",
+      "strength": "document",
+      "data": {
+        "calibration_days_remaining": 9
+      }
+    },
+    {
+      "evidence_id": "E-HIS-05",
+      "category": "history",
+      "title": "相似历史案例",
+      "observation": "模拟历史案例中，扭矩仍在规格内，但角度离散和重试率连续上升。更换磨损套筒后恢复基线。",
+      "source": "historical_cases.json",
+      "locator": "CASE-DEMO-017",
+      "strength": "analogy",
+      "data": {
+        "similarity_basis": "shared_cause_id"
+      }
+    }
+  ],
+  "candidate_causes": [
+    {
+      "cause": "套筒或批头磨损",
+      "confidence": "high",
+      "basis": [
+        "角度离散增大",
+        "重试率上升",
+        "PFMEA C-SOCKET-WEAR"
+      ],
+      "verification": "检查套筒磨损量和同心度，并以合格备件完成 10 次对比拧紧。"
+    },
+    {
+      "cause": "工具标定漂移",
+      "confidence": "medium-high",
+      "basis": [
+        "距标定到期 9 天",
+        "扭矩均值持续同向偏移",
+        "PFMEA C-CAL-DRIFT"
+      ],
+      "verification": "使用标准扭矩测试仪完成 5 点重复性检查，不在系统内自动修改工具参数。"
+    },
+    {
+      "cause": "连接件批次摩擦特性变化",
+      "confidence": "medium",
+      "basis": [
+        "角度与扭矩关系变化",
+        "当前窗口涉及单一物料批次"
+      ],
+      "verification": "对当前批次抽样复核表面状态、涂层和螺纹，并与上一合格批次做对照。"
+    }
+  ],
+  "recommended_actions": [
+    {
+      "action_id": "A-01",
+      "title": "复核工具标定与套筒状态",
+      "owner_role": "设备工程师",
+      "due_minutes": 30,
+      "approval_required": true,
+      "acceptance_criteria": "上传标定结果、套筒照片和对比拧紧记录"
+    },
+    {
+      "action_id": "A-02",
+      "title": "对风险窗口车辆执行紧固点抽检",
+      "owner_role": "质量工程师",
+      "due_minutes": 45,
+      "approval_required": true,
+      "acceptance_criteria": "记录抽检 VIN 脱敏编号、扭矩复核结果和判定"
+    },
+    {
+      "action_id": "A-03",
+      "title": "追溯物料批次并与上一合格批次对比",
+      "owner_role": "工艺质量工程师",
+      "due_minutes": 60,
+      "approval_required": true,
+      "acceptance_criteria": "完成批次差异表并排除或保留批次假设"
+    },
+    {
+      "action_id": "A-04",
+      "title": "工程师评审后决定是否扩大隔离范围",
+      "owner_role": "生产质量负责人",
+      "due_minutes": 90,
+      "approval_required": true,
+      "acceptance_criteria": "工程师复核后决定点检、抽检、批次追溯及是否扩大隔离；系统不得自动停线或改写PLC参数"
+    }
+  ],
+  "agent_trace": [
+    {
+      "step": "sense",
+      "tool": "read_events",
+      "result": "读取 820 条合成拧紧记录"
+    },
+    {
+      "step": "detect",
+      "tool": "spc_rules",
+      "result": "检查过程中心、趋势、离散与重试变化"
+    },
+    {
+      "step": "retrieve",
+      "tool": "knowledge_subgraph",
+      "result": "检索 PFMEA、控制计划和相似历史案例"
+    },
+    {
+      "step": "reason",
+      "tool": "risk_analyzer",
+      "result": "形成 high 风险卡，评分 78"
+    },
+    {
+      "step": "act",
+      "tool": "task_payload",
+      "result": "生成待人工确认的点检、抽检和追溯任务"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "torque-guard-ontology-v0.1",
+  "note": "All nodes and relations are synthetic competition examples.",
+  "nodes": [
+    {"id": "ST-FAS-07", "type": "Station", "name": "总装关键拧紧工位（模拟）"},
+    {"id": "TOOL-TG-07", "type": "Equipment", "name": "电动拧紧工具（模拟）"},
+    {"id": "P03", "type": "FasteningPoint", "name": "关键紧固点 P03"},
+    {"id": "QC-TORQUE", "type": "QualityCharacteristic", "name": "安装扭矩"},
+    {"id": "QC-ANGLE", "type": "QualityCharacteristic", "name": "拧紧角度"},
+    {"id": "FM-PRELOAD-UNSTABLE", "type": "FailureMode", "name": "关键连接预紧力不稳定"},
+    {"id": "C-SOCKET-WEAR", "type": "Cause", "name": "套筒或批头磨损"},
+    {"id": "C-CAL-DRIFT", "type": "Cause", "name": "工具标定漂移"},
+    {"id": "C-BATCH-FRICTION", "type": "Cause", "name": "连接件批次摩擦特性变化"},
+    {"id": "A-CAL-CHECK", "type": "Action", "name": "标准器复核"},
+    {"id": "A-SOCKET-CHECK", "type": "Action", "name": "套筒状态检查"},
+    {"id": "A-BATCH-COMPARE", "type": "Action", "name": "批次对照抽检"},
+    {"id": "ROLE-EQUIPMENT", "type": "Role", "name": "设备工程师"},
+    {"id": "ROLE-QUALITY", "type": "Role", "name": "质量工程师"}
+  ],
+  "edges": [
+    {"source": "ST-FAS-07", "relation": "has_equipment", "target": "TOOL-TG-07"},
+    {"source": "TOOL-TG-07", "relation": "executes", "target": "P03"},
+    {"source": "P03", "relation": "controls", "target": "QC-TORQUE"},
+    {"source": "P03", "relation": "controls", "target": "QC-ANGLE"},
+    {"source": "FM-PRELOAD-UNSTABLE", "relation": "affects", "target": "QC-TORQUE"},
+    {"source": "C-SOCKET-WEAR", "relation": "may_cause", "target": "FM-PRELOAD-UNSTABLE"},
+    {"source": "C-CAL-DRIFT", "relation": "may_cause", "target": "FM-PRELOAD-UNSTABLE"},
+    {"source": "C-BATCH-FRICTION", "relation": "may_cause", "target": "FM-PRELOAD-UNSTABLE"},
+    {"source": "A-SOCKET-CHECK", "relation": "verifies", "target": "C-SOCKET-WEAR"},
+    {"source": "A-CAL-CHECK", "relation": "verifies", "target": "C-CAL-DRIFT"},
+    {"source": "A-BATCH-COMPARE", "relation": "verifies", "target": "C-BATCH-FRICTION"},
+    {"source": "ROLE-EQUIPMENT", "relation": "owns", "target": "A-CAL-CHECK"},
+    {"source": "ROLE-EQUIPMENT", "relation": "owns", "target": "A-SOCKET-CHECK"},
+    {"source": "ROLE-QUALITY", "relation": "owns", "target": "A-BATCH-COMPARE"}
+  ]
+}

@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "TorqueGuard 矩证"
+message: "If you reuse this competition prototype, cite this repository."
+type: software
+authors:
+  - name: "TorqueGuard contributors"
+version: 0.1.0
+date-released: 2026-07-17
+license: MIT
+repository-code: "https://github.com/Gikemj/tightening-quality-guardian"
+url: "https://gikemj.github.io/tightening-quality-guardian/"

@@ -1,0 +1,5 @@
+alarm_code,source,meaning,quality_link,recommended_check
+ALM-210,controller,扭矩上升速率异常,可能与摩擦或工具输出变化有关,检查套筒与连接件批次
+ALM-314,tool,传感器零点偏移,可能导致量测偏差,执行标准器复核并检查标定状态
+ALM-421,controller,程序号不匹配,可能造成错误参数窗口,核对车型程序和防错联锁
+ALM-507,tool,连续重试次数过多,可能存在对中或套筒磨损,检查套筒同心度和工件定位

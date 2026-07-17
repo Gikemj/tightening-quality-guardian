@@ -1,0 +1,33 @@
+name: Verify prototype
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Rebuild deterministic demo artifacts
+        run: |
+          PYTHONPATH=src python scripts/generate_demo_data.py
+          PYTHONPATH=src python scripts/build_demo_assets.py
+          PYTHONPATH=src python scripts/evaluate.py
+      - name: Run Python tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Run browser-engine tests
+        run: node --test tests/web-engine.test.mjs
+      - name: Audit public artifacts and safety boundaries
+        run: python scripts/audit_repository.py
+      - name: Verify generated artifacts are committed
+        run: git diff --exit-code -- data docs/data outputs

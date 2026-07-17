@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-17T00:00:00+08:00",
+  "title": "Design System: TorqueGuard 矩证",
+  "extensions": {
+    "colorMeta": {
+      "calibration-mark": {
+        "role": "primary",
+        "displayName": "校准印记",
+        "canonical": "oklch(0.55 0.15 338)",
+        "tonalRamp": ["oklch(0.18 0.07 338)", "oklch(0.28 0.10 338)", "oklch(0.40 0.13 338)", "oklch(0.55 0.15 338)", "oklch(0.66 0.13 338)", "oklch(0.76 0.10 338)", "oklch(0.87 0.06 338)", "oklch(0.95 0.025 338)"]
+      },
+      "equipment-ink": {
+        "role": "secondary",
+        "displayName": "设备墨蓝",
+        "canonical": "oklch(0.34 0.08 220)",
+        "tonalRamp": ["oklch(0.16 0.04 220)", "oklch(0.24 0.06 220)", "oklch(0.34 0.08 220)", "oklch(0.46 0.08 220)", "oklch(0.58 0.07 220)", "oklch(0.70 0.055 220)", "oklch(0.84 0.035 220)", "oklch(0.95 0.015 220)"]
+      },
+      "canvas": {"role": "neutral", "displayName": "画布白", "canonical": "oklch(1 0 0)", "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.28 0 0)", "oklch(0.42 0 0)", "oklch(0.56 0 0)", "oklch(0.70 0 0)", "oklch(0.82 0 0)", "oklch(0.92 0 0)", "oklch(1 0 0)"]}
+    },
+    "typographyMeta": {
+      "headline": {"displayName": "Headline", "purpose": "页面标题与当前风险名称。"},
+      "body": {"displayName": "Body", "purpose": "业务说明和证据摘要。"},
+      "data": {"displayName": "Data", "purpose": "量测值、规则号、批次和时间。"}
+    },
+    "shadows": [
+      {"name": "popover", "value": "0 4px 8px oklch(0.19 0.01 320 / 0.12)", "purpose": "临时浮层。"},
+      {"name": "focus", "value": "0 0 0 3px oklch(0.55 0.15 338 / 0.24)", "purpose": "键盘焦点。"}
+    ],
+    "motion": [
+      {"name": "state", "value": "180ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "控件和状态变化。"}
+    ],
+    "breakpoints": [
+      {"name": "compact", "value": "760px"},
+      {"name": "wide", "value": "1180px"}
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "用于注入演示场景或确认任务。",
+      "html": "<button class=\"ds-btn-primary\">注入漂移场景</button>",
+      "css": ".ds-btn-primary{border:0;border-radius:8px;background:oklch(0.55 0.15 338);color:white;padding:10px 16px;font:600 12px/1.35 Inter,system-ui,sans-serif;transition:transform 180ms cubic-bezier(.22,1,.36,1),background 180ms}.ds-btn-primary:hover{background:oklch(0.49 0.15 338);transform:translateY(-1px)}.ds-btn-primary:focus-visible{outline:0;box-shadow:0 0 0 3px oklch(0.55 0.15 338 / .24)}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "用于查看证据和次级动作。",
+      "html": "<button class=\"ds-btn-secondary\">查看证据链</button>",
+      "css": ".ds-btn-secondary{border:1px solid oklch(0.88 0.01 320);border-radius:8px;background:white;color:oklch(0.19 0.01 320);padding:10px 16px;font:600 12px/1.35 Inter,system-ui,sans-serif}.ds-btn-secondary:hover{background:oklch(0.965 0 0)}.ds-btn-secondary:focus-visible{outline:0;box-shadow:0 0 0 3px oklch(0.55 0.15 338 / .24)}"
+    },
+    {
+      "name": "Risk Chip",
+      "kind": "chip",
+      "refersTo": "risk-chip-high",
+      "description": "颜色和文字共同表达风险。",
+      "html": "<span class=\"ds-risk-high\">高风险</span>",
+      "css": ".ds-risk-high{display:inline-flex;align-items:center;border-radius:999px;background:oklch(0.50 0.18 25);color:white;padding:4px 9px;font:600 12px/1.35 Inter,system-ui,sans-serif}"
+    },
+    {
+      "name": "Evidence Card",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "标明证据类型、来源和定位信息。",
+      "html": "<article class=\"ds-evidence\"><small>SPC RULE · WE-04</small><strong>连续 8 点位于中心线同侧</strong><p>来源：P03 扭矩序列，12:14–12:21</p></article>",
+      "css": ".ds-evidence{max-width:360px;border:1px solid oklch(0.88 0.01 320);border-radius:12px;background:white;color:oklch(0.19 0.01 320);padding:16px;font:400 14px/1.55 Inter,system-ui,sans-serif}.ds-evidence small{display:block;color:oklch(0.34 0.08 220);font:600 11px/1.35 ui-monospace,monospace}.ds-evidence strong{display:block;margin-top:6px}.ds-evidence p{margin:8px 0 0;color:oklch(0.46 0.015 320);font-size:12px}"
+    },
+    {
+      "name": "Station Select",
+      "kind": "input",
+      "description": "常规筛选控件。",
+      "html": "<label class=\"ds-field\"><span>验证场景</span><select><option>扭矩均值缓慢漂移</option></select></label>",
+      "css": ".ds-field{display:grid;gap:6px;color:oklch(0.46 0.015 320);font:600 12px/1.35 Inter,system-ui,sans-serif}.ds-field select{min-height:40px;border:1px solid oklch(0.88 0.01 320);border-radius:8px;background:white;color:oklch(0.19 0.01 320);padding:0 12px;font:400 14px/1.4 Inter,system-ui,sans-serif}.ds-field select:focus-visible{outline:0;border-color:oklch(0.55 0.15 338);box-shadow:0 0 0 3px oklch(0.55 0.15 338 / .24)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "校准台账",
+    "overview": "TorqueGuard 像一份放在工位旁、可以随时追溯的电子校准台账。白色画布承担大部分面积，少量玫红色像工程师的校准印记。风险、推断、人工审批和结案状态使用不同的视觉语法。",
+    "keyCharacteristics": ["数据先于结论，证据可展开、可定位。", "高密度但不拥挤。", "风险、推断、人工审批和结案状态边界明确。", "动效只解释状态变化。"],
+    "rules": [
+      {"name": "Signal Color", "body": "红、黄、绿只表示风险或处置状态；校准印记色只表示交互与选择。", "section": "colors"},
+      {"name": "Measured Number", "body": "数字不能只显示结果；数值、单位、基线或阈值至少同时出现两项。", "section": "typography"},
+      {"name": "Flat Ledger", "body": "常规内容平铺在同一工作面上；阴影表示临时浮层或当前焦点。", "section": "elevation"}
+    ],
+    "dos": ["Do 让每条风险结论回到具体数据点、规则编号、文档条目或历史案例。", "Do 把已观测事实、候选原因、建议动作、人工决定分区呈现。", "Do 明确标注比赛合成数据和非赛力斯官方系统。"],
+    "donts": ["Don't 做成一个没有任务闭环的通用 AI 聊天窗口。", "Don't 使用赛博霓虹、暗色大屏或装饰性工厂照片。", "Don't 暗示系统会自动停线、修改 PLC 参数或替工程师确认根因。", "Don't 写未经验证的效果数字，也不要暗示使用赛力斯内部数据。"]
+  }
+}

@@ -1,0 +1,6 @@
+pfmea_id,fastening_point,failure_mode_id,failure_mode,effect,severity,cause_ids,current_controls
+PFMEA-TG-01,P01,FM-PRELOAD-LOW,连接预紧力不足,连接松动或异响,7,C-SOCKET-WEAR;C-CAL-DRIFT,扭矩角度监控+定期标定+抽检
+PFMEA-TG-02,P02,FM-PRELOAD-HIGH,连接预紧力过高,连接件损伤或变形,7,C-PROGRAM-MISMATCH;C-CAL-DRIFT,程序防错+扭矩角度监控
+PFMEA-TG-03,P03,FM-PRELOAD-UNSTABLE,关键连接预紧力不稳定,连接可靠性下降并产生潜在安全风险,9,C-SOCKET-WEAR;C-CAL-DRIFT;C-BATCH-FRICTION,扭矩角度监控+工具标定+过程审核
+PFMEA-TG-04,P04,FM-ANGLE-ABNORMAL,拧紧角度异常,装配不到位或螺纹异常,7,C-BATCH-FRICTION;C-THREAD-DAMAGE,扭矩角度窗口+外观检查
+PFMEA-TG-05,P05,FM-TOOL-REPEAT,工具重复拧紧,连接件受损或节拍异常,6,C-SOCKET-WEAR;C-OPERATION-RETRY,重试计数+工位防错

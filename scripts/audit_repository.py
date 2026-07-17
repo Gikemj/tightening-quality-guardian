@@ -70,6 +70,15 @@ def main() -> None:
     require(page.has_viewport, "viewport meta is missing")
     require(page.h1_count == 1, "page must contain exactly one h1")
     require(all(anchor in page.ids for anchor in page.local_anchors if anchor), "broken in-page anchor")
+    require("relationship-chain" in page.ids, "knowledge relationship chain is missing")
+    require("质控前哨" in page_text, "public project name must match the submission")
+
+    subgraph = json.loads((ROOT / "docs" / "data" / "subgraph.json").read_text(encoding="utf-8"))
+    relations = {edge["relation"] for edge in subgraph["edges"]}
+    require(
+        {"has_equipment", "executes", "controls", "may_cause", "affects", "verifies"} <= relations,
+        "subgraph is missing a required reasoning relation",
+    )
 
     public_text = "\n".join(
         path.read_text(encoding="utf-8", errors="ignore")

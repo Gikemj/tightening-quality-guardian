@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Static GitHub Pages demo and browser-side risk calculation for TorqueGuard",
+  "description": "Static GitHub Pages demo and browser-side risk calculation for 质控前哨",
   "scripts": {
     "test": "node --test tests/web-engine.test.mjs",
     "serve": "python3 -m http.server 8000 --directory docs"

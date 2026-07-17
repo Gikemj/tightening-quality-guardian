@@ -1,9 +1,9 @@
 cff-version: 1.2.0
-title: "TorqueGuard 矩证"
+title: "质控前哨"
 message: "If you reuse this competition prototype, cite this repository."
 type: software
 authors:
-  - name: "TorqueGuard contributors"
+  - name: "智造哨兵参赛团队"
 version: 0.1.0
 date-released: 2026-07-17
 license: MIT

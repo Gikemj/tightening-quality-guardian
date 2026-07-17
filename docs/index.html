@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="TorqueGuard 矩证：主动管控拧紧设备质量风险的比赛原型。" />
+    <meta name="description" content="质控前哨：主动管控拧紧设备质量风险的比赛原型。" />
     <meta name="theme-color" content="#ffffff" />
-    <title>TorqueGuard 矩证｜设备质量风险数字员工</title>
+    <title>质控前哨｜设备质量风险数字员工</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="TorqueGuard 矩证首页">
-        <span class="brand-mark" aria-hidden="true">矩</span>
-        <span><strong>TorqueGuard 矩证</strong><small>设备质量风险数字员工</small></span>
+      <a class="brand" href="#top" aria-label="质控前哨首页">
+        <span class="brand-mark" aria-hidden="true">哨</span>
+        <span><strong>质控前哨</strong><small>设备质量风险数字员工</small></span>
       </a>
       <div class="topbar-meta">
         <span class="demo-badge">比赛合成数据</span>
@@ -154,17 +154,24 @@
 
         <section class="section-block" id="knowledge" aria-labelledby="knowledge-title">
           <div class="section-heading">
-            <div><span class="section-kicker">Graph Retrieval</span><h2 id="knowledge-title">只检索与当前异常相连的知识子图</h2></div>
+            <div><span class="section-kicker">Graph Retrieval</span><h2 id="knowledge-title">沿关系路径取回当前风险所需知识</h2></div>
             <p id="graph-count">正在读取子图…</p>
           </div>
           <div class="knowledge-layout">
-            <article class="panel">
-              <h3>本次推理上下文</h3>
-              <ol class="knowledge-nodes" id="graph-nodes"></ol>
+            <article class="panel relationship-panel">
+              <div class="relationship-panel-heading">
+                <div><h3>本次检索关系链</h3><p>节点和关系直接来自比赛样例本体。</p></div>
+                <span class="source-tag">ONTOLOGY V0.1</span>
+              </div>
+              <div class="relationship-chain" id="relationship-chain" aria-label="从生产对象、风险解释到现场验证的知识关系链">
+                <p class="relation-empty">正在读取关系路径…</p>
+              </div>
             </article>
             <article class="panel graph-note">
-              <h3>知识子图怎样参与研判</h3>
-              <p>检索从 P03 和 TOOL-TG-07 开始，只沿当前失效链查找 PFMEA、控制计划和历史案例。取回内容与最近 24 次时序数据一起写入风险卡，再用于生成验证任务。</p>
+              <div>
+                <h3>关系链在风险卡中的用途</h3>
+                <p>检索从 P03 和 TOOL-TG-07 开始，沿明确关系找到质量特性、失效模式、候选原因和验证动作。每条路径保留关系代码，取回内容与最近 24 次时序数据一起写入风险卡。</p>
+              </div>
               <dl class="compact-dl">
                 <div><dt>查询起点</dt><dd>P03 + TOOL-TG-07</dd></div>
                 <div><dt>文档证据</dt><dd>PFMEA、控制计划、历史案例</dd></div>
@@ -212,8 +219,8 @@
 
         <footer>
           <div>
-            <strong>TorqueGuard 矩证</strong>
-            <p>智能车辆工程本科生的比赛原型。非赛力斯官方产品，未使用赛力斯内部数据。</p>
+            <strong>质控前哨</strong>
+            <p>智造哨兵队参赛原型。非赛力斯官方产品，未使用赛力斯内部数据。</p>
           </div>
           <div class="footer-links">
             <a href="https://activity.feishu.cn/future-talent?detail=sailisijituan">官方命题页</a>

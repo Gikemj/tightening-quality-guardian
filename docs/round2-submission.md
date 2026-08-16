@@ -68,7 +68,7 @@ flowchart LR
 
 - 在线演示：`https://gikemj.github.io/tightening-quality-guardian/round2.html`
 - 源码与复现：`https://github.com/Gikemj/tightening-quality-guardian`
-- 演示视频：`https://github.com/Gikemj/tightening-quality-guardian/releases/download/v2-round2/quality-guardian-v2.mp4`（约 4 分 25 秒；按“数据边界—三类案卷—任务门禁—试点路径”讲解，不展示原始脱敏数据）。
+- 演示视频：`https://gikemj.github.io/tightening-quality-guardian/video/quality-guardian-v2.mp4`（约 4 分 25 秒；按“数据边界—三类案卷—任务门禁—试点路径”讲解，不展示原始脱敏数据）。
 
 ## 附：原型可核验范围
 

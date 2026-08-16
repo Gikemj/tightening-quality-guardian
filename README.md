@@ -17,7 +17,7 @@
 第二轮以赛题提供的对象、字段和关系结构为边界，重点解决“关联关系尚未核验时，数字员工如何安全地发起补证与协同”。它不把脱敏快照用于知识抽取、时序分析或真实状态推断。
 
 - [打开第二轮关系证据演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)
-- [观看 4 分 25 秒演示视频](https://github.com/Gikemj/tightening-quality-guardian/releases/download/v2-round2/quality-guardian-v2.mp4)
+- [观看 4 分 25 秒演示视频](https://gikemj.github.io/tightening-quality-guardian/video/quality-guardian-v2.mp4)
 - [第二轮完整提交稿](docs/round2-submission.md)
 - [数据使用与公开边界](docs/data-boundary-round2.html)
 - [关系证据数字员工实现](src/torque_guard/round2.py)

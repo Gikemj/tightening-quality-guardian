@@ -11,8 +11,8 @@
   <body>
     <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="质控前哨 V2 首页"><span>哨</span><b>质控前哨</b><small>V2 · 关系证据闭环</small></a>
-      <div class="topbar-meta"><span class="boundary-badge">公开合成案例</span><a href="./video/quality-guardian-v2.mp4">观看 4 分演示</a><a href="./index.html">查看第一轮原型</a><a href="https://github.com/Gikemj/tightening-quality-guardian">源码与复现</a></div>
+      <a class="brand" href="#top" aria-label="质控前哨统一演示首页"><span>哨</span><b>质控前哨</b><small>设备质量风险统一演示</small></a>
+      <div class="topbar-meta"><span class="boundary-badge">公开合成案例</span><a href="#process">设备过程风险</a><a href="#relationship">关系证据闭环</a><a href="./video/quality-guardian-v2.mp4">观看演示视频</a><a href="https://github.com/Gikemj/tightening-quality-guardian">源码与复现</a></div>
     </header>
 
     <main id="main-content" class="page-shell">
@@ -20,7 +20,7 @@
         <div>
           <p class="eyebrow">设备质量风险闭环数字员工</p>
           <h1 id="intro-title">先判断关系是否可信，再讨论处置。</h1>
-          <p class="lede">第二轮不把脱敏数据包装成时序预测样本。数字员工从工单、设备对象和失效模式的关联状态出发，区分已证实事实、历史候选和信息缺口，生成待审批的协同任务。</p>
+          <p class="lede">同一入口串起设备过程信号、SPC 对照、知识关系链和工单补证。数字员工先区分可观察事实、历史候选与信息缺口，再把需要工程师确认的动作整理成可追溯任务。</p>
         </div>
         <aside class="intro-contract" aria-label="数据使用边界">
           <span>数据使用边界</span>
@@ -47,6 +47,40 @@
         <article><span>关系判断</span><strong id="confidence">—</strong><small>不等同于根因置信度</small></article>
         <article><span>事实与候选</span><strong id="evidence-count">—</strong><small>候选关联必须现场核验</small></article>
         <article><span>任务门禁</span><strong>人工审批</strong><small>公开页不写入外部系统</small></article>
+      </section>
+
+      <section class="section process-section" id="process" aria-labelledby="process-title">
+        <div class="section-head"><div><p class="eyebrow">设备过程风险分析</p><h2 id="process-title">从拧紧信号到风险卡，证据在同一条线上</h2></div><p>默认加载 P03 的公开合成窗口。所有数值来自仓库中的权威分析结果，页面不在浏览器重新计算风险。</p></div>
+        <div class="process-toolbar">
+          <div><strong id="process-scenario-title">正在读取过程分析场景…</strong><span id="process-scenario-meta">正在读取工位、工具与窗口口径…</span></div>
+          <div class="process-actions"><button class="outline-button" id="process-risk-toggle" type="button" aria-pressed="true">重放风险窗口</button><button class="outline-button" id="process-baseline-toggle" type="button" aria-pressed="false">查看稳定窗口</button></div>
+        </div>
+        <div class="process-metrics" aria-label="过程风险关键指标">
+          <article><span>处理顺序</span><strong id="process-risk-level">—</strong><small id="process-risk-score">—</small></article>
+          <article><span>扭矩均值</span><strong id="process-torque-mean">—</strong><small id="process-torque-delta">—</small></article>
+          <article><span>角度离散比</span><strong id="process-angle-ratio">—</strong><small>相对基线</small></article>
+          <article><span>重试均值</span><strong id="process-retry">—</strong><small id="process-retry-delta">—</small></article>
+          <article><span>规格内比例</span><strong id="process-in-spec">—</strong><small id="process-process-state">—</small></article>
+        </div>
+        <div class="process-grid">
+          <article class="process-panel process-chart-panel">
+            <header><div><span>同口径窗口对照</span><h3>扭矩趋势与最近窗口</h3></div><div class="process-legend"><i></i>量测值 <b></b>基线均值</div></header>
+            <svg id="process-chart" viewBox="0 0 960 300" role="img" aria-labelledby="process-chart-title process-chart-desc">
+              <title id="process-chart-title">P03 扭矩趋势</title><desc id="process-chart-desc">公开合成扭矩窗口曲线，最近窗口以不同颜色标识。</desc>
+              <g transform="translate(50 20)"><line class="process-grid-line" x1="0" x2="870" y1="0" y2="0"></line><line class="process-grid-line" x1="0" x2="870" y1="65" y2="65"></line><line class="process-grid-line" x1="0" x2="870" y1="130" y2="130"></line><line class="process-grid-line" x1="0" x2="870" y1="195" y2="195"></line><line class="process-grid-line" x1="0" x2="870" y1="260" y2="260"></line><line id="process-baseline-line" class="process-baseline-line" x1="0" x2="870" y1="130" y2="130"></line><path id="process-torque-line" class="process-torque-line" d=""></path><path id="process-recent-line" class="process-recent-line" d=""></path><text class="process-axis" x="-12" y="5" text-anchor="end">53</text><text class="process-axis" x="-12" y="135" text-anchor="end">48</text><text class="process-axis" x="-12" y="265" text-anchor="end">43</text><text class="process-axis" x="0" y="288">较早</text><text class="process-axis" x="870" y="288" text-anchor="end">最近</text></g>
+            </svg>
+            <footer><span>分析分层：<code id="process-stratum">—</code></span><span>基线 <strong id="process-window">—</strong></span></footer>
+          </article>
+          <aside class="process-panel signal-panel"><header><div><span>多信号判定</span><h3>触发原因与边界</h3></div><span class="source-tag">RULE + DATA</span></header><ul id="process-signal-list" class="process-list"></ul><div class="process-note" id="process-boundary-note">—</div></aside>
+        </div>
+        <div class="process-detail-grid">
+          <article class="process-panel"><header><div><span>风险卡</span><h3>当前窗口的工程含义</h3></div><button class="outline-button compact-button" id="process-copy-card" type="button">复制风险卡 JSON</button></header><p id="process-inference">正在读取风险卡结论…</p><div class="score-rows" id="process-score-breakdown"></div><p class="process-uncertainty" id="process-uncertainty">—</p></article>
+          <article class="process-panel"><header><div><span>候选原因</span><h3>只列出可验证的假设</h3></div><span id="process-cause-state" class="source-tag">正在读取</span></header><div class="cause-list" id="process-cause-list"></div></article>
+        </div>
+        <div class="process-evidence-wrap"><header><div><span>证据账本</span><h3>每条结论都能回到来源</h3></div><span id="process-evidence-count">—</span></header><div class="process-evidence-table-wrap"><table><thead><tr><th>证据</th><th>观察</th><th>来源与定位</th><th>强度</th></tr></thead><tbody id="process-evidence-table"></tbody></table></div></div>
+        <div class="process-graph-wrap"><header><div><span>Graph Retrieval</span><h3>从工位和紧固点取回可用知识</h3></div><span id="process-graph-count">正在读取关系子图…</span></header><div class="process-graph-grid"><div class="process-graph-chain" id="process-graph-chain"></div><div class="process-graph-note"><strong>关系链的作用</strong><p>关系检索只限定候选范围，不把历史关联当作当前根因。PFMEA、控制计划和历史案例仍以文件证据形式进入风险卡，并由工程师决定是否采信。</p><dl><div><dt>查询起点</dt><dd id="process-graph-start">—</dd></div><div><dt>节点 / 关系</dt><dd id="process-graph-size">—</dd></div><div><dt>动作约束</dt><dd>只生成待审批任务</dd></div></dl></div></div></div>
+        <div class="process-task-wrap"><header><div><span>人工门禁</span><h3>处置任务、验收条件与审批状态</h3></div><button class="primary-button" id="process-task-preview" type="button">生成任务预览</button></header><div class="process-task-state"><strong id="process-workflow-status">—</strong><span id="process-workflow-boundary">—</span></div><div class="process-evidence-table-wrap"><table><thead><tr><th>任务</th><th>责任角色</th><th>时限</th><th>验收依据</th><th>审批</th></tr></thead><tbody id="process-task-table"></tbody></table></div><p id="process-task-feedback" class="process-feedback" aria-live="polite"></p></div>
+        <div class="evaluation-strip" aria-label="公开合成验证结果"><div><span>滚动窗口样本</span><strong id="process-eval-samples">—</strong><small>同口径验证</small></div><div><span>召回率</span><strong id="process-eval-recall">—</strong><small>不外推至工厂</small></div><div><span>误报率</span><strong id="process-eval-fpr">—</strong><small>独立合成案例口径</small></div><div><span>证据可追溯</span><strong id="process-eval-trace">—</strong><small>来源与定位字段齐全</small></div></div>
       </section>
 
       <section class="section" id="relationship" aria-labelledby="relationship-title">

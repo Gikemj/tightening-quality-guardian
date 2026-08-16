@@ -23,7 +23,9 @@
 - [关系证据数字员工实现](src/torque_guard/round2.py)
 - [Terra 的服务端受控接入](src/torque_guard/integrations/codekey.py)
 
-页面支持风险窗口与稳定窗口切换、设备过程指标重放、风险卡和任务预览、三个关系案卷切换、关系核验、案卷摘要复制、受控模型输入查看以及飞书任务草案生成。页面所有操作都在浏览器本地完成，不携带企业凭证，也不会创建真实飞书任务；页面加载失败时可用“重试读取”恢复。浏览器端可通过 `window.round2Demo.selectCase(0)`、`window.round2Demo.generateTaskPreview()`、`window.round2Demo.getProcessCard()` 和 `window.round2Demo.getModelPayload()` 调用同一套演示接口。
+在线页的主路径是一个可重放的本地工作流：点击“开始主动研判”，观察感知、检测、关系检索和风险卡生成；风险窗口随后停在“等待具名工程师审批”，可按顺序演示“通过审批 → 提交现场验证 → 审核回写案例”。点击“退回补证”会回到人工复核，不会把候选原因改写成根因。切换到稳定窗口后，流程停在常规监控，异常任务按钮保持禁用。证据行、候选原因、风险卡 JSON、工具调用轨迹和三个关系案卷均可在同一页展开查看。
+
+页面所有操作都在浏览器本地完成，不携带企业凭证，也不会创建真实飞书任务；页面加载失败时可用“重试读取”恢复。浏览器端可通过 `window.round2Demo.runProcess()`、`window.round2Demo.approveProcess()`、`window.round2Demo.submitVerification()`、`window.round2Demo.reviewKnowledgeWriteback()`、`window.round2Demo.selectCase(0)` 和 `window.round2Demo.getModelPayload()` 调用同一套演示接口。
 
 ## 四十强提交材料
 

@@ -24,13 +24,13 @@
 
 ### 企业部署扩展
 
-仓库保留可选的管理员服务端实现，用于企业授权环境接入 Terra 与飞书。公开页面不加载密钥，也不依赖这一路径。若进入企业部署，将 `.env.example` 复制为 `.env`，填写服务端 `CODEKEY_API_KEY`（以及可选的 `CODEKEY_BASE_URL=https://codekey.ai`、`CODEKEY_TERRA_MODEL=terra`），再运行：
+仓库保留可选的管理员服务端实现，用于企业授权环境接入受控文书模型与飞书。公开页面不加载密钥，也不依赖这一路径。若进入企业部署，将 `.env.example` 复制为 `.env`，填写服务端 `CODEKEY_API_KEY`（默认使用受控白名单中的 `CODEKEY_BASE_URL=https://hetune.top`、`CODEKEY_TERRA_MODEL=gpt-5.6-sol`），再运行：
 
 ```bash
 PYTHONPATH=src python3 scripts/admin_server.py
 ```
 
-该服务只用于受控部署验证。Terra 只接收最小化的脱敏风险卡摘要，用于整理复核说明和任务备注；输出必须通过结构校验，不能确认根因、停线、改 PLC 或替代工程师审批。密钥不会进入网页、日志、截图或提交记录。
+该服务只用于受控部署验证。受控文书模型只接收最小化的脱敏风险卡摘要，用于整理复核说明和任务备注；输出必须通过结构校验，不能确认根因、停线、改 PLC 或替代工程师审批。密钥不会进入网页、日志、截图或提交记录。
 
 ## 四十强提交材料
 
@@ -38,11 +38,11 @@ PYTHONPATH=src python3 scripts/admin_server.py
 - [业务价值与验收口径](docs/business-value.md)：严格区分合成原型结果、企业试点目标和待确认收益假设，附 Before/After 与收益公式。
 - [企业试点与对照验证计划](docs/pilot-plan.md)：准备后先静默观察 2–4 周，再进行 4 周受控对照，包含安全门槛、归因与推广路线。
 
-> 官方命题全称已按赛事页面核对。正式提交仍需团队补齐真实成员介绍与分工、授权飞书租户验证证据和 3–5 分钟 Demo 视频；仓库不虚构这些信息。
+> 官方命题全称已按赛事页面核对。固定链接中的中文字幕 Demo 已完成；正式提交时只需按报名表补齐真实成员介绍与分工，并在具备授权的飞书测试租户中补留可核验的联调证据。仓库不虚构成员身份、租户权限或企业生产数据。
 
 ## 评委快速入口
 
-- [打开在线演示](https://gikemj.github.io/tightening-quality-guardian/)，重放“规格内缓慢漂移”场景。
+- [打开在线演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)，先看工位回放，再重放“规格内缓慢漂移”场景。
 - [查看生成的风险卡](outputs/risk_card.json)，每条证据都带来源和定位字段。
 - [查看离线验证结果](outputs/metrics.json)，数据、标签和计算脚本均可复现。
 - [查看多场景独立合成评测](outputs/scenario_metrics.json)，包含 120 个案例、Wilson 区间和传统报警代理对照。

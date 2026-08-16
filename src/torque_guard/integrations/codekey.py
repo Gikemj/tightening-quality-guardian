@@ -1,4 +1,4 @@
-"""Guarded OpenAI-compatible client for the optional CodeKey Terra reasoner.
+"""Guarded OpenAI-compatible client for the optional administrator reasoner.
 
 This integration is intentionally server-side only.  A browser bundle must
 never contain a provider key.  The client receives a minimized relationship
@@ -32,8 +32,8 @@ Transport = Callable[[str, dict[str, str], dict[str, Any], float], Mapping[str, 
 @dataclass(frozen=True)
 class CodeKeyTerraConfig:
     api_key: str
-    base_url: str = "https://codekey.ai"
-    model: str = "terra"
+    base_url: str = "https://hetune.top"
+    model: str = "gpt-5.6-sol"
     timeout_seconds: float = 12.0
     max_tokens: int = 600
     temperature: float = 0.1
@@ -43,8 +43,8 @@ class CodeKeyTerraConfig:
         values = os.environ if env is None else env
         config = cls(
             api_key=values.get("CODEKEY_API_KEY", "").strip(),
-            base_url=(values.get("CODEKEY_BASE_URL") or "https://codekey.ai").rstrip("/"),
-            model=(values.get("CODEKEY_TERRA_MODEL") or "terra").strip(),
+            base_url=(values.get("CODEKEY_BASE_URL") or "https://hetune.top").rstrip("/"),
+            model=(values.get("CODEKEY_TERRA_MODEL") or "gpt-5.6-sol").strip(),
         )
         config.validate()
         return config
@@ -55,14 +55,14 @@ class CodeKeyTerraConfig:
         if not self.model:
             raise CodeKeyConfigurationError("CODEKEY_TERRA_MODEL 未配置")
         parsed = urlsplit(self.base_url)
-        if parsed.scheme != "https" or parsed.netloc != "codekey.ai" or parsed.query or parsed.fragment:
-            raise CodeKeyConfigurationError("CODEKEY_BASE_URL 只允许 https://codekey.ai")
+        if parsed.scheme != "https" or parsed.hostname not in {"codekey.ai", "hetune.top"} or parsed.port or parsed.username or parsed.password or parsed.query or parsed.fragment:
+            raise CodeKeyConfigurationError("CODEKEY_BASE_URL 只允许受控的 https://codekey.ai 或 https://hetune.top")
         if not 1 <= self.max_tokens <= 800:
-            raise CodeKeyConfigurationError("Terra 最大输出 token 必须位于 1..800")
+            raise CodeKeyConfigurationError("受控模型最大输出 token 必须位于 1..800")
         if not 0 <= self.temperature <= 0.2:
-            raise CodeKeyConfigurationError("Terra 温度必须位于 0..0.2")
+            raise CodeKeyConfigurationError("受控模型温度必须位于 0..0.2")
         if not 1 <= self.timeout_seconds <= 20:
-            raise CodeKeyConfigurationError("Terra 超时必须位于 1..20 秒")
+            raise CodeKeyConfigurationError("受控模型超时必须位于 1..20 秒")
 
 
 TERRA_SYSTEM_PROMPT = """你是设备质量风险闭环中的受控文书助手。
@@ -86,17 +86,17 @@ def _transport(
         with urlopen(request, timeout=timeout) as response:  # noqa: S310 - fixed HTTPS host
             raw = response.read().decode("utf-8")
     except HTTPError as exc:
-        raise CodeKeyResponseError(f"Terra 请求返回 HTTP {exc.code}") from exc
+        raise CodeKeyResponseError(f"受控模型请求返回 HTTP {exc.code}") from exc
     except URLError as exc:
         if isinstance(exc.reason, (socket.gaierror, ConnectionRefusedError)):
-            raise CodeKeyResponseError("Terra 服务不可达") from exc
-        raise CodeKeyResponseError("Terra 请求失败") from exc
+            raise CodeKeyResponseError("受控模型服务不可达") from exc
+        raise CodeKeyResponseError("受控模型请求失败") from exc
     try:
         parsed = json.loads(raw)
     except json.JSONDecodeError as exc:
-        raise CodeKeyResponseError("Terra 返回了非 JSON 响应") from exc
+        raise CodeKeyResponseError("受控模型返回了非 JSON 响应") from exc
     if not isinstance(parsed, Mapping):
-        raise CodeKeyResponseError("Terra 响应不是对象")
+        raise CodeKeyResponseError("受控模型响应不是对象")
     return parsed
 
 
@@ -129,7 +129,7 @@ class CodeKeyTerraClient:
             self.config.timeout_seconds,
         )
         raw = self._content(response)
-        return self._validate_output(raw, minimized)
+        return self._validate_output(raw, minimized, self.config.model)
 
     @staticmethod
     def _minimize(dossier: Mapping[str, Any]) -> dict[str, Any]:
@@ -138,7 +138,7 @@ class CodeKeyTerraClient:
         gaps = dossier.get("gaps")
         tasks = dossier.get("tasks")
         if not all(isinstance(value, (dict, list)) for value in (case, facts, gaps, tasks)):
-            raise CodeKeyResponseError("Terra 输入必须是结构化关系案卷")
+            raise CodeKeyResponseError("受控模型输入必须是结构化关系案卷")
         return {
             "question": str(dossier.get("question", "")).strip()[:2000],
             "case": {
@@ -171,52 +171,52 @@ class CodeKeyTerraClient:
         try:
             content = response["choices"][0]["message"]["content"]
         except (KeyError, IndexError, TypeError) as exc:
-            raise CodeKeyResponseError("Terra 响应缺少 choices[0].message.content") from exc
+            raise CodeKeyResponseError("受控模型响应缺少 choices[0].message.content") from exc
         if not isinstance(content, str):
-            raise CodeKeyResponseError("Terra 内容不是文本")
+            raise CodeKeyResponseError("受控模型内容不是文本")
         try:
             output = json.loads(content)
         except json.JSONDecodeError as exc:
-            raise CodeKeyResponseError("Terra 未返回有效 JSON 文书") from exc
+            raise CodeKeyResponseError("受控模型未返回有效 JSON 文书") from exc
         if not isinstance(output, Mapping):
-            raise CodeKeyResponseError("Terra 文书不是对象")
+            raise CodeKeyResponseError("受控模型文书不是对象")
         return output
 
     @staticmethod
-    def _validate_output(output: Mapping[str, Any], minimized: Mapping[str, Any]) -> dict[str, Any]:
+    def _validate_output(output: Mapping[str, Any], minimized: Mapping[str, Any], model: str) -> dict[str, Any]:
         expected = {"summary", "review_questions", "task_notes", "safety"}
         if set(output) != expected:
-            raise CodeKeyResponseError("Terra 输出字段不符合受控合同")
+            raise CodeKeyResponseError("受控模型输出字段不符合受控合同")
         summary = output.get("summary")
         questions = output.get("review_questions")
         notes = output.get("task_notes")
         safety = output.get("safety")
         if not isinstance(summary, str) or not summary.strip() or len(summary) > 360:
-            raise CodeKeyResponseError("Terra summary 非法或过长")
+            raise CodeKeyResponseError("受控模型 summary 非法或过长")
         if not isinstance(questions, list) or not all(isinstance(item, str) and item.strip() for item in questions):
-            raise CodeKeyResponseError("Terra review_questions 非法")
+            raise CodeKeyResponseError("受控模型 review_questions 非法")
         if not isinstance(notes, list) or not all(isinstance(item, Mapping) for item in notes):
-            raise CodeKeyResponseError("Terra task_notes 非法")
+            raise CodeKeyResponseError("受控模型 task_notes 非法")
         allowed_ids = set(minimized["task_ids"])
         for note in notes:
             if set(note) != {"task_id", "note"} or note.get("task_id") not in allowed_ids:
-                raise CodeKeyResponseError("Terra task_notes 引用了未知任务")
+                raise CodeKeyResponseError("受控模型 task_notes 引用了未知任务")
             if not isinstance(note.get("note"), str) or not note["note"].strip() or len(note["note"]) > 220:
-                raise CodeKeyResponseError("Terra task_notes 内容非法")
+                raise CodeKeyResponseError("受控模型 task_notes 内容非法")
         if safety != {
             "root_cause_confirmed": False,
             "automatic_action_allowed": False,
             "human_approval_required": True,
         }:
-            raise CodeKeyResponseError("Terra 输出试图绕过人工与安全门禁")
+            raise CodeKeyResponseError("受控模型输出试图绕过人工与安全门禁")
         prohibited = ("已确认根因", "自动停线", "修改plc", "无需验证", "质量放行")
         combined = " ".join([summary, *questions, *(str(item.get("note", "")) for item in notes)]).lower().replace(" ", "")
         if any(term in combined for term in prohibited):
-            raise CodeKeyResponseError("Terra 输出包含未经授权的结论或动作")
+            raise CodeKeyResponseError("受控模型输出包含未经授权的结论或动作")
         return {
             "summary": summary.strip(),
             "review_questions": [item.strip() for item in questions],
             "task_notes": [{"task_id": item["task_id"], "note": item["note"].strip()} for item in notes],
             "safety": dict(safety),
-            "provenance": {"provider": "codekey", "model": "terra", "external_call": True},
+            "provenance": {"provider": "hetune", "model": model, "external_call": True},
         }

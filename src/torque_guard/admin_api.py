@@ -272,6 +272,8 @@ class AdminService:
         keys = ["FEISHU_APP_ID", "FEISHU_APP_SECRET", "FEISHU_APP_TOKEN", "FEISHU_RISK_TABLE_ID", "FEISHU_TASK_TABLE_ID"]
         configured = [key for key in keys if os.getenv(key)]
         terra_key_configured = bool(os.getenv("CODEKEY_API_KEY", "").strip())
+        reasoner_model = os.getenv("CODEKEY_TERRA_MODEL", "gpt-5.6-sol")
+        reasoner_base_url = os.getenv("CODEKEY_BASE_URL", "https://hetune.top")
         return {
             "mode": "preview",
             "configuredKeys": configured,
@@ -280,9 +282,9 @@ class AdminService:
             "message": "浏览器 API 不会触发 live 写入；需在授权环境中显式调用 CLI 并完成审批回执",
             "terra": {
                 "configured": terra_key_configured,
-                "provider": "CodeKey",
-                "model": os.getenv("CODEKEY_TERRA_MODEL", "terra"),
-                "baseUrl": os.getenv("CODEKEY_BASE_URL", "https://codekey.ai"),
+                "provider": "Hetune（OpenAI 兼容接口）",
+                "model": reasoner_model,
+                "baseUrl": reasoner_base_url,
                 "keyLoaded": terra_key_configured,
                 "serverSideOnly": True,
                 "message": "管理员服务端按需调用；密钥不返回浏览器、不写审计日志。" if terra_key_configured else "未配置密钥时使用本地确定性摘要。",
@@ -560,7 +562,7 @@ class AdminService:
                 terra_used = True
                 used_external = True
             except (CodeKeyResponseError, ValueError, OSError) as exc:
-                external_error = f"Terra 受控调用失败：{exc}"
+                external_error = f"受控文书模型调用失败：{exc}"
         if not answer and endpoint and (config.get("authType") == "none" or self._monitor_key):
             context = {
                 "scenario": status.get("scenario"),
@@ -600,7 +602,7 @@ class AdminService:
             external_error = "后台尚未配置 API 地址"
         if not answer:
             answer = self._local_ai_answer(question, status, external_error)
-        result = {"answer": answer, "source": "codekey_terra" if terra_used else ("external_api" if used_external else "local_rule_fallback"), "usedExternalApi": used_external, "externalError": external_error, "provider": "CodeKey", "model": "terra" if terra_used else None, "at": _now(), "sequence": status.get("sequence", 0), "cardId": (status.get("card") or {}).get("card_id")}
+        result = {"answer": answer, "source": "hetune_reasoner" if terra_used else ("external_api" if used_external else "local_rule_fallback"), "usedExternalApi": used_external, "externalError": external_error, "provider": "Hetune" if terra_used else None, "model": CodeKeyTerraConfig.from_env().model if terra_used else None, "at": _now(), "sequence": status.get("sequence", 0), "cardId": (status.get("card") or {}).get("card_id")}
         self.audit("ai.chat", {"source": result["source"], "sequence": result["sequence"]})
         return result
 

@@ -1471,6 +1471,10 @@ function renderLiveAnalysis(payload) {
   renderLiveDashboard(payload);
   renderLiveTerminal(payload);
   renderAiSnapshot(payload);
+  // Keep the physical workcell replay and the tabular risk view on the same
+  // deterministic payload. The replay listens for this event and never
+  // receives raw customer or production data.
+  window.dispatchEvent(new CustomEvent("qg:live-update", { detail: payload }));
 }
 
 function updateLiveTestControls(running, hasError = false) {

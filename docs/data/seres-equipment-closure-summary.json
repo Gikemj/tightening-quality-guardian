@@ -1,0 +1,73 @@
+{
+  "allowed_use": [
+    "设备类别、设备实例、功能、失效模式和工单对象建模",
+    "推荐关系链和字段级关系核验",
+    "缺口分级、补证任务和知识检索范围设计"
+  ],
+  "counts": {
+    "equipment_categories": 625,
+    "equipment_functions": 336,
+    "equipment_instances": 9673,
+    "failure_modes": 1287,
+    "work_orders": 406
+  },
+  "data_boundary": "schema_and_relationship_reference_only",
+  "demo_separation": "公开拧紧工位时序、风险卡和多场景评测均为独立合成数据；本汇总不与拧紧时序混合评分。",
+  "generated_at": "2026-08-17",
+  "missing_fields": [
+    "原始设备手册、维修手册和图纸不在数据包中",
+    "缺失字段保持缺失，不补造父子关系",
+    "数据包不提供可用于计算的 S/O/D、RPN、真实地点、品牌、型号或人员字段"
+  ],
+  "prohibited_use": [
+    "推断真实设备状态、真实故障概率或真实质量影响",
+    "把结构闭环候选写成已确认根因",
+    "计算赛力斯真实业务收益或产线效果"
+  ],
+  "recommended_chain": [
+    "设备类别",
+    "设备实例",
+    "故障工单",
+    "失效模式",
+    "设备功能",
+    "设备类别"
+  ],
+  "relations": {
+    "closed_typed_candidate": {
+      "coverage": 0.1527,
+      "label": "结构闭环候选",
+      "matched_work_orders": 62,
+      "total_work_orders": 406
+    },
+    "equipment_instance_to_category": {
+      "coverage": 1.0,
+      "matched": 9673,
+      "total": 9673
+    },
+    "failure_mode_to_function": {
+      "coverage": 1.0,
+      "matched": 1287,
+      "total": 1287
+    },
+    "function_to_category": {
+      "coverage": 1.0,
+      "matched": 336,
+      "total": 336
+    },
+    "work_order_to_equipment_instance_to_category": {
+      "coverage": 0.9433,
+      "label": "有效设备链路",
+      "matched_work_orders": 383,
+      "total_work_orders": 406
+    },
+    "work_order_to_failure_mode": {
+      "coverage": 0.1749,
+      "label": "工单关联失效模式",
+      "matched_work_orders": 71,
+      "total_work_orders": 406
+    }
+  },
+  "schema_version": "1.0",
+  "source_file": "赛力斯设备场景闭环脱敏数据包.xlsx",
+  "summary": "该汇总只用于说明赛题脱敏数据的对象规模、关系覆盖率和缺口处理方式。它不代表真实产线状态、故障概率、质量影响或企业收益。"
+}

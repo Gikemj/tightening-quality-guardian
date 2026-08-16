@@ -16,10 +16,11 @@
 
 ## 评委固定入口
 
-- [统一在线演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)：新版拧紧质量风险驾驶舱、实时合成回放、SPC 对照、证据链、任务门禁与独立评测集中在同一页。
+- [统一在线演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)：拧紧质量风险驾驶舱、工位回放、SPC 对照、证据链、赛题数据基础、关系案卷、任务门禁与独立评测集中在同一页。
 - [演示视频（含中文字幕）](https://gikemj.github.io/tightening-quality-guardian/video/quality-guardian-v2.mp4)：按“工位窗口—多信号识别—证据核对—人工闭环”讲解新版项目，不展示第一轮原型入口。
 - [第二轮参赛稿](docs/round2-submission.md)：与在线页面的工位、字段、关系链和安全边界保持同一口径。
 - [数据边界说明](docs/data-boundary-round2.html)：说明公开案例、设备信号和企业数据之间的使用边界。
+- [赛力斯脱敏数据对齐说明](docs/seres-data-alignment.md)：列出设备对象规模、关系覆盖率、缺口处理和与主演示时序的分离方式。
 - [公开管理员工作台](https://gikemj.github.io/tightening-quality-guardian/admin.html)：评委无需安装或启动服务即可查看风险、证据、工作流、数据模拟器、接口契约与操作审计；所有按钮都在当前浏览器内产生可复现变化。
 
 ### 企业部署扩展

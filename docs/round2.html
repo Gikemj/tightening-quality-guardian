@@ -42,7 +42,9 @@
           <a href="#comparison">对比分析</a>
           <a href="#risk-analysis">触发原因</a>
           <a href="#evidence">证据来源</a>
+          <a href="#data-foundation">赛题数据基础</a>
           <a href="#workflow">处置任务</a>
+          <a href="#relationship-cases">关系案卷</a>
           <a href="#evaluation">评估报告</a>
         </nav>
         <div class="sidebar-note">
@@ -457,7 +459,7 @@
           <p class="integration-note"><strong>飞书边界：</strong>公开演示仅生成多维表格字段预览，不发送网络请求；代码支持在具名人工审批后，经企业授权的 live 模式写入风险台账与任务表，但尚未完成具体租户的权限、字段与审批联调。本页面绝不表示已经真实发送。</p>
         </section>
 
-        <section class="section-block relationship-cases" id="relationship-cases" aria-labelledby="relationship-cases-title" hidden aria-hidden="true">
+        <section class="section-block relationship-cases" id="relationship-cases" aria-labelledby="relationship-cases-title">
           <div class="section-heading">
             <div><span class="section-kicker">CASE RELATION REVIEW</span><h2 id="relationship-cases-title">设备工单关系案卷</h2></div>
             <p id="relation-case-boundary">只展示赛题字段结构与关系核验路径，不从脱敏快照推断真实设备状态。</p>
@@ -486,6 +488,38 @@
           <div class="table-wrap relation-case-tasks"><div class="table-heading"><h3>处置任务草案</h3><span>全部需具名审批</span></div><table><thead><tr><th>任务</th><th>责任角色</th><th>时限</th><th>验收依据</th><th>关联证据</th></tr></thead><tbody id="relation-case-tasks"><tr><td colspan="5" class="comparison-loading">正在读取任务字段…</td></tr></tbody></table></div>
           <pre class="relation-case-output" id="relation-case-output" hidden></pre>
           <p class="integration-note"><strong>数据边界：</strong>公开案例编号均以 <code>CASE-DEMO-</code> 开头。案卷只用于演示对象映射、字段完整度、关系核验和人工任务预览；页面不会创建飞书任务或把历史关联写成根因。</p>
+        </section>
+
+        <section class="section-block data-foundation" id="data-foundation" aria-labelledby="data-foundation-title">
+          <div class="section-heading">
+            <div><span class="section-kicker">SERES DATA FOUNDATION</span><h2 id="data-foundation-title">赛题脱敏数据包，如何进入本项目</h2></div>
+            <p id="data-foundation-status">正在读取数据包汇总…</p>
+          </div>
+          <div class="data-foundation-intro">
+            <p id="data-foundation-summary">这里展示赛力斯提供的设备场景闭环脱敏数据包的结构统计。它用于确定对象、关系和缺口处理方式，不用于推断真实设备状态、故障概率或企业收益。</p>
+            <a class="button secondary" href="https://github.com/Gikemj/tightening-quality-guardian/blob/main/docs/seres-data-alignment.md" target="_blank" rel="noreferrer">查看数据对齐说明 →</a>
+          </div>
+          <div class="data-foundation-metrics" aria-label="赛题脱敏数据规模与关系覆盖率">
+            <div><span>设备类别</span><strong id="data-count-equipment-categories">—</strong><small>对象类型目录</small></div>
+            <div><span>设备实例</span><strong id="data-count-equipment-instances">—</strong><small>实例建账记录</small></div>
+            <div><span>设备功能</span><strong id="data-count-equipment-functions">—</strong><small>功能定义</small></div>
+            <div><span>失效模式</span><strong id="data-count-failure-modes">—</strong><small>失效模式目录</small></div>
+            <div><span>故障工单</span><strong id="data-count-work-orders">—</strong><small>待核验问题记录</small></div>
+            <div><span>有效设备链路</span><strong id="data-count-valid-workorder-links">—</strong><small id="data-count-valid-workorder-links-note">工单 → 实例 → 类别</small></div>
+            <div><span>工单关联失效模式</span><strong id="data-count-failure-links">—</strong><small id="data-count-failure-links-note">不补造缺失关系</small></div>
+            <div><span>结构闭环候选</span><strong id="data-count-closed-candidates">—</strong><small id="data-count-closed-candidates-note">需按字段核验</small></div>
+          </div>
+          <div class="data-foundation-grid">
+            <article class="panel data-foundation-chain">
+              <div class="panel-heading"><div><h3>关系链与本项目的对应</h3><span>只沿已存在字段连接</span></div><span class="source-tag">XLSX SUMMARY</span></div>
+              <div class="data-chain-steps" aria-label="赛题推荐关系链"><span>设备类别</span><i aria-hidden="true">→</i><span>设备实例</span><i aria-hidden="true">→</i><span>故障工单</span><i aria-hidden="true">→</i><span>失效模式</span><i aria-hidden="true">→</i><span>设备功能</span><i aria-hidden="true">→</i><span>设备类别</span></div>
+              <p id="data-foundation-chain-note">本项目的拧紧工位演示使用独立合成时序数据；赛题脱敏包为对象建模、关系核验和人工补证设计提供结构参考，两者不混合计算。</p>
+            </article>
+            <article class="panel data-boundary-card">
+              <div class="panel-heading"><div><h3>数据使用边界</h3><span>评审时可直接核对</span></div><span class="source-tag">BOUNDARY</span></div>
+              <ul id="data-foundation-boundaries"><li>允许：对象建模、关系覆盖率和字段缺口检查。</li><li>禁止：补造父子关系、S/O/D、RPN、真实地点、品牌、型号或人员。</li><li>禁止：根据脱敏快照推断真实设备状态、故障概率、质量影响和企业收益。</li></ul>
+            </article>
+          </div>
         </section>
 
         <section class="section-block" id="evaluation" aria-labelledby="evaluation-title">

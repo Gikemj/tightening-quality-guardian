@@ -10,10 +10,12 @@ async function loadStaticAdminState() {
       fetch("./data/risk_card.json").then((response) => response.json()),
       fetch("./data/risk_result.json").then((response) => response.json()),
       fetch("./data/demo_series.json").then((response) => response.json()),
-    ]).then(([card, result, series]) => ({
+      fetch("./data/seres-equipment-closure-summary.json").then((response) => response.json()),
+    ]).then(([card, result, series, seresData]) => ({
       card,
       result,
       series,
+      seresData,
       workflow: { status: card.status || "awaiting_engineer_review", events: [], allowedActions: card.workflow?.allowed_actions || ["approve", "reject"], humanApprovalRequired: card.workflow?.human_approval_required !== false, automaticStopLineAllowed: false },
       audit: [{ at: "2026-08-17T09:00:00+08:00", action: "公开预览已载入", detail: { mode: "browser_static_preview", source: "docs/data" } }],
       monitor: { configured: false, running: false, config: {}, samples: [], lastSample: null },
@@ -77,7 +79,7 @@ async function staticApi(path, options = {}) {
     { name: "外部集成", status: "partial", details: "服务端保留受控接口，当前演示不写入真实租户。" },
   ] };
   if (path === "/api/knowledge") return staticSummary(state).knowledge;
-  if (path === "/api/data") return { events: { records: (state.series || []).length, path: "data/tightening_events_demo.csv" }, files: [{ path: "data/tightening_events_demo.csv", kind: "synthetic events", size: 42000, modified: "2026-08-17T09:00:00+08:00" }, { path: "outputs/risk_card.json", kind: "risk card", size: 9000, modified: "2026-08-17T09:00:00+08:00" }] };
+  if (path === "/api/data") return { events: { records: (state.series || []).length, path: "data/tightening_events_demo.csv" }, files: [{ path: "data/tightening_events_demo.csv", kind: "synthetic events", size: 42000, modified: "2026-08-17T09:00:00+08:00" }, { path: "outputs/risk_card.json", kind: "risk card", size: 9000, modified: "2026-08-17T09:00:00+08:00" }], seresData: state.seresData || null };
   if (path === "/api/integration") return { mode: "preview", liveWriteEnabled: false, configuredKeys: [], requiredKeys: ["FEISHU_APP_ID", "FEISHU_APP_SECRET"], message: "公开管理员工作台不配置企业凭证，不执行外部写入。", terra: { configured: false, provider: "Hetune（OpenAI 兼容接口）", model: "gpt-5.6-sol", baseUrl: "https://hetune.top", keyLoaded: false, serverSideOnly: true, message: "公开页面不加载密钥，使用浏览器内确定性摘要。" } };
   if (path === "/api/openapi") return { endpoints: [
     { method: "GET", path: "/api/summary", purpose: "读取风险、健康与工作流摘要" },
@@ -251,6 +253,36 @@ function renderKnowledge(data) {
 function renderData(data) {
   $("#event-count").textContent = `${data.events.records} 条事件`;
   $("#data-files").innerHTML = data.files.map((file) => `<tr><td class="mono">${escapeHtml(file.path)}</td><td>${escapeHtml(file.kind)}</td><td>${(file.size / 1024).toFixed(1)} KB</td><td class="mono">${escapeHtml(formatTime(file.modified))}</td></tr>`).join("");
+  const summary = data.seresData;
+  const status = $("#seres-data-status");
+  const details = $("#seres-data-details");
+  const boundary = $("#seres-data-boundary");
+  if (!status || !details || !boundary) return;
+  if (!summary) {
+    status.textContent = "未读取";
+    status.className = "status-chip status-missing";
+    details.innerHTML = "<div><dt>状态</dt><dd>公开汇总资产不可用</dd></div>";
+    boundary.textContent = "主风险演示仍使用独立合成数据；没有数据摘要时不生成赛题关系结论。";
+    return;
+  }
+  const count = summary.counts || {};
+  const relation = summary.relations || {};
+  const equipmentLink = relation.work_order_to_equipment_instance_to_category || {};
+  const failureLink = relation.work_order_to_failure_mode || {};
+  const closedLink = relation.closed_typed_candidate || {};
+  const number = (value) => Number.isFinite(Number(value)) ? Number(value).toLocaleString("zh-CN") : "—";
+  const percent = (value) => Number.isFinite(Number(value)) ? `${(Number(value) * 100).toFixed(2)}%` : "—";
+  status.textContent = "已读取 · 仅作结构参考";
+  status.className = "status-chip status-guarded";
+  details.innerHTML = [
+    ["设备类别 / 实例", `${number(count.equipment_categories)} / ${number(count.equipment_instances)}`],
+    ["功能 / 失效模式", `${number(count.equipment_functions)} / ${number(count.failure_modes)}`],
+    ["故障工单", number(count.work_orders)],
+    ["有效设备链路", `${number(equipmentLink.matched_work_orders)} / ${number(equipmentLink.total_work_orders)} · ${percent(equipmentLink.coverage)}`],
+    ["工单—失效模式", `${number(failureLink.matched_work_orders)} / ${number(failureLink.total_work_orders)} · ${percent(failureLink.coverage)}`],
+    ["结构闭环候选", `${number(closedLink.matched_work_orders)} / ${number(closedLink.total_work_orders)} · ${percent(closedLink.coverage)}`],
+  ].map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
+  boundary.textContent = summary.demo_separation || "脱敏包只用于对象和关系核验，不与拧紧时序混合评分，也不用于推断真实产线效果。";
 }
 
 function renderIntegration(data) {

@@ -686,3 +686,159 @@ body.public-ui .ai-connection-chip.external { border-color: var(--state-ok) !imp
   body.public-ui .station-speed-button,
   body.public-ui .station-callout { transition: none !important; }
 }
+
+/* Final legibility pass ---------------------------------------------------
+   styles.css contains an older dark workbench skin for the same components.
+   These selectors intentionally sit last and use the public light tokens so
+   selected rows, dependency steps and compact facts stay readable. */
+body.public-ui .comparison-matrix tbody td,
+body.public-ui .comparison-matrix tbody td:first-child,
+body.public-ui .comparison-matrix tbody tr.is-selected td,
+body.public-ui .comparison-matrix tbody tr[aria-selected="true"] td {
+  color: var(--ink) !important;
+}
+body.public-ui .comparison-matrix tbody td:first-child { font-weight: 700 !important; }
+body.public-ui .comparison-matrix tbody tr.is-selected,
+body.public-ui .comparison-matrix tbody tr[aria-selected="true"] {
+  background: var(--calibration-soft) !important;
+}
+body.public-ui .comparison-matrix tbody tr.is-selected td,
+body.public-ui .comparison-matrix tbody tr[aria-selected="true"] td { background: transparent !important; }
+body.public-ui .comparison-matrix .comparison-value,
+body.public-ui .comparison-matrix .comparison-delta,
+body.public-ui .comparison-matrix .comparison-judgment { color: var(--ink) !important; }
+body.public-ui .comparison-matrix .comparison-judgment[data-status="已触发"] { color: oklch(0.38 0.14 25) !important; }
+body.public-ui .comparison-matrix .comparison-judgment[data-status="未触发"] { color: var(--state-ok) !important; }
+body.public-ui .comparison-metric-button,
+body.public-ui .comparison-metric-button > strong,
+body.public-ui .comparison-metric-button > small { color: var(--ink) !important; }
+body.public-ui .comparison-metric-button > small { color: var(--muted) !important; }
+body.public-ui .comparison-metric-button[aria-pressed="true"],
+body.public-ui .comparison-metric-button.is-active { background: var(--equipment-soft) !important; background-image: none !important; color: var(--ink) !important; box-shadow: inset 0 -3px 0 var(--calibration) !important; }
+body.public-ui .comparison-metric-button[aria-pressed="true"]::before,
+body.public-ui .comparison-metric-button.is-active::before { color: var(--equipment) !important; border-color: var(--equipment) !important; }
+body.public-ui .comparison-metric-button[aria-pressed="true"] > strong,
+body.public-ui .comparison-metric-button.is-active > strong { color: var(--equipment) !important; }
+body.public-ui .dependency-flow li strong,
+body.public-ui .dependency-flow li.is-active strong,
+body.public-ui .dependency-flow li.active strong { color: var(--ink) !important; }
+body.public-ui .dependency-flow li small { color: var(--muted) !important; }
+body.public-ui .dependency-flow li.is-active,
+body.public-ui .dependency-flow li.active { background: var(--equipment-soft) !important; background-image: none !important; border-color: var(--equipment) !important; box-shadow: inset 3px 0 0 var(--calibration) !important; }
+body.public-ui .dependency-flow li.is-active::after,
+body.public-ui .dependency-flow li.active::after { background: var(--equipment-soft) !important; color: var(--equipment) !important; border-color: var(--equipment) !important; }
+body.public-ui .dependency-flow li.is-disabled strong,
+body.public-ui .dependency-flow li.disabled strong { color: var(--muted) !important; }
+body.public-ui .comparison-next span,
+body.public-ui .comparison-next strong { color: var(--ink) !important; }
+body.public-ui .signal-summary p,
+body.public-ui .compact-dl dd,
+body.public-ui .graph-note .compact-dl dd,
+body.public-ui .graph-note > div > p { color: var(--ink) !important; }
+body.public-ui .compact-dl dt,
+body.public-ui .signal-summary .panel-heading > span:first-child { color: var(--muted) !important; }
+body.public-ui .relation-case-summary > p,
+body.public-ui .relation-case-evidence h4,
+body.public-ui .relation-evidence-columns li span,
+body.public-ui .relation-case-status { color: var(--muted) !important; }
+body.public-ui .relation-evidence-columns li strong,
+body.public-ui .relation-case-tasks td,
+body.public-ui .relation-case-tasks td strong { color: var(--ink) !important; }
+body.public-ui .relation-evidence-columns li small,
+body.public-ui .relation-case-tasks code { color: var(--equipment) !important; }
+body.public-ui .integration-note,
+body.public-ui .integration-note strong,
+body.public-ui .analysis-explainer-boundary,
+body.public-ui .comparison-boundary { color: var(--ink) !important; }
+body.public-ui .integration-note strong,
+body.public-ui .analysis-explainer-boundary strong,
+body.public-ui .comparison-boundary strong { color: var(--equipment) !important; }
+
+/* Evidence and task tables inherit a legacy dark-workbench color ramp.  Restate
+   the light-surface values here so every conclusion remains readable after a
+   linked row is highlighted. */
+body.public-ui .evidence-item,
+body.public-ui .evidence-item summary,
+body.public-ui .evidence-item .evidence-heading,
+body.public-ui .evidence-item .evidence-heading strong,
+body.public-ui .evidence-item .evidence-heading small,
+body.public-ui .evidence-item .evidence-detail,
+body.public-ui .evidence-item .evidence-detail dt,
+body.public-ui .evidence-item .evidence-detail dd { color: var(--ink) !important; }
+body.public-ui .evidence-item .evidence-heading small,
+body.public-ui .evidence-item .evidence-detail dt { color: var(--muted) !important; }
+body.public-ui .evidence-item summary::before { color: var(--equipment) !important; }
+body.public-ui .evidence-item .evidence-detail { background: var(--panel) !important; }
+body.public-ui .evidence-item.is-linked,
+body.public-ui .evidence-item.is-linked[open] {
+  background: var(--calibration-soft) !important;
+  box-shadow: none !important;
+}
+body.public-ui .evidence-item.is-linked strong { color: var(--ink) !important; }
+body.public-ui .cause-wrap,
+body.public-ui .task-wrap,
+body.public-ui .cause-wrap table,
+body.public-ui .task-wrap table,
+body.public-ui .cause-wrap tbody,
+body.public-ui .task-wrap tbody,
+body.public-ui .cause-wrap tr,
+body.public-ui .task-wrap tr,
+body.public-ui .cause-wrap td,
+body.public-ui .task-wrap td { color: var(--ink) !important; }
+body.public-ui .cause-wrap td small,
+body.public-ui .task-wrap td small,
+body.public-ui .cause-wrap td::before,
+body.public-ui .task-wrap td::before { color: var(--muted) !important; }
+body.public-ui .cause-wrap tr.is-linked,
+body.public-ui .task-wrap tr.is-linked { background: var(--calibration-soft) !important; box-shadow: none !important; }
+body.public-ui .cause-wrap tr.is-linked td:first-child,
+body.public-ui .task-wrap tr.is-linked td:first-child { color: var(--ink) !important; }
+body.public-ui .dependency-flow li.is-active,
+body.public-ui .dependency-flow li.active { box-shadow: none !important; }
+
+/* The data foundation is a review surface, not a decorative metric wall. */
+body.public-ui .data-foundation-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin: -8px 0 20px; }
+body.public-ui .data-foundation-intro p { max-width: 74ch; margin: 0; color: var(--ink) !important; font-size: 13px; line-height: 1.7; }
+body.public-ui .data-foundation-intro .button { flex: 0 0 auto; }
+body.public-ui .data-foundation-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--canvas); }
+body.public-ui .data-foundation-metrics > div { min-width: 0; padding: 15px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+body.public-ui .data-foundation-metrics > div:nth-child(4n) { border-right: 0; }
+body.public-ui .data-foundation-metrics > div:nth-last-child(-n + 4) { border-bottom: 0; }
+body.public-ui .data-foundation-metrics span,
+body.public-ui .data-foundation-metrics strong,
+body.public-ui .data-foundation-metrics small { display: block; }
+body.public-ui .data-foundation-metrics span { color: var(--muted); font-size: 11px; }
+body.public-ui .data-foundation-metrics strong { margin-top: 5px; color: var(--ink); font: 700 20px/1.1 var(--font-mono); }
+body.public-ui .data-foundation-metrics small { margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.4; }
+body.public-ui .data-foundation-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 16px; margin-top: 16px; }
+body.public-ui .data-foundation-chain,
+body.public-ui .data-boundary-card { min-width: 0; padding: 20px; }
+body.public-ui .data-chain-steps { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+body.public-ui .data-chain-steps span { padding: 7px 9px; border: 1px solid var(--border-strong); border-radius: 7px; background: var(--equipment-soft); color: var(--equipment); font-size: 11px; font-weight: 700; }
+body.public-ui .data-chain-steps i { color: var(--equipment); font: 700 14px/1 var(--font-mono); font-style: normal; }
+body.public-ui .data-foundation-chain p { margin: 18px 0 0; color: var(--ink) !important; font-size: 12px; line-height: 1.65; }
+body.public-ui .data-boundary-card ul { display: grid; gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; }
+body.public-ui .data-boundary-card li { position: relative; padding-left: 18px; color: var(--ink) !important; font-size: 12px; line-height: 1.6; }
+body.public-ui .data-boundary-card li::before { content: ""; position: absolute; top: .68em; left: 0; width: 7px; height: 7px; border-radius: 50%; background: var(--calibration); }
+
+/* Make the ink read as a living field while panels retain a readable paper. */
+body.public-ui main,
+body.public-ui .section-block,
+body.public-ui .hero { background: color-mix(in oklch, var(--canvas) 90%, transparent) !important; }
+body.public-ui .topbar { background: color-mix(in oklch, var(--canvas) 92%, transparent) !important; }
+body.public-ui .sidebar { background: color-mix(in oklch, var(--panel) 91%, transparent) !important; }
+body.public-ui #ink-field { opacity: 1 !important; mix-blend-mode: multiply; }
+
+@media (max-width: 900px) {
+  body.public-ui .data-foundation-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.public-ui .data-foundation-metrics > div:nth-child(4n) { border-right: 1px solid var(--border); }
+  body.public-ui .data-foundation-metrics > div:nth-child(2n) { border-right: 0; }
+  body.public-ui .data-foundation-metrics > div:nth-last-child(-n + 4) { border-bottom: 1px solid var(--border); }
+  body.public-ui .data-foundation-metrics > div:nth-last-child(-n + 2) { border-bottom: 0; }
+}
+@media (max-width: 700px) {
+  body.public-ui .data-foundation-intro,
+  body.public-ui .data-foundation-grid { display: grid; grid-template-columns: 1fr; }
+  body.public-ui .data-foundation-intro { gap: 12px; }
+  body.public-ui .data-foundation-intro .button { justify-self: start; }
+}

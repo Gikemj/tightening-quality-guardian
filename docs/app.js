@@ -12,6 +12,7 @@ const state = {
   results: { risk: null, baseline: null },
   metrics: null,
   scenarioMetrics: null,
+  seresData: null,
   graph: null,
   graphError: null,
   relationReports: [],
@@ -170,6 +171,53 @@ function bindRelationCaseInteractions() {
     }, null, 2);
     text("#relation-case-status", `任务预览已更新，共 ${(report.tasks || []).length} 项，需具名审批后才能执行`);
   });
+}
+
+function formatWholeNumber(value) {
+  return Number.isFinite(Number(value)) ? Number(value).toLocaleString("zh-CN") : "—";
+}
+
+function formatCoverage(value) {
+  return Number.isFinite(Number(value)) ? `${(Number(value) * 100).toFixed(2)}%` : "—";
+}
+
+function renderSeresDataFoundation() {
+  const payload = state.seresData;
+  if (!payload) {
+    text("#data-foundation-status", "汇总资产暂不可用");
+    text("#data-foundation-summary", "赛题数据汇总未能读取。公开风险分析仍使用独立合成数据，页面不会把缺失关系补成事实。");
+    return;
+  }
+  const counts = payload.counts || {};
+  const relations = payload.relations || {};
+  const equipmentLink = relations.work_order_to_equipment_instance_to_category || {};
+  const failureLink = relations.work_order_to_failure_mode || {};
+  const closedLink = relations.closed_typed_candidate || {};
+  text("#data-foundation-status", `来源：${payload.source_file || "赛题脱敏数据包"} · 仅作结构/关系参考`);
+  text("#data-foundation-summary", payload.summary || "赛题脱敏数据只用于对象建模、关系核验和缺口分级，不用于推断真实产线状态或企业收益。");
+  text("#data-count-equipment-categories", formatWholeNumber(counts.equipment_categories));
+  text("#data-count-equipment-instances", formatWholeNumber(counts.equipment_instances));
+  text("#data-count-equipment-functions", formatWholeNumber(counts.equipment_functions));
+  text("#data-count-failure-modes", formatWholeNumber(counts.failure_modes));
+  text("#data-count-work-orders", formatWholeNumber(counts.work_orders));
+  text("#data-count-valid-workorder-links", `${formatWholeNumber(equipmentLink.matched_work_orders)} / ${formatWholeNumber(equipmentLink.total_work_orders)}`);
+  text("#data-count-valid-workorder-links-note", `${formatCoverage(equipmentLink.coverage)} · ${equipmentLink.label || "有效设备链路"}`);
+  text("#data-count-failure-links", `${formatWholeNumber(failureLink.matched_work_orders)} / ${formatWholeNumber(failureLink.total_work_orders)}`);
+  text("#data-count-failure-links-note", `${formatCoverage(failureLink.coverage)} · 关系缺失保持缺失`);
+  text("#data-count-closed-candidates", `${formatWholeNumber(closedLink.matched_work_orders)} / ${formatWholeNumber(closedLink.total_work_orders)}`);
+  text("#data-count-closed-candidates-note", `${formatCoverage(closedLink.coverage)} · 仅作结构候选`);
+  const chainNote = payload.demo_separation || "脱敏包与拧紧时序分开使用，不混合计算。";
+  text("#data-foundation-chain-note", chainNote);
+  const boundaries = $("#data-foundation-boundaries");
+  if (boundaries) {
+    const allowed = (payload.allowed_use || []).slice(0, 2).map((item) => `允许：${item}`);
+    const prohibited = (payload.prohibited_use || []).slice(0, 2).map((item) => `禁止：${item}`);
+    boundaries.replaceChildren(...[...allowed, ...prohibited].map((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      return li;
+    }));
+  }
 }
 
 function buildLocalLivePayload(running = localLiveState.running) {
@@ -597,7 +645,7 @@ function installAdminWorkbench() {
       <div><span class="section-kicker">PUBLIC READ-ONLY ADMIN</span><h2 id="admin-workbench-title">管理员审计台</h2></div>
       <div class="workflow-action">
         <span id="admin-overall" tabindex="-1" aria-live="polite">正在核对</span>
-        <button class="button secondary" id="admin-copy-command" type="button">复制复现命令</button>
+        <button class="button secondary" id="admin-copy-command" type="button">复制本地复现命令</button>
         <button class="button primary" id="admin-export-summary" type="button">导出当前分析摘要</button>
       </div>
     </div>
@@ -2072,7 +2120,7 @@ function bindInteractions() {
       button.title = error instanceof Error ? error.message : "复制失败";
     } finally {
       setTimeout(() => {
-        text("#admin-copy-command", "复制复现命令");
+          text("#admin-copy-command", "复制本地复现命令");
         button.title = "";
       }, 2200);
     }
@@ -2279,9 +2327,9 @@ async function load() {
       "baseline_result.json",
       "scenario_metrics.json",
     ];
-    const [responses, optionalAssets] = await Promise.all([
+  const [responses, optionalAssets] = await Promise.all([
       Promise.all(requiredNames.map((name) => fetch(`./data/${name}`))),
-      Promise.all([optionalJson("metrics.json"), optionalJson("subgraph.json")]),
+      Promise.all([optionalJson("metrics.json"), optionalJson("subgraph.json"), optionalJson("seres-equipment-closure-summary.json")]),
     ]);
     responses.forEach((response, index) => {
       if (!response.ok) throw new Error(`${requiredNames[index]} 加载失败（HTTP ${response.status}）`);
@@ -2296,6 +2344,7 @@ async function load() {
     state.metrics = optionalAssets[0].data;
     state.graph = optionalAssets[1].data;
     state.graphError = optionalAssets[1].error;
+    state.seresData = optionalAssets[2].data;
 
     // Validate both scenarios before rendering either one. A stale generated
     // asset must never silently produce a mixed Python/JavaScript conclusion.
@@ -2311,6 +2360,7 @@ async function load() {
     installAdminWorkbench();
     renderGraph();
     renderMetrics();
+    renderSeresDataFoundation();
     renderScenarioMetrics();
     bindInteractions();
     render();

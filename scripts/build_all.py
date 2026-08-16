@@ -5,10 +5,10 @@ from pathlib import Path
 
 from torque_guard.artifacts import commit_staged_files
 from build_demo_assets import main as build_demo_assets
+from build_round2_assets import main as build_round2_assets
 from evaluate import main as evaluate_rolling_windows
 from evaluate_scenarios import main as evaluate_independent_scenarios
 from generate_demo_data import main as generate_demo_data
-from build_round2_assets import main as build_round2_assets
 
 
 ROOT = Path(__file__).resolve().parents[1]

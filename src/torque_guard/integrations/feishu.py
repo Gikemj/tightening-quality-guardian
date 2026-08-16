@@ -8,7 +8,7 @@ import socket
 import time
 from collections import Counter
 from dataclasses import dataclass
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, Optional
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from urllib.parse import urlsplit
@@ -195,7 +195,10 @@ class FeishuConfig:
             )
 
 
-Transport = Callable[[str, str, dict[str, Any] | None, dict[str, str], float], dict[str, Any]]
+# Keep this alias evaluable on the Python 3.9 environments used by some
+# student machines. Function annotations are deferred above, but assignment
+# expressions such as this one are evaluated immediately.
+Transport = Callable[[str, str, Optional[dict[str, Any]], dict[str, str], float], dict[str, Any]]
 
 
 def _urllib_transport(

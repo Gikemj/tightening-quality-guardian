@@ -2,13 +2,13 @@
 
 本项目的目标仓库是：
 
-`https://github.com/Z1on-J1che/tightening-quality-guardian`
+`https://github.com/Gikemj/tightening-quality-guardian`
 
 ## 在线演示
 
 GitHub Pages 站点地址：
 
-`https://z1on-j1che.github.io/tightening-quality-guardian/`
+`https://gikemj.github.io/tightening-quality-guardian/`
 
 站点文件位于 `docs/`，入口为 `docs/index.html`。页面使用仓库内的示例数据和生成结果，不需要后端服务或数据库。
 

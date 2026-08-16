@@ -1,0 +1,22 @@
+{
+  "title": "质控前哨公开管理员工作台接口契约",
+  "version": "browser-preview-1.0",
+  "mode": "static_browser_preview",
+  "description": "GitHub Pages 只读演示使用同一组路径命名模拟后台动作，不向企业租户写入。",
+  "endpoints": [
+    { "method": "GET", "path": "/api/summary", "purpose": "读取风险、健康与工作流摘要" },
+    { "method": "POST", "path": "/api/risk/run", "purpose": "运行公开风险分析回放" },
+    { "method": "POST", "path": "/api/workflow/transition", "purpose": "按人工门禁推进审批、任务、验证与结案" },
+    { "method": "GET", "path": "/api/knowledge", "purpose": "读取知识修订与关系节点摘要" },
+    { "method": "GET", "path": "/api/data", "purpose": "读取合成事件与输出资产清单" },
+    { "method": "POST", "path": "/api/monitor/test", "purpose": "运行合成数据源连接测试" },
+    { "method": "POST", "path": "/api/simulator/generate", "purpose": "生成一批浏览器内合成拧紧数据" },
+    { "method": "GET", "path": "/api/audit", "purpose": "读取当前页面操作审计记录" }
+  ],
+  "safety": {
+    "external_write": false,
+    "automatic_stop_line": false,
+    "root_cause_confirmation": false,
+    "secret_in_browser": false
+  }
+}

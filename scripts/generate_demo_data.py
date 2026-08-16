@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import csv
-import json
+import io
 import random
 from datetime import datetime, timedelta
 from pathlib import Path
+
+from torque_guard.artifacts import atomic_write_bytes, write_json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,14 +99,16 @@ def generate() -> list[dict[str, str | int | float]]:
     return rows
 
 
-def main() -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+def main(artifact_root: Path = ROOT) -> None:
+    data_dir = Path(artifact_root) / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
     rows = generate()
-    csv_path = DATA_DIR / "tightening_events_demo.csv"
-    with csv_path.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=FIELDS, lineterminator="\n")
-        writer.writeheader()
-        writer.writerows(rows)
+    csv_path = data_dir / "tightening_events_demo.csv"
+    csv_buffer = io.StringIO(newline="")
+    writer = csv.DictWriter(csv_buffer, fieldnames=FIELDS, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    atomic_write_bytes(csv_path, csv_buffer.getvalue().encode("utf-8-sig"))
 
     manifest = {
         "dataset": csv_path.name,
@@ -120,9 +124,7 @@ def main() -> None:
             "description": "扭矩仍在规格内，但均值偏移、角度离散和重试率同步上升。",
         },
     }
-    (DATA_DIR / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    write_json(data_dir / "manifest.json", manifest)
     print(f"generated {len(rows)} rows -> {csv_path}")
 
 

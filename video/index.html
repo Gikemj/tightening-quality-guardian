@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family:"PingFang SC"; src:local("PingFang SC"); }
+      @font-face { font-family:"Microsoft YaHei"; src:local("Microsoft YaHei"); }
+      @font-face { font-family:"Songti SC"; src:local("Songti SC"); }
+      @font-face { font-family:"STSong"; src:local("STSong"); }
+      @font-face { font-family:"SFMono-Regular"; src:local("SF Mono"); }
+      :root { --canvas:#f7f8f6; --ink:#142033; --blue:#246b96; --blue-soft:#e9f2f7; --ochre:#a56d2d; --magenta:#a32962; --line:#d9deda; --muted:#60707a; }
+      * { box-sizing:border-box; }
+      html, body { width:1920px; height:1080px; margin:0; overflow:hidden; background:var(--canvas); color:var(--ink); }
+      body { font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+      .mono { font-family:"SFMono-Regular",Menlo,monospace; font-variant-numeric:tabular-nums; }
+      .clip { position:absolute; inset:0; }
+      .scene { display:flex; flex-direction:column; width:100%; height:100%; padding:84px 140px 76px; background:var(--canvas); }
+      .kicker { margin:0; color:var(--blue); font:700 23px/1.3 "SFMono-Regular",Menlo,monospace; letter-spacing:.05em; }
+      h1, h2, h3, p { margin:0; }
+      h1, h2 { max-width:1260px; font-family:"Songti SC",STSong,serif; font-weight:700; letter-spacing:-.045em; }
+      h1 { margin-top:34px; font-size:112px; line-height:1.08; }
+      h2 { margin-top:26px; font-size:84px; line-height:1.1; }
+      .lede { max-width:1120px; margin-top:34px; color:#344553; font-size:34px; line-height:1.7; }
+      .footer { display:flex; justify-content:space-between; margin-top:auto; padding-top:28px; border-top:2px solid var(--line); color:var(--muted); font:20px/1.4 "SFMono-Regular",Menlo,monospace; }
+      .stamp { display:inline-flex; align-items:center; width:max-content; margin-top:46px; padding:14px 18px; border:2px solid var(--magenta); color:var(--magenta); font:700 23px/1 "SFMono-Regular",Menlo,monospace; letter-spacing:.03em; }
+      .rule { height:5px; width:100%; margin-top:52px; background:linear-gradient(90deg,var(--blue) 0 44%,var(--ochre) 44% 76%,var(--magenta) 76% 100%); }
+      .card-row { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:46px; }
+      .card { min-height:248px; padding:28px; border:2px solid var(--line); background:#fff; }
+      .card .num { color:var(--magenta); font:700 24px/1 "SFMono-Regular",Menlo,monospace; }
+      .card h3 { margin-top:20px; font-size:31px; line-height:1.25; }
+      .card p { margin-top:14px; color:#4b5a64; font-size:24px; line-height:1.55; }
+      .path { display:grid; grid-template-columns:1fr 92px 1fr 92px 1fr 92px 1fr; align-items:stretch; gap:0; margin-top:62px; }
+      .node { min-height:260px; padding:30px; border:2px solid var(--line); background:#fff; }
+      .node small { display:block; color:var(--muted); font:700 20px/1.35 "SFMono-Regular",Menlo,monospace; }
+      .node strong { display:block; margin-top:20px; font-size:34px; line-height:1.25; }
+      .node span { display:block; margin-top:24px; color:var(--blue); font:20px/1.5 "SFMono-Regular",Menlo,monospace; }
+      .node.candidate { border-color:#d6bb97; background:#fffaf3; }
+      .node.candidate span { color:var(--ochre); }
+      .arrow { display:grid; place-items:center; color:var(--blue); font-size:52px; }
+      .classification { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:50px; }
+      .classification article { min-height:322px; padding:30px; border-top:9px solid var(--blue); background:#fff; }
+      .classification article:nth-child(2) { border-color:var(--ochre); background:#fffaf3; }
+      .classification article:nth-child(3) { border-color:var(--magenta); background:#fff7fa; }
+      .classification span { color:var(--muted); font:700 19px/1.35 "SFMono-Regular",Menlo,monospace; }
+      .classification h3 { margin-top:28px; font-size:34px; }
+      .classification p { margin-top:18px; color:#4b5a64; font-size:25px; line-height:1.55; }
+      .case-layout { display:grid; grid-template-columns:1.05fr .95fr; gap:42px; margin-top:38px; }
+      .case-sheet { padding:34px; border:2px solid var(--line); background:#fff; }
+      .case-sheet .case-id { color:var(--blue); font:700 22px/1.3 "SFMono-Regular",Menlo,monospace; }
+      .case-sheet h3 { margin-top:18px; font-size:38px; line-height:1.25; }
+      .rows { margin-top:28px; border-top:1px solid var(--line); }
+      .rows div { display:grid; grid-template-columns:190px 1fr; gap:20px; padding:18px 0; border-bottom:1px solid var(--line); font-size:23px; line-height:1.45; }
+      .rows b { color:var(--muted); font-weight:600; }
+      .task-stack { display:grid; gap:14px; align-content:start; }
+      .task { padding:23px 26px; border-left:8px solid var(--magenta); background:#fff; }
+      .task small { color:var(--magenta); font:700 18px/1.3 "SFMono-Regular",Menlo,monospace; }
+      .task strong { display:block; margin-top:10px; font-size:27px; }
+      .task span { display:block; margin-top:8px; color:#4b5a64; font-size:21px; line-height:1.45; }
+      .guard { display:grid; grid-template-columns:1.1fr .9fr; gap:34px; margin-top:48px; }
+      .guard-box { padding:34px; border:2px solid var(--line); background:#fff; }
+      .guard-box h3 { font-size:33px; }.guard-box ul { margin:24px 0 0; padding-left:28px; color:#41525e; font-size:25px; line-height:1.72; }
+      .contract { background:var(--ink); color:#fff; border-color:var(--ink); }.contract p { margin-top:22px; color:#d6e3ec; font:24px/1.65 "SFMono-Regular",Menlo,monospace; }
+      .flow { display:grid; grid-template-columns:1fr 70px 1fr 70px 1fr; align-items:center; margin-top:64px; }
+      .flow-step { padding:28px; border:2px solid var(--line); background:#fff; }.flow-step b { display:block; color:var(--magenta); font:700 18px/1.3 "SFMono-Regular",Menlo,monospace; }.flow-step strong { display:block; margin-top:14px; font-size:30px; }.flow-step span { display:block; margin-top:10px; color:#50616c; font-size:22px; line-height:1.45; }.flow-arrow { color:var(--blue); font-size:46px; text-align:center; }
+      .close { justify-content:center; }.close h1 { max-width:1450px; margin-top:28px; font-size:100px; }.close .lede { max-width:1000px; }.url { margin-top:56px; color:var(--blue); font:700 30px/1.5 "SFMono-Regular",Menlo,monospace; }
+      .transition { z-index:3; background:linear-gradient(105deg,transparent 0 41%,var(--canvas) 41% 59%,transparent 59% 100%); pointer-events:none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="267" data-width="1920" data-height="1080">
+      <audio id="narration" data-start="0" data-duration="265.8" data-track-index="3" src="assets/narration.m4a" data-volume="1"></audio>
+
+      <section id="scene-1" class="scene clip" data-start="0" data-duration="36" data-track-index="1">
+        <p class="kicker">SERES SUPER FACTORY · ROUND 2</p><h1 id="s1-title">先判断关系是否可信，<br>再讨论处置。</h1>
+        <p id="s1-lede" class="lede">质控前哨 V2：面向设备质量风险闭环的关系证据数字员工</p><span id="s1-stamp" class="stamp">智造哨兵 · 公开合成案例演示</span><div class="rule"></div><div class="footer"><span>数据使用边界：对象、字段与关系</span><span>不做时序预测 · 不推断真实状态</span></div>
+      </section>
+
+      <section id="scene-2" class="scene clip" data-start="36" data-duration="42" data-track-index="1">
+        <p class="kicker">01 · 从赛题数据边界出发</p><h2 id="s2-title">静态快照能说明什么，<br>不能说明什么。</h2>
+        <div class="card-row"><article id="s2-card1" class="card"><span class="num">可用</span><h3>对象与字段</h3><p>设备类别、实例、工单、失效模式、功能关系。</p></article><article id="s2-card2" class="card"><span class="num">可用</span><h3>关系核验</h3><p>判断关系是否存在、是否完整、是否需要复核。</p></article><article id="s2-card3" class="card"><span class="num">不可直接得到</span><h3>现场结论</h3><p>真实状态、故障概率、质量影响和已确认根因。</p></article></div><div class="footer"><span>脱敏数据提供参考，不等于可直接训练样本</span><span>边界先行</span></div>
+      </section>
+
+      <section id="scene-3" class="scene clip" data-start="78" data-duration="45" data-track-index="1">
+        <p class="kicker">02 · 关系核验</p><h2 id="s3-title">先把案卷走对，<br>再决定能走多远。</h2>
+        <div class="path"><article id="s3-node1" class="node"><small>对象</small><strong>设备实例</strong><span>可回溯对象</span></article><div class="arrow">→</div><article id="s3-node2" class="node"><small>知识入口</small><strong>类别与功能</strong><span>受控检索范围</span></article><div class="arrow">→</div><article id="s3-node3" class="node"><small>业务记录</small><strong>故障工单</strong><span>状态与来源</span></article><div class="arrow">→</div><article id="s3-node4" class="node candidate"><small>候选知识</small><strong>失效模式</strong><span>历史关联待核验</span></article></div><div class="footer"><span>主链：设备类别 → 实例 → 工单 → 失效模式 → 功能</span><span>链路存在 ≠ 结论成立</span></div>
+      </section>
+
+      <section id="scene-4" class="scene clip" data-start="123" data-duration="49" data-track-index="1">
+        <p class="kicker">03 · 证据分级与案卷分流</p><h2 id="s4-title">同一份工单，<br>不能用同一种推理方式处理。</h2>
+        <div class="classification"><article id="s4-fact"><span>DIRECT</span><h3>直接事实</h3><p>工单状态、设备对象、类别与功能关系可以作为案卷事实。</p></article><article id="s4-candidate"><span>CANDIDATE</span><h3>历史候选</h3><p>失效模式关联可供检索，但必须由业务人员核验。</p></article><article id="s4-gap"><span>GAP</span><h3>信息缺口</h3><p>现象、检查结果、复机依据不足时，先补证，不补造。</p></article></div><div class="footer"><span>仅结构记录：补齐工单　关联候选：复核关系　关系较完整：跨角色复核</span><span>分流而非强答</span></div>
+      </section>
+
+      <section id="scene-5" class="scene clip" data-start="172" data-duration="47" data-track-index="1">
+        <p class="kicker">04 · 合成案卷演示</p><h2 id="s5-title">任务草案先写清楚<br>“谁、凭什么、验收什么”。</h2>
+        <div class="case-layout"><article id="s5-sheet" class="case-sheet"><span class="case-id">CASE-DEMO-002</span><h3>控制与电气报警的工单补证</h3><div class="rows"><div><b>关系层级</b><span>仅工单结构记录</span></div><div><b>失效模式</b><span>未关联</span></div><div><b>系统动作</b><span>停止原因推断，转入补证</span></div><div><b>风险红线</b><span>不自动修改参数，不判断质量放行</span></div></div></article><div class="task-stack"><article id="s5-task1" class="task"><small>TASK-REL-01</small><strong>核验设备对象与工单归属</strong><span>责任：设备管理员 · 留存核验依据</span></article><article id="s5-task2" class="task"><small>TASK-REL-02</small><strong>补齐工单事实字段</strong><span>责任：现场报修人 · 未知项明确标记</span></article><article id="s5-task3" class="task"><small>TASK-REL-03</small><strong>评估是否需要共同复核</strong><span>责任：质量工程师 · 审批后执行</span></article></div></div><div class="footer"><span>证据编号、责任角色、建议时点、验收依据完整保留</span><span>任务需人工审批</span></div>
+      </section>
+
+      <section id="scene-6" class="scene clip" data-start="219" data-duration="38" data-track-index="1">
+        <p class="kicker">05 · 受控模型与飞书协同</p><h2 id="s6-title">模型整理文书，<br>人员保留工程判断。</h2>
+        <div class="guard"><article id="s6-model" class="guard-box contract"><h3>Terra · 服务端受控调用</h3><p>最小案卷输入<br>单次 / 低随机性 / 600 token<br>固定 JSON / 超时回退</p></article><article id="s6-limit" class="guard-box"><h3>明确禁止</h3><ul><li>确认根因</li><li>判断质量放行</li><li>建议停线或改 PLC</li><li>绕过审批写入外部系统</li></ul></article></div><div class="flow"><article id="s6-flow1" class="flow-step"><b>FEISHU 01</b><strong>案卷预览</strong><span>关系判断、证据与缺口</span></article><div class="flow-arrow">→</div><article id="s6-flow2" class="flow-step"><b>FEISHU 02</b><strong>具名审批</strong><span>审批前不创建任务</span></article><div class="flow-arrow">→</div><article id="s6-flow3" class="flow-step"><b>FEISHU 03</b><strong>验收与回写</strong><span>结果人工审核后更新知识</span></article></div><div class="footer"><span>公开演示不使用企业凭证，不向飞书写入</span><span>可审计、可回退</span></div>
+      </section>
+
+      <section id="scene-8" class="scene close clip" data-start="257" data-duration="10" data-track-index="1"><p class="kicker">质控前哨 V2</p><h1 id="s8-title">让数字员工先交代证据，<br>再把问题交给正确的人。</h1><p id="s8-lede" class="lede">从一个设备类别和有限事件类型开始，先验证对象映射、工单补齐、关联核验与审批闭环，再讨论真实业务收益。</p><p class="url">gikemj.github.io/tightening-quality-guardian/round2.html</p><div class="footer"><span>赛力斯集团命题 · 智造哨兵</span><span>谢谢观看</span></div></section>
+
+      <div id="transition-1" class="transition clip" data-start="35.55" data-duration="0.9" data-track-index="2"></div><div id="transition-2" class="transition clip" data-start="77.55" data-duration="0.9" data-track-index="2"></div><div id="transition-3" class="transition clip" data-start="122.55" data-duration="0.9" data-track-index="2"></div><div id="transition-4" class="transition clip" data-start="171.55" data-duration="0.9" data-track-index="2"></div><div id="transition-5" class="transition clip" data-start="218.55" data-duration="0.9" data-track-index="2"></div><div id="transition-6" class="transition clip" data-start="256.55" data-duration="0.9" data-track-index="2"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const enter = (selector, at, vars = {}) => tl.from(selector, { opacity:0, y:42, duration:.7, ease:"power3.out", ...vars }, at);
+      enter("#s1-title", .25, {y:58, duration:.9}); enter("#s1-lede", 1.1, {x:-32, y:0, duration:.7}); enter("#s1-stamp", 2.0, {scale:.92, y:0, duration:.45, ease:"back.out(1.6)"});
+      enter("#s2-title", 36.3, {x:-48, y:0, duration:.8}); enter("#s2-card1", 39, {y:30, duration:.55}); enter("#s2-card2", 42.2, {y:30, duration:.55, ease:"sine.out"}); enter("#s2-card3", 46, {y:30, duration:.55, ease:"expo.out"});
+      enter("#s3-title", 78.3, {x:-48, y:0, duration:.8}); enter("#s3-node1", 82, {x:-36, y:0, duration:.55}); enter("#s3-node2", 86, {x:-36, y:0, duration:.55, ease:"sine.out"}); enter("#s3-node3", 90, {x:-36, y:0, duration:.55, ease:"expo.out"}); enter("#s3-node4", 95, {scale:.94, y:0, duration:.6, ease:"back.out(1.4)"});
+      enter("#s4-title", 123.3, {x:-48, y:0, duration:.8}); enter("#s4-fact", 127.5, {y:30, duration:.55}); enter("#s4-candidate", 132.5, {y:30, duration:.55, ease:"sine.out"}); enter("#s4-gap", 138, {y:30, duration:.55, ease:"expo.out"});
+      enter("#s5-title", 172.3, {x:-48, y:0, duration:.8}); enter("#s5-sheet", 176.5, {x:-42, y:0, duration:.65}); enter("#s5-task1", 181, {x:42, y:0, duration:.5}); enter("#s5-task2", 186.5, {x:42, y:0, duration:.5, ease:"sine.out"}); enter("#s5-task3", 192, {x:42, y:0, duration:.5, ease:"expo.out"});
+      enter("#s6-title", 219.3, {x:-48, y:0, duration:.8}); enter("#s6-model", 224, {scale:.95, y:0, duration:.6, ease:"back.out(1.3)"}); enter("#s6-limit", 228.5, {x:38, y:0, duration:.6}); enter("#s6-flow1", 235, {y:30, duration:.5}); enter("#s6-flow2", 239.5, {y:30, duration:.5, ease:"sine.out"}); enter("#s6-flow3", 244, {y:30, duration:.5, ease:"expo.out"});
+      enter("#s8-title", 257.2, {y:58, duration:.75}); enter("#s8-lede", 258.15, {x:-32, y:0, duration:.5});
+      window.__timelines.main = tl;
+    </script>
+  </body>
+</html>

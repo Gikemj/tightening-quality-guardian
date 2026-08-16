@@ -1,8 +1,6 @@
 {
   "dataset": "tightening_events_demo.csv",
   "generated_by": "scripts/generate_demo_data.py",
-  "seed": 20260717,
-  "records": 820,
   "points": [
     "P01",
     "P02",
@@ -10,11 +8,13 @@
     "P04",
     "P05"
   ],
-  "real_personal_data": false,
-  "seres_internal_data": false,
   "primary_scenario": {
+    "description": "扭矩仍在规格内，但均值偏移、角度离散和重试率同步上升。",
     "id": "hidden_torque_drift",
-    "point": "P03",
-    "description": "扭矩仍在规格内，但均值偏移、角度离散和重试率同步上升。"
-  }
+    "point": "P03"
+  },
+  "real_personal_data": false,
+  "records": 820,
+  "seed": 20260717,
+  "seres_internal_data": false
 }

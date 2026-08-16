@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from statistics import median
 
+from torque_guard.artifacts import write_json
 from torque_guard.risk import RiskAnalyzer, read_events
 
 
@@ -14,8 +15,9 @@ def ratio(numerator: int, denominator: int) -> float:
     return numerator / denominator if denominator else 0.0
 
 
-def main() -> None:
-    events = read_events(ROOT / "data" / "tightening_events_demo.csv")
+def main(artifact_root: Path = ROOT) -> None:
+    artifact_root = Path(artifact_root)
+    events = read_events(artifact_root / "data" / "tightening_events_demo.csv")
     point_events = [row for row in events if row["fastening_point"] == "P03"]
     analyzer = RiskAnalyzer(ROOT / "knowledge")
     samples = []
@@ -40,7 +42,15 @@ def main() -> None:
     )
     task_completeness = ratio(
         sum(
-            bool(action.owner_role and action.due_minutes and action.acceptance_criteria)
+            bool(
+                action.owner_role
+                and action.due_minutes
+                and action.acceptance_criteria
+                and action.why
+                and action.evidence_ids
+                and action.candidate_causes
+                and action.approval_required
+            )
             for action in full_card.recommended_actions
         ),
         len(full_card.recommended_actions),
@@ -65,16 +75,12 @@ def main() -> None:
             "Thresholds require recalibration on real equipment and stratification by model, program, and fastening point.",
         ],
     }
-    output_dir = ROOT / "outputs"
+    output_dir = artifact_root / "outputs"
     output_dir.mkdir(parents=True, exist_ok=True)
-    (output_dir / "metrics.json").write_text(
-        json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    web_data = ROOT / "docs" / "data"
+    write_json(output_dir / "metrics.json", metrics)
+    web_data = artifact_root / "docs" / "data"
     web_data.mkdir(parents=True, exist_ok=True)
-    (web_data / "metrics.json").write_text(
-        json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    write_json(web_data / "metrics.json", metrics)
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
 
 

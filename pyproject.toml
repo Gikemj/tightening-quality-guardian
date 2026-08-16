@@ -18,3 +18,6 @@ torque-guard = "torque_guard.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"torque_guard.prompts" = ["*.txt", "*.json"]

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="质控前哨：主动管控拧紧设备质量风险的比赛原型。" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="质控前哨：主动管控设备质量风险的比赛原型。" />
+    <meta name="theme-color" content="#07111f" />
     <title>质控前哨｜设备质量风险数字员工</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
@@ -14,78 +14,192 @@
     <header class="topbar">
       <a class="brand" href="#top" aria-label="质控前哨首页">
         <span class="brand-mark" aria-hidden="true">哨</span>
-        <span><strong>质控前哨</strong><small>设备质量风险数字员工</small></span>
+        <span><strong>质控前哨</strong><small>QUALITY GUARDIAN · CONTROL DESK</small></span>
       </a>
       <div class="topbar-meta">
+        <span class="system-presence"><i aria-hidden="true"></i>只读演示在线</span>
         <span class="demo-badge">比赛合成数据</span>
-        <a href="https://github.com/Gikemj/tightening-quality-guardian">查看 GitHub</a>
+        <a class="source-link" href="./round2.html">进入第二轮关系证据演示</a>
+        <span class="admin-profile" aria-label="管理员审计视图，只读公开演示"><b aria-hidden="true">A</b><span><strong>管理员审计视图</strong><small>只读演示 · 无登录授权</small></span></span>
       </div>
     </header>
 
     <div class="app-shell" id="top">
       <aside class="sidebar" aria-label="页面导航">
+        <div class="workspace-label"><span>WORKSPACE</span><strong>质量风险驾驶舱</strong></div>
         <div class="station-context">
-          <span>当前验证对象</span>
+          <span><i aria-hidden="true"></i> 当前验证对象</span>
           <strong>ST-FAS-07 · P03</strong>
           <small>总装关键拧紧工位（模拟）</small>
         </div>
         <nav>
-          <a class="active" href="#overview">风险总览</a>
-          <a href="#signals">异常信号</a>
-          <a href="#evidence">证据链</a>
-          <a href="#knowledge">知识子图</a>
-          <a href="#workflow">任务闭环</a>
-          <a href="#evaluation">离线验证</a>
+          <a class="active" href="#overview">数据概览</a>
+          <a href="#comparison">对比分析</a>
+          <a href="#risk-analysis">触发原因</a>
+          <a href="#evidence">证据来源</a>
+          <a href="#workflow">处置任务</a>
+          <a href="#evaluation">评估报告</a>
         </nav>
         <div class="sidebar-note">
-          <strong>安全边界</strong>
+          <span class="guardrail-icon" aria-hidden="true">◆</span>
+          <strong>安全边界已启用</strong>
           <p>只读分析。停线、隔离、参数修改和根因确认均需工程师批准。</p>
         </div>
+        <div class="sidebar-foot"><span>CONTRACT</span><strong>browser_read_only</strong><small>所有结论来自权威分析资产</small></div>
       </aside>
 
       <main id="main-content">
         <section class="hero" id="overview" aria-labelledby="main-title">
           <div class="hero-copy">
-            <div class="breadcrumb">风险台账 / TG-0519ED0B</div>
+            <div class="hero-eyebrow"><span><i aria-hidden="true"></i> RISK INTELLIGENCE</span><span>HUMAN-GATED CONTROL</span><span>TRACEABLE EVIDENCE</span></div>
+            <div class="breadcrumb">风险台账 / 正在加载</div>
             <div class="title-line">
-              <h1 id="main-title">规格内，也可能正在失稳</h1>
-              <span id="risk-chip" class="risk-chip risk-high">高风险</span>
+              <h1 id="main-title">正在读取权威分析结果</h1>
+              <span id="risk-chip" class="risk-chip risk-low">载入中</span>
             </div>
-            <p id="main-lead">P03 紧固点没有出现批量越限，但扭矩中心、角度离散和重试行为同时变化。数字员工已关联 PFMEA、控制计划和相似案例，等待工程师确认。</p>
+            <p id="main-lead">页面将从 Python 生成的风险卡与只读分析结果中读取当前结论。</p>
             <div class="hero-actions">
-              <button class="button primary" id="inject-risk" type="button">重放风险识别</button>
-              <button class="button secondary" id="reset-baseline" type="button">恢复基线窗口</button>
+              <button class="button primary" id="inject-risk" type="button" aria-pressed="true">重放风险识别</button>
+              <button class="button secondary" id="reset-baseline" type="button" aria-pressed="false">恢复基线窗口</button>
             </div>
             <p class="load-state" id="load-state" aria-live="polite">正在载入可复现演示数据…</p>
+            <p class="sr-only" id="scenario-announcement" aria-live="polite" aria-atomic="true"></p>
           </div>
           <aside class="score-panel" aria-label="动态风险排序指数">
-            <span>动态风险排序指数</span>
-            <div><strong id="risk-score">78</strong><small>/100</small></div>
+            <header><span>动态风险排序指数</span><b>PUBLIC REPLAY</b></header>
+            <div class="score-display"><strong id="risk-score">—</strong><small>/100</small></div>
+            <div class="score-scale" aria-hidden="true"><span>LOW</span><span>MEDIUM</span><span>HIGH</span></div>
             <p>用于运行期排队，不替代正式 PFMEA 的 S/O/D 或 RPN。</p>
           </aside>
         </section>
 
-        <section class="metric-strip" aria-label="当前风险摘要">
-          <div><span>处置状态</span><strong id="metric-state">需工程师复核</strong><small>状态由责任人确认</small></div>
-          <div><span>均值偏移</span><strong id="metric-shift">1.56σ</strong><small>基线：前 60 次</small></div>
-          <div><span>规格内比例</span><strong id="metric-in-spec">100%</strong><small>并非批量越限</small></div>
-          <div><span>最近重试</span><strong id="metric-retry">0.250 次/循环</strong><small>与角度离散同步</small></div>
+        <section class="analysis-explainer" aria-labelledby="analysis-explainer-title">
+          <header class="analysis-explainer-head">
+            <div>
+              <span class="section-kicker">THIS RUN, EXPLAINED</span>
+              <h2 id="analysis-explainer-title">本次在分析什么</h2>
+              <p id="analysis-question">正在从权威风险卡读取本次分析问题…</p>
+            </div>
+            <div class="analysis-progress-card" aria-label="当前分析链路状态">
+              <span>分析链路</span>
+              <strong id="analysis-progress">正在核对数据、知识与工作流契约</strong>
+              <div class="analysis-progress-rail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </header>
+
+          <div class="analysis-flow" aria-label="从分析对象到风险卡输出的五步流水线">
+            <article class="analysis-step">
+              <div class="analysis-step-mark"><span>01</span><i aria-hidden="true">◎</i></div>
+              <div><small>OBJECT</small><h3>对象与点位</h3></div>
+              <strong id="analysis-object">正在读取工位、工具与紧固点…</strong>
+              <p id="analysis-scope">正在读取当前影响范围…</p>
+            </article>
+
+            <article class="analysis-step">
+              <div class="analysis-step-mark"><span>02</span><i aria-hidden="true">⇄</i></div>
+              <div><small>WINDOW</small><h3>对照窗口</h3></div>
+              <strong id="analysis-window">正在读取基线窗口与当前窗口…</strong>
+              <p>以相同分析分层进行前后对照，不跨车型或程序混算。</p>
+            </article>
+
+            <article class="analysis-step">
+              <div class="analysis-step-mark"><span>03</span><i aria-hidden="true">∿</i></div>
+              <div><small>SIGNALS</small><h3>多信号感知</h3></div>
+              <ul id="analysis-signal-list"><li>正在读取本次可用信号与触发规则…</li></ul>
+            </article>
+
+            <article class="analysis-step">
+              <div class="analysis-step-mark"><span>04</span><i aria-hidden="true">⌘</i></div>
+              <div><small>KNOWLEDGE</small><h3>知识证据</h3></div>
+              <ul id="analysis-knowledge-list"><li>正在读取 PFMEA、控制计划与案例引用…</li></ul>
+            </article>
+
+            <article class="analysis-step analysis-step-output">
+              <div class="analysis-step-mark"><span>05</span><i aria-hidden="true">✓</i></div>
+              <div><small>OUTPUT</small><h3>风险卡与人工门禁</h3></div>
+              <strong id="analysis-output">正在读取分析结论与审批状态…</strong>
+              <p>系统只输出可追溯风险卡；处置、停线和根因确认仍由具名工程师决定。</p>
+            </article>
+          </div>
+
+          <p class="analysis-explainer-boundary"><strong>真实性边界：</strong>本区只解释当前公开演示资产的分析链路，不表示已接入真实产线、完成自动派单或获得生产系统写权限。</p>
         </section>
 
-        <section class="section-block" id="signals" aria-labelledby="signals-title">
+        <section class="comparison-workbench" id="comparison" aria-labelledby="comparison-workbench-title">
+          <header class="comparison-workbench-head">
+            <div>
+              <span class="section-kicker">BASELINE VS RECENT WINDOW</span>
+              <h2 id="comparison-workbench-title">基线与最近窗口，到底哪里变了</h2>
+              <p id="comparison-question">正在从权威分析结果读取本次对比问题…</p>
+            </div>
+            <dl class="comparison-context" aria-label="本次对比的数据来源与窗口口径">
+              <div><dt>数据来源</dt><dd id="comparison-source">正在读取数据文件与分析分层…</dd></div>
+              <div><dt>窗口口径</dt><dd id="comparison-window">正在读取基线与最近窗口数量…</dd></div>
+            </dl>
+          </header>
+
+          <div class="comparison-workbench-grid">
+            <article class="comparison-matrix" aria-labelledby="comparison-matrix-title">
+              <header><div><small>METRIC DELTA</small><h3 id="comparison-matrix-title">同口径指标对照</h3></div><span>不在浏览器重新评分</span></header>
+              <div class="comparison-table-scroll">
+                <table>
+                  <thead><tr><th>观察指标</th><th>基线</th><th>最近窗口</th><th>变化</th><th>分析判定</th></tr></thead>
+                  <tbody id="comparison-table-body">
+                    <tr><td colspan="5" class="comparison-loading">正在读取扭矩、角度、重试及可用辅助信号…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="dependency-panel" aria-labelledby="dependency-title">
+              <header><small>DECISION DEPENDENCY</small><h3 id="dependency-title">指标如何走到处置任务</h3></header>
+              <ol class="dependency-flow" id="dependency-flow" aria-label="指标、规则、证据、原因与任务的依赖链">
+                <li><span>01</span><strong>指标变化</strong><small>同口径窗口对照</small></li>
+                <li><span>02</span><strong>规则触发</strong><small>仅消费权威结果</small></li>
+                <li><span>03</span><strong>证据关联</strong><small>数据与文件可追溯</small></li>
+                <li><span>04</span><strong>候选原因</strong><small>只形成待验证假设</small></li>
+                <li><span>05</span><strong>处置任务</strong><small>必须经过人工门禁</small></li>
+              </ol>
+              <p id="dependency-detail">正在读取当前卡片实际走过的依赖链…</p>
+              <div class="comparison-next"><span>下一步</span><strong id="comparison-next-step">正在读取当前工作流建议…</strong></div>
+            </article>
+          </div>
+
+          <p class="comparison-boundary"><strong>口径说明：</strong>该区域只解释 Python 权威结果中的窗口差异与依赖关系；页面不自行计算风险分数，也不会自动确认根因或执行生产动作。</p>
+        </section>
+
+        <section class="metric-strip" aria-label="当前风险摘要">
+          <div><span>处置状态</span><strong id="metric-state">载入中</strong><small id="metric-state-note">由风险卡工作流决定</small></div>
+          <div><span>均值偏移</span><strong id="metric-shift">—</strong><small id="metric-baseline-note">正在读取基线窗口</small></div>
+          <div><span>规格内比例</span><strong id="metric-in-spec">—</strong><small id="metric-spec-note">正在读取量测结果</small></div>
+          <div><span>最近重试</span><strong id="metric-retry">—</strong><small id="metric-retry-note">正在读取设备信号</small></div>
+        </section>
+
+        <section class="section-block" id="risk-analysis" aria-labelledby="signals-title">
           <div class="section-heading">
-            <div><span class="section-kicker">主动感知</span><h2 id="signals-title">组合信号先于设备报警出现</h2></div>
-            <p>扭矩没有越限，但中心位置在上移，角度波动和重试也同时增加。把这些信号放在一起，能比单点越限更早看到风险。</p>
+            <div><span class="section-kicker">主动感知</span><h2 id="signals-title">正在读取当前窗口信号</h2></div>
+            <p id="signals-description">信号说明将由当前分析卡片动态生成。</p>
           </div>
           <div class="signal-grid">
             <article class="panel chart-panel">
               <div class="panel-heading">
-                <div><span>扭矩趋势 · P03</span><strong id="chart-latest">49.42 N·m</strong></div>
-                <div class="chart-legend"><span class="legend-line"></span>量测值 <span class="legend-base"></span>基线 48 N·m</div>
+                <div><span id="chart-heading">扭矩趋势</span><strong id="chart-latest">—</strong></div>
+                <div class="chart-legend"><span class="legend-line"></span>量测值 <span class="legend-base"></span><span id="chart-baseline-label">基线载入中</span></div>
               </div>
               <svg class="trend-chart" viewBox="0 0 960 340" role="img" aria-labelledby="chart-title chart-desc">
-                <title id="chart-title">P03 紧固点扭矩趋势</title>
-                <desc id="chart-desc">最近窗口的扭矩值全部位于 43 至 53 牛米规格内，但末段均值逐步上移。</desc>
+                <title id="chart-title">扭矩趋势正在载入</title>
+                <desc id="chart-desc">正在读取当前场景的扭矩时序数据。</desc>
+                <defs>
+                  <linearGradient id="torque-gradient" x1="0" x2="1">
+                    <stop offset="0" stop-color="#28d7ff"></stop>
+                    <stop offset="0.55" stop-color="#c95cff"></stop>
+                    <stop offset="1" stop-color="#ff4d8d"></stop>
+                  </linearGradient>
+                  <filter id="line-glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="2.4" result="blur"></feGaussianBlur>
+                    <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+                  </filter>
+                </defs>
                 <g transform="translate(58 28)">
                   <line class="grid-line" x1="0" x2="880" y1="0" y2="0"></line>
                   <line class="grid-line" x1="0" x2="880" y1="65" y2="65"></line>
@@ -102,22 +216,22 @@
                   <text class="axis-caption" x="880" y="298" text-anchor="end">最近</text>
                 </g>
               </svg>
-              <div class="chart-foot"><span>当前分析窗口：<strong id="chart-window">14:34–15:20</strong></span><span>规格：43–53 N·m</span></div>
+              <div class="chart-foot"><span>当前分析窗口：<strong id="chart-window">—</strong></span><span>规格：43–53 N·m</span></div>
             </article>
             <aside class="panel signal-summary">
               <div class="panel-heading"><span>机器可读摘要</span><span class="source-tag">RULE + DATA</span></div>
-              <p id="signal-summary">最近 24 次扭矩均值偏移 1.56σ，角度离散为基线的 2.17 倍，重试均值升至 0.250 次/循环。测量值仍有 100% 位于规格内。</p>
+              <p id="signal-summary">正在读取当前窗口的机器可读指标。</p>
               <dl class="compact-dl">
-                <div><dt>触发规则</dt><dd>MW-24 滚动均值偏移</dd></div>
-                <div><dt>设备上下文</dt><dd>标定到期前 9 天</dd></div>
-                <div><dt>产品影响</dt><dd>PFMEA S=9</dd></div>
-                <div><dt>需要补证</dt><dd>套筒、标准器、物料批次</dd></div>
+                <div><dt>触发规则</dt><dd id="signal-rules">正在读取</dd></div>
+                <div><dt>设备上下文</dt><dd id="signal-calibration">正在读取</dd></div>
+                <div><dt>产品影响</dt><dd id="signal-product-impact">正在读取</dd></div>
+                <div><dt>需要补证</dt><dd id="signal-required-evidence">正在读取</dd></div>
               </dl>
             </aside>
           </div>
         </section>
 
-        <section class="section-block" id="risk-analysis" aria-labelledby="risk-title">
+        <section class="section-block" id="risk-scoring" aria-labelledby="risk-title">
           <div class="section-heading">
             <div><h2 id="risk-title">风险分数只决定处理顺序</h2></div>
             <p>正式 PFMEA 不由模型改写。动态指数只把过程、设备、质量影响和上下文放在同一张风险卡中。</p>
@@ -128,10 +242,10 @@
               <div id="score-breakdown" class="score-breakdown"></div>
             </article>
             <article class="panel inference-panel">
-              <div class="fact-label">模型推断</div>
-              <h3>设备与过程信号可能指向同一项质量风险</h3>
-              <p>优先验证套筒磨损与工具标定漂移，同时保留连接件批次差异这一替代假设。</p>
-              <div class="uncertainty"><strong>不能直接下结论：</strong> 当前结果只能生成候选原因和验证路径，根因由现场工程师确认。</div>
+              <div class="fact-label" id="inference-label">分析结论</div>
+              <h3 id="inference-title">正在读取推断结果</h3>
+              <p id="inference-body">推断正文将由当前风险卡提供。</p>
+              <div class="uncertainty"><strong id="inference-uncertainty-label">结论边界：</strong> <span id="inference-uncertainty">正在读取</span></div>
             </article>
           </div>
         </section>
@@ -144,7 +258,7 @@
           <div id="evidence-list" class="evidence-list"></div>
 
           <div class="table-wrap cause-wrap">
-            <div class="table-heading"><h3>候选原因与验证路径</h3><span>根因待现场验证</span></div>
+            <div class="table-heading"><h3>候选原因与验证路径</h3><span id="cause-table-state">正在读取</span></div>
             <table>
               <thead><tr><th>候选原因</th><th>置信度</th><th>依据</th><th>现场验证</th></tr></thead>
               <tbody id="cause-table-body"></tbody>
@@ -170,12 +284,12 @@
             <article class="panel graph-note">
               <div>
                 <h3>关系链在风险卡中的用途</h3>
-                <p>检索从 P03 和 TOOL-TG-07 开始，沿明确关系找到质量特性、失效模式、候选原因和验证动作。每条路径保留关系代码，取回内容与最近 24 次时序数据一起写入风险卡。</p>
+                <p id="graph-use-description">正在读取本次分析分层与知识检索摘要。</p>
               </div>
               <dl class="compact-dl">
-                <div><dt>查询起点</dt><dd>P03 + TOOL-TG-07</dd></div>
-                <div><dt>文档证据</dt><dd>PFMEA、控制计划、历史案例</dd></div>
-                <div><dt>动作约束</dt><dd>人工审批、来源定位、结案回写</dd></div>
+                <div><dt>查询起点</dt><dd id="graph-query-start">正在读取</dd></div>
+                <div><dt>文档证据</dt><dd id="graph-document-evidence">正在读取</dd></div>
+                <div><dt>动作约束</dt><dd id="graph-action-boundary">正在读取</dd></div>
               </dl>
             </article>
           </div>
@@ -183,13 +297,55 @@
 
         <section class="section-block" id="workflow" aria-labelledby="workflow-title">
           <div class="section-heading">
-            <div><h2 id="workflow-title">工程师确认后生成点检与追溯任务</h2></div>
+            <div><h2 id="workflow-title">正在读取工作流与任务状态</h2></div>
             <div class="workflow-action">
-              <span id="workflow-status" tabindex="-1" aria-live="polite">等待工程师确认</span>
-              <button class="button primary" id="create-task" type="button">人工确认并生成任务预览</button>
+              <span id="workflow-status" tabindex="-1" aria-live="polite">正在读取</span>
+              <button class="button primary" id="create-task" type="button" disabled>正在读取任务状态</button>
             </div>
           </div>
 
+          <div class="agent-audit-grid" aria-label="推理与治理审计摘要">
+            <article class="panel audit-panel">
+              <div class="audit-panel-heading">
+                <div><span class="section-kicker">Reasoning Contract</span><h3>受约束推理</h3></div>
+                <span class="audit-status" id="reasoner-mode">载入中</span>
+              </div>
+              <dl class="audit-kv">
+                <div><dt>Prompt 版本</dt><dd id="prompt-version">—</dd></div>
+                <div><dt>Schema 版本</dt><dd id="schema-version">—</dd></div>
+                <div><dt>推理判定</dt><dd id="reasoning-decision">—</dd></div>
+              </dl>
+              <div class="analysis-provenance" aria-label="分析规则与数据修订版本">
+                <div><span>风险规则</span><code id="risk-policy-version">—</code></div>
+                <div><span>知识指纹</span><code id="knowledge-revision">—</code></div>
+                <div><span>输入指纹</span><code id="input-revision">—</code></div>
+              </div>
+              <div class="citation-block">
+                <span>结论引用证据</span>
+                <div class="citation-list" id="reasoning-citations"><code>载入中</code></div>
+              </div>
+              <p class="model-boundary" id="model-boundary">正在核对本次运行的模型调用记录…</p>
+            </article>
+
+            <article class="panel audit-panel">
+              <div class="audit-panel-heading">
+                <div><span class="section-kicker">Human Gate</span><h3>人工审批门禁</h3></div>
+                <span class="gate-status" id="approval-gate">载入中</span>
+              </div>
+              <dl class="audit-kv audit-kv-wide">
+                <div><dt>工作流状态</dt><dd id="workflow-state">—</dd></div>
+                <div><dt>允许操作</dt><dd id="allowed-actions">—</dd></div>
+                <div><dt>自动停线</dt><dd id="automatic-stop-line">—</dd></div>
+                <div><dt>外部同步</dt><dd id="external-sync-state">—</dd></div>
+              </dl>
+              <p class="governance-note">任何派单、隔离、停线、参数修改和根因确认都不能由本原型自动执行，必须留下具名工程师审批与现场验证记录。</p>
+            </article>
+          </div>
+
+          <div class="trace-heading">
+            <div><h3 id="trace-title">本次真实工具调用轨迹</h3><p id="trace-description">状态和耗时来自运行期审计记录，不是预先写好的流程文案。</p></div>
+            <span class="source-tag" id="trace-source">AUDIT TRAIL</span>
+          </div>
           <ol class="agent-trace" id="agent-trace" aria-label="数字员工执行轨迹"></ol>
 
           <div class="table-wrap task-wrap">
@@ -198,22 +354,45 @@
               <tbody id="task-table-body"></tbody>
             </table>
           </div>
-          <p class="integration-note">演示按钮只生成飞书多维表格字段预览，不会发送网络请求。真实接入需由企业提供应用权限、字段映射和审批策略。</p>
+          <p class="integration-note"><strong>飞书边界：</strong>公开演示仅生成多维表格字段预览，不发送网络请求；代码支持在具名人工审批后，经企业授权的 live 模式写入风险台账与任务表，但尚未完成具体租户的权限、字段与审批联调。本页面绝不表示已经真实发送。</p>
         </section>
 
         <section class="section-block" id="evaluation" aria-labelledby="evaluation-title">
           <div class="section-heading">
-            <div><h2 id="evaluation-title">当前只验证 P03 规格内漂移场景</h2></div>
-            <p id="eval-samples">49 个滚动窗口</p>
+            <div><span class="section-kicker">Independent Synthetic Suite</span><h2 id="evaluation-title">多场景独立合成验证</h2></div>
+            <p id="scenario-case-count">正在读取独立案例…</p>
           </div>
-          <div class="evaluation-grid">
-            <div><span>场景召回率</span><strong id="eval-recall">94.4%</strong><small>合成标签</small></div>
-            <div><span>误报率</span><strong id="eval-fpr">3.2%</strong><small>正常滚动窗口</small></div>
-            <div><span>证据可追溯率</span><strong id="eval-trace">100%</strong><small>来源 + 定位字段</small></div>
+          <div class="evaluation-grid evaluation-grid-wide">
+            <div><span>独立合成案例</span><strong id="scenario-total">120</strong><small>4 组 × 30 例，不是重叠窗口</small></div>
+            <div><span>异常场景覆盖</span><strong id="scenario-coverage-count">3</strong><small>漂移、零漂、重复报警</small></div>
+            <div><span>异常召回率</span><strong id="scenario-recall">100%</strong><small id="recall-wilson">95% Wilson：95.91%–100%</small></div>
+            <div><span>正常案例误报率</span><strong id="scenario-fpr">0%</strong><small id="fpr-wilson">95% Wilson：0%–11.35%</small></div>
           </div>
-          <div class="limitation-note">
-            <strong>这些数字不能外推到真实工厂。</strong>
-            <p>结果只说明仓库内的模拟场景可以复现、检测和生成完整风险卡。真实试点需要按车型、程序号和紧固点重新分层，并用企业数据校准阈值。</p>
+
+          <div class="scenario-grid" id="scenario-grid" aria-label="异常场景覆盖明细"></div>
+
+          <article class="comparison-panel" aria-labelledby="comparison-title">
+            <div class="comparison-copy">
+              <span class="section-kicker">Controlled Comparison</span>
+              <h3 id="comparison-title">相同 90 个异常合成案例上的召回对比</h3>
+              <p>传统报警代理仅检查已有报警码或非 OK 结果，用作透明代码基线；它不是赛力斯现有系统的实测表现。</p>
+            </div>
+            <div class="comparison-bars">
+              <div><header><span>质控前哨</span><strong id="guardian-recall">100%</strong></header><div class="comparison-track"><span id="guardian-bar"></span></div></div>
+              <div><header><span>传统报警代理</span><strong id="traditional-recall">66.7%</strong></header><div class="comparison-track conventional"><span id="traditional-bar"></span></div></div>
+              <p>合成场景召回差值 <strong id="recall-uplift">+33.3 个百分点</strong></p>
+            </div>
+          </article>
+
+          <div class="limitation-note limitation-strong">
+            <strong>非工厂效果：这些数字绝不能外推为真实产线准确率或业务收益。</strong>
+            <p>120 例全部是确定性、独立生成的比赛合成数据，只验证预设场景覆盖和代码行为。真实表现必须通过企业数据盲标、分层阈值校准和受控对照试点确认。</p>
+          </div>
+
+          <div class="material-links" aria-label="业务价值与试点材料">
+            <div><span class="section-kicker">Pilot Evidence Plan</span><h3>从合成原型走向企业验收</h3><p>收益假设、口径、责任边界和试点门槛均单独成文，避免把目标值写成已实现成绩。</p></div>
+            <a href="https://github.com/Gikemj/tightening-quality-guardian/blob/main/docs/business-value.md"><strong>业务价值与验收口径</strong><span>Before / After、收益公式、待企业确认变量 →</span></a>
+            <a href="https://github.com/Gikemj/tightening-quality-guardian/blob/main/docs/pilot-plan.md"><strong>企业试点与对照方案</strong><span>静默观察、受控验证、安全门槛、推广路线 →</span></a>
           </div>
         </section>
 

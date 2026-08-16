@@ -1,0 +1,330 @@
+{
+  "affected_scope": {
+    "batch_ids": [
+      "BATCH-DEMO-02",
+      "BATCH-DEMO-03"
+    ],
+    "event_count": 24,
+    "model_code": [
+      "DEMO-A"
+    ],
+    "program_id": [
+      "PGM-A-07"
+    ],
+    "window_end": "2026-07-14T04:08:00Z",
+    "window_start": "2026-07-14T03:22:00Z"
+  },
+  "agent_trace": [
+    {
+      "call_id": "CALL-PUBLIC-BASELINE-001",
+      "completed_at": "2026-07-20T00:00:00Z",
+      "duration_ms": 0.0,
+      "error": null,
+      "input_summary": {
+        "fastening_point": "P03",
+        "source": "P03:first_124_normal_events"
+      },
+      "output_summary": {
+        "event_count": 124,
+        "fastening_points": [
+          "P03"
+        ],
+        "field_count": 19
+      },
+      "result": "接收 124 条已加载拧紧记录",
+      "sequence": 1,
+      "started_at": "2026-07-20T00:00:00Z",
+      "status": "succeeded",
+      "step": "sense",
+      "tool": "accept_event_records",
+      "trace_mode": "deterministic_public_build"
+    },
+    {
+      "call_id": "CALL-PUBLIC-BASELINE-002",
+      "completed_at": "2026-07-20T00:00:00Z",
+      "duration_ms": 0.0,
+      "error": null,
+      "input_summary": {
+        "baseline_count": 100,
+        "event_count": 124,
+        "fastening_point": "P03",
+        "recent_count": 24
+      },
+      "output_summary": {
+        "attribution_required": false,
+        "candidate_cause_count": 0,
+        "card_id": "TG-42A017F8424C7F4C95AD88F0C1ED4B46",
+        "evidence_ids": [
+          "E-SPC-01",
+          "E-EQP-02",
+          "E-KNW-03",
+          "E-CTL-04",
+          "E-HIS-05"
+        ],
+        "risk_level": "low",
+        "risk_score": 39
+      },
+      "result": "生成 low 风险卡，评分 39，关联 5 条证据",
+      "sequence": 2,
+      "started_at": "2026-07-20T00:00:00Z",
+      "status": "succeeded",
+      "step": "analyze",
+      "tool": "risk_analyzer.analyze",
+      "trace_mode": "deterministic_public_build"
+    },
+    {
+      "call_id": "CALL-PUBLIC-BASELINE-003",
+      "completed_at": "2026-07-20T00:00:00Z",
+      "duration_ms": 0.0,
+      "error": null,
+      "input_summary": {
+        "attribution_required": false,
+        "card_id": "TG-42A017F8424C7F4C95AD88F0C1ED4B46",
+        "evidence_ids": [
+          "E-SPC-01",
+          "E-EQP-02",
+          "E-KNW-03",
+          "E-CTL-04",
+          "E-HIS-05"
+        ],
+        "prompt_contract": "1.0",
+        "proposed_cause_count": 0
+      },
+      "output_summary": {
+        "cited_evidence_ids": [],
+        "decision": "refused",
+        "disposition": "no_attribution_required",
+        "fallback_reason": null,
+        "reasoner_mode": "deterministic"
+      },
+      "result": "当前窗口稳定，无需启动根因归因",
+      "sequence": 3,
+      "started_at": "2026-07-20T00:00:00Z",
+      "status": "succeeded",
+      "step": "reason",
+      "tool": "structured_reasoner.reason",
+      "trace_mode": "deterministic_public_build"
+    },
+    {
+      "call_id": "CALL-PUBLIC-BASELINE-004",
+      "completed_at": "2026-07-20T00:00:00Z",
+      "duration_ms": 0.0,
+      "error": null,
+      "input_summary": {
+        "card_id": "TG-42A017F8424C7F4C95AD88F0C1ED4B46",
+        "recommended_action_ids": [],
+        "requested_status": "monitoring_only"
+      },
+      "output_summary": {
+        "allowed_actions": [],
+        "automatic_stop_line_allowed": false,
+        "case_id": "TG-42A017F8424C7F4C95AD88F0C1ED4B46",
+        "events": [],
+        "human_approval_required": false,
+        "schema_version": "1.0",
+        "status": "monitoring_only"
+      },
+      "result": "记录稳定窗口并保持常规监控；未创建异常处置任务",
+      "sequence": 4,
+      "started_at": "2026-07-20T00:00:00Z",
+      "status": "succeeded",
+      "step": "govern",
+      "tool": "risk_monitoring.record_stable_window",
+      "trace_mode": "deterministic_public_build"
+    }
+  ],
+  "analysis_provenance": {
+    "analysis_disposition": "stable_monitoring",
+    "analysis_stratum": {
+      "fastening_point": "P03",
+      "model_code": "DEMO-A",
+      "program_id": "PGM-A-07",
+      "station_id": "ST-FAS-07",
+      "tool_id": "TOOL-TG-07"
+    },
+    "attribution_required": false,
+    "baseline_count": 100,
+    "card_identity_revision": "sha256:42a017f8424c7f4c95ad88f0c1ed4b4647e4ab10b4e5c252096ce740e444e50f",
+    "generated_by": "torque_guard.risk.RiskAnalyzer",
+    "input_window_revision": "sha256:ca8e2c6b7a11ec5ecd6af9b9d9e86e8e5f2f26de6a66d82670468cd60515e7a4",
+    "knowledge_revision": "sha256:ebb485e4cd3f2ecfbe0011933f32df037626ccb94f9c1612966efe8d1373849c",
+    "knowledge_schema": "torque-guard-ontology-v0.1",
+    "metric_availability": {
+      "current_a": {
+        "available": true,
+        "baseline_required_count": 100,
+        "baseline_sample_count": 100,
+        "reason": null,
+        "recent_required_count": 24,
+        "recent_sample_count": 24
+      },
+      "cycle_time_s": {
+        "available": true,
+        "baseline_required_count": 100,
+        "baseline_sample_count": 100,
+        "reason": null,
+        "recent_required_count": 24,
+        "recent_sample_count": 24
+      }
+    },
+    "normalized_window_schema": "torque-event-window-2.0",
+    "recent_count": 24,
+    "risk_policy_version": "risk-policy-2.0",
+    "timestamp_policy": {
+      "canonical_timezone": "UTC",
+      "duplicate_timestamp_policy": "allowed_and_ordered_by_event_id",
+      "event_ordering": "utc_timestamp_then_event_id",
+      "naive_input_timezone": "UTC+08:00"
+    },
+    "trigger_reasons": []
+  },
+  "candidate_causes": [],
+  "card_id": "TG-42A017F8424C7F4C95AD88F0C1ED4B46",
+  "created_at": "2026-07-14T04:08:00Z",
+  "evidence": [
+    {
+      "category": "spc",
+      "data": {
+        "baseline_in_spec_rate": 1.0,
+        "baseline_mean_nm": 48.126,
+        "baseline_sigma_nm": 0.617,
+        "in_spec_rate": 1.0,
+        "mean_shift_sigma": 0.0,
+        "recent_cpk": 1.96,
+        "recent_mean_nm": 48.126,
+        "rule_ids": []
+      },
+      "evidence_id": "E-SPC-01",
+      "locator": "EVT-00401..EVT-00424",
+      "observation": "均值偏移 0.00σ；未触发趋势规则",
+      "source": "P03:first_124_normal_events",
+      "strength": "direct",
+      "title": "扭矩过程稳定性检查"
+    },
+    {
+      "category": "equipment",
+      "data": {
+        "angle_std_ratio": 1.0,
+        "current_shift_sigma": 0.091,
+        "cycle_time_shift_sigma": 0.185,
+        "metric_availability": {
+          "current_a": {
+            "available": true,
+            "baseline_required_count": 100,
+            "baseline_sample_count": 100,
+            "reason": null,
+            "recent_required_count": 24,
+            "recent_sample_count": 24
+          },
+          "cycle_time_s": {
+            "available": true,
+            "baseline_required_count": 100,
+            "baseline_sample_count": 100,
+            "reason": null,
+            "recent_required_count": 24,
+            "recent_sample_count": 24
+          }
+        },
+        "retry_baseline": 0.01,
+        "retry_recent": 0.0
+      },
+      "evidence_id": "E-EQP-02",
+      "locator": "tool=TOOL-TG-07, point=P03",
+      "observation": "角度标准差比值 1.00；重试 0.010 → 0.000 次/循环",
+      "source": "P03:first_124_normal_events",
+      "strength": "direct",
+      "title": "设备辅助信号检查"
+    },
+    {
+      "category": "pfmea",
+      "data": {
+        "cause_ids": [
+          "C-BATCH-FRICTION",
+          "C-CAL-DRIFT",
+          "C-SOCKET-WEAR"
+        ]
+      },
+      "evidence_id": "E-KNW-03",
+      "locator": "FM-PRELOAD-UNSTABLE",
+      "observation": "严重度 S=9；影响：连接可靠性下降并产生潜在安全风险",
+      "source": "pfmea_demo.csv",
+      "strength": "document",
+      "title": "关键连接预紧力不稳定"
+    },
+    {
+      "category": "control_plan",
+      "data": {
+        "calibration_days_remaining": 25
+      },
+      "evidence_id": "E-CTL-04",
+      "locator": "CP-TG-P03",
+      "observation": "工程师复核后决定点检、抽检、批次追溯及是否扩大隔离；系统不得自动停线或改写PLC参数",
+      "source": "control_plan_demo.csv",
+      "strength": "document",
+      "title": "控制计划要求"
+    },
+    {
+      "category": "history",
+      "data": {
+        "similarity_basis": "shared_cause_id"
+      },
+      "evidence_id": "E-HIS-05",
+      "locator": "CASE-DEMO-017",
+      "observation": "模拟历史案例中，扭矩仍在规格内，但角度离散和重试率连续上升。更换磨损套筒后恢复基线。",
+      "source": "historical_cases.json",
+      "strength": "analogy",
+      "title": "相似历史案例"
+    }
+  ],
+  "fastening_point": "P03",
+  "inference": "当前窗口稳定且未触发异常信号，无需启动根因归因；保持常规监控。",
+  "observed_facts": [
+    "最近 24 次拧紧均值为 48.13 N·m，较基线偏移 0.00σ",
+    "拧紧角度离散度为基线的 1.00 倍",
+    "重试均值由 0.010 次/循环升至 0.000 次/循环",
+    "电流相对基线偏移 0.09σ；节拍相对基线偏移 0.19σ",
+    "本窗口规格内比例为 100.0%，未触发 SPC 异常规则或设备组合异常信号，当前窗口稳定"
+  ],
+  "reasoning": {
+    "conclusion": null,
+    "decision": "refused",
+    "disposition": "no_attribution_required",
+    "hypotheses": [],
+    "prompt_version": "1.0",
+    "provenance": {
+      "fallback_reason": null,
+      "model": null,
+      "reasoner_mode": "deterministic"
+    },
+    "refusal_reason": "当前窗口稳定且未触发异常信号，无需根因归因",
+    "safety": {
+      "automatic_action_allowed": false,
+      "requires_human_approval": false
+    },
+    "schema_version": "1.0",
+    "uncertainty": "稳定判定仅适用于当前分析分层与时间窗口；后续继续按常规频率监控。"
+  },
+  "recommended_actions": [],
+  "risk_level": "low",
+  "risk_score": 39,
+  "schema_version": "1.0",
+  "score_breakdown": {
+    "context": 7,
+    "equipment_health": 0,
+    "process_stability": 10,
+    "quality_impact": 22
+  },
+  "station_id": "ST-FAS-07",
+  "status": "monitoring_only",
+  "tool_id": "TOOL-TG-07",
+  "uncertainty": "稳定判定仅适用于当前分析分层与时间窗口；后续继续按常规频率监控。",
+  "workflow": {
+    "allowed_actions": [],
+    "automatic_stop_line_allowed": false,
+    "case_id": "TG-42A017F8424C7F4C95AD88F0C1ED4B46",
+    "events": [],
+    "human_approval_required": false,
+    "schema_version": "1.0",
+    "status": "monitoring_only"
+  }
+}

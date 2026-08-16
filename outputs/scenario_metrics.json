@@ -1,0 +1,65 @@
+{
+  "cases": 120,
+  "cases_per_scenario": 30,
+  "confusion_matrix": {
+    "fn": 0,
+    "fp": 0,
+    "tn": 30,
+    "tp": 90
+  },
+  "conventional_alarm_false_positive_rate": 0.0,
+  "conventional_alarm_recall": 0.6667,
+  "evaluation_scope": "independent synthetic case suite; not factory evidence",
+  "false_positive_rate": 0.0,
+  "false_positive_rate_95pct_wilson": [
+    0.0,
+    0.1135
+  ],
+  "limitations": [
+    "All cases are deterministic synthetic competition data.",
+    "The suite validates code behavior and scenario coverage, not factory generalization.",
+    "Business value and thresholds require an enterprise-controlled pilot."
+  ],
+  "primary_cause_top1_accuracy": 1.0,
+  "recall": 1.0,
+  "recall_95pct_wilson": [
+    0.9591,
+    1.0
+  ],
+  "scenarios": {
+    "hidden_torque_drift": {
+      "cases": 30,
+      "detection_rate": 1.0,
+      "level_counts": {
+        "high": 26,
+        "medium": 4
+      },
+      "primary_cause_accuracy": 1.0
+    },
+    "normal": {
+      "cases": 30,
+      "detection_rate": 0.0,
+      "level_counts": {
+        "low": 30
+      },
+      "primary_cause_accuracy": null
+    },
+    "repeated_alarm": {
+      "cases": 30,
+      "detection_rate": 1.0,
+      "level_counts": {
+        "medium": 30
+      },
+      "primary_cause_accuracy": 1.0
+    },
+    "sensor_zero_drift": {
+      "cases": 30,
+      "detection_rate": 1.0,
+      "level_counts": {
+        "high": 20,
+        "medium": 10
+      },
+      "primary_cause_accuracy": 1.0
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "质控前哨：调试风险分析",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "torque_guard.cli",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "--input",
+        "data/tightening_events_demo.csv",
+        "--knowledge",
+        "knowledge",
+        "--point",
+        "P03"
+      ],
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "质控前哨：独立多场景评测",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/evaluate_scenarios.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "质控前哨：本地网页服务",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "http.server",
+      "args": [
+        "8000",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "docs"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "Serving HTTP on .* port ([0-9]+)",
+        "uriFormat": "http://127.0.0.1:%s"
+      },
+      "justMyCode": true
+    }
+  ]
+}

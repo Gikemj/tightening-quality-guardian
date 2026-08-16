@@ -4,20 +4,43 @@
 [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-7b2f68)](https://gikemj.github.io/tightening-quality-guardian/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-23313a)](LICENSE)
 
-面向总装关键拧紧工位的设备质量风险主动管控原型。
+面向设备对象、故障工单与失效模式关系核验的设备质量风险闭环原型。
 
 > 本仓库是“2026 AI 先锋未来人才大赛”赛力斯集团命题的独立参赛原型。设备、工艺、质量和历史案例均为比赛合成数据，未使用赛力斯内部数据。
 
-**报名项目：质控前哨｜队伍名称：智造哨兵**
+**报名项目：质控前哨 V2｜队伍名称：智造哨兵**
 
-![质控前哨风险台账演示](assets/dashboard-preview.png)
+**官方命题：如果你加入赛力斯超级工厂团队，你如何打造一名会主动管控设备质量风险的 AI数字员工？**
+
+## 第二轮入口
+
+第二轮以赛题提供的对象、字段和关系结构为边界，重点解决“关联关系尚未核验时，数字员工如何安全地发起补证与协同”。它不把脱敏快照用于知识抽取、时序分析或真实状态推断。
+
+- [打开第二轮关系证据演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)
+- [观看 4 分 25 秒演示视频](https://github.com/Gikemj/tightening-quality-guardian/releases/download/v2-round2/quality-guardian-v2.mp4)
+- [第二轮完整提交稿](docs/round2-submission.md)
+- [数据使用与公开边界](docs/data-boundary-round2.html)
+- [关系证据数字员工实现](src/torque_guard/round2.py)
+- [Terra 的服务端受控接入](src/torque_guard/integrations/codekey.py)
+
+第一轮的拧紧工位/SPC 原型仍保留在根目录演示页，用于展示早期方案的可复现工程底座；第二轮材料与演示统一以“关系证据闭环”为准。
+
+## 四十强提交材料
+
+- [完整参赛方案稿](docs/40-strong-submission.md)：按信息卡、场景痛点、创新、具体方案、业务价值、体验入口和自由展示组织，可复制到最终飞书文档。
+- [业务价值与验收口径](docs/business-value.md)：严格区分合成原型结果、企业试点目标和待确认收益假设，附 Before/After 与收益公式。
+- [企业试点与对照验证计划](docs/pilot-plan.md)：准备后先静默观察 2–4 周，再进行 4 周受控对照，包含安全门槛、归因与推广路线。
+
+> 官方命题全称已按赛事页面核对。正式提交仍需团队补齐真实成员介绍与分工、授权飞书租户验证证据和 3–5 分钟 Demo 视频；仓库不虚构这些信息。
 
 ## 评委快速入口
 
 - [打开在线演示](https://gikemj.github.io/tightening-quality-guardian/)，重放“规格内缓慢漂移”场景。
 - [查看生成的风险卡](outputs/risk_card.json)，每条证据都带来源和定位字段。
 - [查看离线验证结果](outputs/metrics.json)，数据、标签和计算脚本均可复现。
+- [查看多场景独立合成评测](outputs/scenario_metrics.json)，包含 120 个案例、Wilson 区间和传统报警代理对照。
 - [查看命题对齐表](docs/competition-alignment.md)，对应知识底座、Graph Retrieval、主动研判、证据链和飞书闭环。
+- [查看安全与能力边界](docs/safety-boundaries.md)，区分当前原型、可选接入与尚待企业验证的能力。
 
 ## 与报名材料的口径
 
@@ -25,7 +48,16 @@
 
 - 报名材料中的高风险召回率 ≥85%、误报率 ≤15%、平均提前 2 小时和定位时间缩短 30%，均为进入企业带教后的试点验收目标；
 - 仓库中的召回率 94.4%、误报率 3.2%，只来自 P03 合成数据的 49 个滚动窗口，不能外推到真实工厂；
-- 材料提出曲线漂移、传感器失准和重复报警三类验证方向。当前仓库先把规格内漂移做成端到端主场景，标定漂移和历史重复问题已进入知识检索与验证任务，但未作为独立检测成绩报告。
+- 仓库另提供正常、规格内漂移、传感器零漂和重复报警各 30 个独立合成案例，用于验证场景分支和原因排序；其 100% 异常召回、0% 正常误报和 100% 预设原因 Top-1 命中不能外推到真实工厂；
+- 多场景评测中的“传统报警”只是检查已有报警码或非 `OK` 结果的代理基线，不代表赛力斯现有系统。
+
+| 能力 | 当前可核验状态 | 对外准确表述 |
+|---|---|---|
+| 异常检测 | 主演示滚动窗口 + 120 个多场景独立合成案例 | 已实现原型；生成器覆盖不代表工厂泛化，阈值需现场校准 |
+| 知识检索 | 以异常对象为起点的有限关系子图检索 | 已实现 Graph Retrieval；不等同于完整 Graph RAG |
+| Agent | [可审计工具编排](src/torque_guard/agent.py)、[证据约束](src/torque_guard/reasoning.py)与[受控状态流](src/torque_guard/workflow.py) | 默认确定性推理；有外部模型接口不等于已经调用模型 |
+| 飞书协同 | 风险/任务字段、审批门禁及[真实/预览双模式客户端](src/torque_guard/integrations/feishu.py) | 代码具备经授权写入能力；实际企业租户联调证据仍需团队验证 |
+| 业务收益 | 有 Before/After、试点和收益公式 | 尚无企业 ROI；只能报告试点目标和待确认测算变量 |
 
 ## 为什么从拧紧工位入手
 
@@ -49,10 +81,10 @@
 | 检测 | 按紧固点分层计算基线、SPC 趋势和设备侧变化 | `src/torque_guard/spc.py` |
 | 检索 | 从设备、工艺、失效模式、原因和动作关系中取回当前子图 | `knowledge/ontology.json` |
 | 研判 | 合并直接数据、PFMEA、控制计划和相似案例，保留不确定性 | `outputs/risk_card.json` |
-| 行动 | 生成责任角色、时限、验收依据和审批要求 | `outputs/feishu_records_preview.json` |
-| 闭环 | 工程师验证后回写结果，案例成为下一次检索的证据 | [飞书接入设计](docs/feishu-integration.md) |
+| 行动 | 生成责任角色、时限、验收依据和审批要求；通过门禁后才允许写任务 | `outputs/feishu_records_preview.json` |
+| 流程门禁 | 本地状态机校验审批、建任务、验证、结案与重开；企业身份、持久化和案例回写尚待联调 | [飞书接入设计](docs/feishu-integration.md) |
 
-在线演示默认显示已触发的风险窗口。点击“恢复基线窗口”可看到正常状态，再点击“重放风险识别”对比前后变化。任务按钮只生成预览，不会向外部系统发送数据。
+在线演示默认显示已触发的风险窗口。点击“恢复基线窗口”可看到正常状态，再点击“重放风险识别”对比前后变化。公开环境没有企业凭证，任务操作保持预览/模拟；只有在授权环境配置应用与字段后，客户端才允许真实写入。
 
 ## 架构
 
@@ -73,7 +105,7 @@ flowchart LR
     K --> F
 ```
 
-Graph Retrieval 从异常对象 P03 和 TOOL-TG-07 开始，只取回当前失效链涉及的节点、关系和文档条目，再与时序信号一起写入风险卡。原型使用可复现的确定性推理器。企业试点可沿用这套证据结构接入 Graph RAG 与受控大模型，同时保留来源定位、权限和人工审批。
+Graph Retrieval 从异常对象 P03 和 TOOL-TG-07 开始，只取回当前失效链涉及的节点、关系和文档条目，再与时序信号一起写入风险卡。原型默认使用可复现的确定性推理器，并保存工具调用审计信息；企业试点可沿用证据结构接入 Graph RAG 与受控大模型，同时保留来源定位、Schema 校验、权限、失败回退和人工审批。除非审计轨迹明确记录一次外部调用成功，否则不得声称该次结果由大模型生成。
 
 ![质控前哨知识关系链](assets/knowledge-relationship-preview.png)
 
@@ -81,7 +113,7 @@ Graph Retrieval 从异常对象 P03 和 TOOL-TG-07 开始，只取回当前失�
 
 ## 离线验证结果
 
-验证对象是 P03 的 49 个滚动窗口。正样本为注入“规格内漂移”的窗口，负样本为正常窗口。
+仓库有两套用途不同的验证。第一套是 P03 主演示序列的 49 个滚动窗口，用于验证“规格内漂移”的连续重放；相邻窗口共享大量记录，不能当成 49 个独立故障案例。
 
 | 指标 | 当前结果 | 说明 |
 |---|---:|---|
@@ -93,9 +125,52 @@ Graph Retrieval 从异常对象 P03 和 TOOL-TG-07 开始，只取回当前失�
 
 结果只能证明仓库内场景可复现，不能外推到真实工厂。真实部署需要按车型、程序号、紧固点和工具重新分层，并用企业数据校准阈值。计算方式和混淆矩阵见 [验证说明](docs/evaluation.md)。
 
+第二套是 120 个独立合成案例，正常、规格内漂移、传感器零漂和重复报警各 30 个：
+
+| 指标 | 当前结果 | 95% Wilson 区间 | 边界 |
+|---|---:|---:|---|
+| 三类异常召回率 | 100%（90/90） | 95.91%–100% | 只验证预设生成器覆盖的代码行为 |
+| 正常场景误报率 | 0%（0/30） | 0%–11.35% | 样本有限，不能宣称真实误报率为 0 |
+| 预设原因 Top-1 命中率 | 100%（90/90） | 未报告 | 预设标签不等于现场根因准确率 |
+| 传统报警代理召回率 | 66.67%（60/90） | 未报告 | 代理只检查报警码/非 `OK`，不是企业系统实测值 |
+
+原始结果见 [`outputs/scenario_metrics.json`](outputs/scenario_metrics.json)，评估脚本见 [`scripts/evaluate_scenarios.py`](scripts/evaluate_scenarios.py)。两套验证不能合并计算，也不能替代工程师盲标和企业对照试点。
+
 ## 本地复现
 
 Python 运行部分只使用标准库；网页演示不依赖外部前端框架。
+
+### Windows + Conda + VS Code
+
+第一次使用或遇到解释器、终端、重建结果不同步的问题，可先看[本地部署与 VS Code 调试指南](docs/local-development.md)。
+
+```powershell
+conda activate huawei
+python --version
+python -m pip install -e .
+python scripts/check_local_environment.py
+python scripts/build_all.py
+python -m unittest discover -s tests -v
+node --test tests/web-engine.test.mjs
+node --check docs/risk-engine.js
+node --check docs/app.js
+python scripts/audit_repository.py
+python -m http.server 8000 --bind 127.0.0.1 --directory docs
+```
+
+浏览器打开 `http://localhost:8000`。`pip install -e .` 只需在新环境中执行一次，它把 `src/torque_guard` 以可编辑方式登记到当前 Python 环境；修改源码后不必重复安装。
+
+VS Code 已提供调试与任务配置：
+
+- 第一次打开项目时，先执行 `Tasks: Run Task` →“本地：检查 Python 与 Node 环境”，它只读取环境并明确显示 VS Code 实际使用的解释器；
+- 按 `F5`，选择“质控前哨：调试风险分析”，即可用当前选中的 Python 解释器运行 CLI 并命中断点；
+- 按 `Ctrl+Shift+P`，执行 `Tasks: Run Test Task`，默认“验证：全部提交门禁”会先重建确定性数据/产物，再依次运行 Python 测试、网页测试、脚本语法检查和仓库审计；
+- 按 `F5`，选择“质控前哨：本地网页服务”，服务就绪后会自动打开浏览器；
+- `.vscode/launch.json` 的 Python 调试配置会自动读取项目根目录 `.env`。普通 VS Code 终端直接执行 CLI 时不会自动读取 `.env`，必须先在当前终端设置所需环境变量；不要把真实密钥提交到仓库。
+
+### Bash / Make
+
+需要 Python 3.10 或以上版本；本机若默认 `python3` 仍为 3.9，可显式执行 `make PYTHON=python3.11 all`。
 
 ```bash
 git clone https://github.com/Gikemj/tightening-quality-guardian.git
@@ -104,7 +179,7 @@ make all
 make serve
 ```
 
-浏览器打开 `http://localhost:8000`。单独运行数字员工：
+单独运行数字员工：
 
 ```bash
 PYTHONPATH=src python3 -m torque_guard.cli \
@@ -113,7 +188,7 @@ PYTHONPATH=src python3 -m torque_guard.cli \
   --point P03
 ```
 
-测试覆盖 SPC 规则、规格内隐性风险、知识子图、人工审批约束、飞书字段预览和浏览器侧计算。
+测试覆盖 SPC 规则、多场景合成风险、知识子图、证据引用/拒答、真实调用边界审计、工作流非法越级、飞书预览/live 请求结构和浏览器权威数据消费。飞书 live 测试使用假传输，不访问企业租户。
 
 ## 仓库结构
 
@@ -135,7 +210,7 @@ PYTHONPATH=src python3 -m torque_guard.cli \
 - 风险评分是运行期排序指数，不替代正式 PFMEA 的 S/O/D 或 RPN。
 - 模型推断必须附候选原因、证据来源、置信度和验证方法。
 - 数据缺失、车型切换、程序号变化和量具异常需要单独识别，不能混入同一基线。
-- 外部接口默认关闭；飞书部分只生成字段预览。
+- 外部接口默认关闭：飞书默认为本地预览；显式 live 模式只有在配置完整、工作流已记录具名批准事件且批准人/依据匹配时才会尝试写入风险表与任务表。仓库尚无授权租户或 Aily 联调证据。
 
 完整说明见 [安全与权限边界](docs/safety-boundaries.md)。
 
@@ -149,4 +224,4 @@ PYTHONPATH=src python3 -m torque_guard.cli \
 
 ## 项目状态
 
-当前版本可以复现一个工位的主风险场景，包括数据读取、异常检测、知识检索、风险卡和人工审批任务。若进入企业带教阶段，首要工作是核对真实字段、基线分层方式、权限模型和现场验收标准。涂胶、焊接等工序要在完成现场验证后再扩展。
+当前版本可以复现一个工位的主风险场景和三类异常的独立合成案例，包括数据读取、异常检测、知识检索、证据约束研判、真实调用审计、风险卡及本地工作流门禁。代码具备显式授权后的飞书多维表格 live 写入路径，但尚未发生真实 LLM、Aily 或授权企业租户调用，也没有真实工程师结案和企业收益。进入企业阶段首先应核对真实字段、分层基线、权限和验收口径，再按静默与对照计划验证；涂胶、焊接等工序须另行校准。

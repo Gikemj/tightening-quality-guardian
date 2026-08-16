@@ -12,9 +12,11 @@ Their shared job is to identify equipment-side signals that may become product-q
 
 ## Product Purpose
 
-质控前哨 is a competition prototype for an AI digital employee that proactively manages equipment-related quality risk. It is intentionally limited to one final-assembly critical tightening station so the full loop can be demonstrated with engineering depth.
+质控前哨 is a competition prototype for an AI digital employee that proactively manages equipment-related quality risk. It is intentionally limited to one final-assembly critical tightening station so the evidence-to-task-preview flow and workflow contract can be demonstrated with engineering depth.
 
-The prototype combines layered SPC checks, equipment-health signals, PFMEA and control-plan knowledge, an evidence graph, candidate-cause reasoning, and human-approved task routing. Success means that a reviewer can reproduce a hidden-risk scenario, inspect every piece of evidence behind the risk card, and follow the record through review, action, verification, and closure.
+The prototype combines layered SPC checks, equipment-health signals, PFMEA and control-plan knowledge, an evidence graph, evidence-constrained candidate-cause reasoning, auditable tool calls, and human-approved task routing. Success means that a reviewer can reproduce the hidden-risk and independent synthetic scenarios, inspect every piece of evidence and version fingerprint behind the risk card, and verify that the workflow rejects approval or verification bypasses.
+
+The public demo stops at a local task preview. The code contains a guarded Feishu Bitable live client and a tested workflow state machine, but the repository does not prove an authorized tenant/Aily integration, a real engineer closure, an external-model call, or factory business impact.
 
 This is not an official SERES system. All equipment, process, and quality records in the repository are synthetic competition data.
 
@@ -37,8 +39,8 @@ The interface should feel like a tool that could sit beside a production quality
 1. Evidence before conclusion. Every risk statement must link to a signal, rule, document excerpt, or historical case.
 2. One station, end to end. Depth of the tightening scenario matters more than nominal factory-wide coverage.
 3. Separate facts from inference. Observations, candidate causes, confidence, and required verification must be visually distinct.
-4. Keep engineers in control. The digital employee recommends, routes, records, and follows up; accountable people approve consequential actions.
-5. Make the demo reproducible. Synthetic datasets, scenario injection, calculations, and expected outputs remain visible in the repository.
+4. Keep engineers in control. The public prototype recommends actions, drafts routes, and verifies the workflow contract; enterprise routing, durable records, and follow-up are target capabilities that require an authorized integration. Accountable people approve consequential actions.
+5. Make the demo reproducible. Synthetic datasets, scenario injection, calculations, policy/knowledge/input revisions, and expected outputs remain visible in the repository.
 
 ## Accessibility & Inclusion
 

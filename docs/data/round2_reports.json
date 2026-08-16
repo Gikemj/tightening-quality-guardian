@@ -1,0 +1,325 @@
+{
+  "data_boundary": "schema_and_relationship_reference_only",
+  "notice": "本文件中的案例、编号、工作状态和说明均为比赛演示合成内容。它们只沿用赛题数据包的数据结构、受控字段和关系链，不复现任何真实工单、设备标识或现场事实。",
+  "reports": [
+    {
+      "boundary": "该结果只核验对象关系与字段完整性，不从脱敏包推断真实设备状态、故障概率、质量影响范围或已确认根因。",
+      "case": {
+        "action_category": "检查与复核",
+        "case_id": "CASE-DEMO-001",
+        "cause_category": "其他或未确认",
+        "completeness_grade": "高",
+        "component_family": "安全防护元件",
+        "equipment_family": "安全防护设备",
+        "failure_mode_link_status": "历史关联待核验",
+        "has_failure_mode_link": true,
+        "has_valid_equipment_link": true,
+        "is_synthetic": true,
+        "outcome_group": "处理中或待跟踪",
+        "phenomenon_category": "动作异常",
+        "relation_tier": "内容较完整候选",
+        "severity_band": "高",
+        "source_group": "检查发现",
+        "status_group": "待处理",
+        "structure_link_status": "设备类别—实例—工单—失效模式—功能链待业务复核",
+        "title": "巡检发现的安全防护对象关系复核"
+      },
+      "confidence_label": "可进入跨角色复核",
+      "data_boundary": "schema_and_relationship_reference_only",
+      "disposition": "review_with_candidate_knowledge",
+      "facts": [
+        {
+          "detail": "来源为检查发现；当前状态为待处理。",
+          "evidence_id": "E-CASE-01",
+          "label": "工单结构已接收",
+          "relation": "工单 → 设备对象",
+          "source_scope": "故障工单受控字段",
+          "strength": "direct"
+        },
+        {
+          "detail": "设备族为安全防护设备，部件族为安全防护元件。",
+          "evidence_id": "E-CASE-02",
+          "label": "设备类别与功能可作为检索入口",
+          "relation": "设备实例 → 设备类别 → 功能",
+          "source_scope": "设备实例、设备类别、功能关系",
+          "strength": "direct"
+        },
+        {
+          "detail": "关联状态为历史关联待核验，需业务人员核验，不视作已确认失效模式。",
+          "evidence_id": "E-CASE-03",
+          "label": "失效模式为历史关联候选",
+          "relation": "工单 → 失效模式",
+          "source_scope": "故障工单、失效模式",
+          "strength": "candidate"
+        }
+      ],
+      "gaps": [],
+      "schema_version": "2.0",
+      "tasks": [
+        {
+          "acceptance_criteria": "确认工单对象、设备类别与部件对象的关联状态，并记录核验依据。",
+          "approval_required": true,
+          "due_hint": "建议在当班内完成",
+          "evidence_ids": [
+            "E-CASE-01",
+            "E-CASE-02"
+          ],
+          "owner_role": "设备管理员",
+          "task_id": "TASK-REL-01",
+          "title": "核验设备对象与工单归属"
+        },
+        {
+          "acceptance_criteria": "记录检查现象、排查路径和是否同意复用历史失效模式；不同意时说明差异。",
+          "approval_required": true,
+          "due_hint": "建议在现场检查后完成",
+          "evidence_ids": [
+            "E-CASE-02",
+            "E-CASE-03"
+          ],
+          "owner_role": "维修工程师",
+          "task_id": "TASK-REL-02",
+          "title": "核验失效模式关联是否可复用"
+        },
+        {
+          "acceptance_criteria": "按异常发生区间、生产批次和检查结果判断是否需要扩大影响范围核验。",
+          "approval_required": true,
+          "due_hint": "建议在设备复机前完成",
+          "evidence_ids": [
+            "E-CASE-01"
+          ],
+          "owner_role": "质量工程师",
+          "task_id": "TASK-REL-03",
+          "title": "评估是否需要质量与工艺共同复核"
+        }
+      ],
+      "terra": {
+        "mode": "deterministic",
+        "note": "公开演示未调用外部模型。"
+      }
+    },
+    {
+      "boundary": "该结果只核验对象关系与字段完整性，不从脱敏包推断真实设备状态、故障概率、质量影响范围或已确认根因。",
+      "case": {
+        "action_category": "其他处置",
+        "case_id": "CASE-DEMO-002",
+        "cause_category": "其他或未确认",
+        "completeness_grade": "低",
+        "component_family": "控制电气元件",
+        "equipment_family": "控制与电气设备",
+        "failure_mode_link_status": "未关联",
+        "has_failure_mode_link": false,
+        "has_valid_equipment_link": true,
+        "is_synthetic": true,
+        "outcome_group": "处理中或待跟踪",
+        "phenomenon_category": "报警事件",
+        "relation_tier": "仅工单结构记录",
+        "severity_band": "中",
+        "source_group": "设备报警或系统事件",
+        "status_group": "待处理",
+        "structure_link_status": "已关联设备对象，未形成可复核失效模式链",
+        "title": "控制与电气报警的工单补证"
+      },
+      "confidence_label": "关系不足，先补齐工单",
+      "data_boundary": "schema_and_relationship_reference_only",
+      "disposition": "complete_case_before_reasoning",
+      "facts": [
+        {
+          "detail": "来源为设备报警或系统事件；当前状态为待处理。",
+          "evidence_id": "E-CASE-01",
+          "label": "工单结构已接收",
+          "relation": "工单 → 设备对象",
+          "source_scope": "故障工单受控字段",
+          "strength": "direct"
+        },
+        {
+          "detail": "设备族为控制与电气设备，部件族为控制电气元件。",
+          "evidence_id": "E-CASE-02",
+          "label": "设备类别与功能可作为检索入口",
+          "relation": "设备实例 → 设备类别 → 功能",
+          "source_scope": "设备实例、设备类别、功能关系",
+          "strength": "direct"
+        }
+      ],
+      "gaps": [
+        {
+          "detail": "当前记录不能直接复用历史处置结论，需要先补充现象、检查结果和关联依据。",
+          "evidence_id": "G-CASE-03",
+          "label": "缺少失效模式关联",
+          "relation": "工单 ↛ 失效模式",
+          "source_scope": "故障工单、失效模式",
+          "strength": "gap"
+        },
+        {
+          "detail": "当前仅保留工单结构记录，不能据此生成候选根因或质量结论。",
+          "evidence_id": "G-CASE-04",
+          "label": "关联层级不足",
+          "relation": "工单关系层级",
+          "source_scope": "关联概览",
+          "strength": "gap"
+        },
+        {
+          "detail": "现有记录缺少可用于复机确认或知识回写的字段，需保留缺失状态而非补造内容。",
+          "evidence_id": "G-CASE-05",
+          "label": "工单字段需要补齐",
+          "relation": "现象、原因、处置、结果",
+          "source_scope": "故障工单字段完整度",
+          "strength": "gap"
+        }
+      ],
+      "schema_version": "2.0",
+      "tasks": [
+        {
+          "acceptance_criteria": "确认工单对象、设备类别与部件对象的关联状态，并记录核验依据。",
+          "approval_required": true,
+          "due_hint": "建议在当班内完成",
+          "evidence_ids": [
+            "E-CASE-01",
+            "E-CASE-02"
+          ],
+          "owner_role": "设备管理员",
+          "task_id": "TASK-REL-01",
+          "title": "核验设备对象与工单归属"
+        },
+        {
+          "acceptance_criteria": "补充可观察现象、检查依据和当前处置状态；未知项明确标记为未确认。",
+          "approval_required": true,
+          "due_hint": "建议在首次处置前完成",
+          "evidence_ids": [
+            "G-CASE-03",
+            "G-CASE-04",
+            "G-CASE-05"
+          ],
+          "owner_role": "现场报修人",
+          "task_id": "TASK-REL-02",
+          "title": "补齐工单事实字段"
+        },
+        {
+          "acceptance_criteria": "按异常发生区间、生产批次和检查结果判断是否需要扩大影响范围核验。",
+          "approval_required": true,
+          "due_hint": "建议在设备复机前完成",
+          "evidence_ids": [
+            "E-CASE-01"
+          ],
+          "owner_role": "质量工程师",
+          "task_id": "TASK-REL-03",
+          "title": "评估是否需要质量与工艺共同复核"
+        }
+      ],
+      "terra": {
+        "mode": "deterministic",
+        "note": "公开演示未调用外部模型。"
+      }
+    },
+    {
+      "boundary": "该结果只核验对象关系与字段完整性，不从脱敏包推断真实设备状态、故障概率、质量影响范围或已确认根因。",
+      "case": {
+        "action_category": "维修后检查",
+        "case_id": "CASE-DEMO-003",
+        "cause_category": "设备因素",
+        "completeness_grade": "中",
+        "component_family": "运动执行部件",
+        "equipment_family": "机器人系统",
+        "failure_mode_link_status": "历史关联待核验",
+        "has_failure_mode_link": true,
+        "has_valid_equipment_link": true,
+        "is_synthetic": true,
+        "outcome_group": "已恢复或关闭",
+        "phenomenon_category": "位置或夹持异常",
+        "relation_tier": "设备-失效模式关联候选",
+        "severity_band": "中",
+        "source_group": "检查发现",
+        "status_group": "已关闭",
+        "structure_link_status": "结构链完整但类型一致性待业务复核",
+        "title": "机器人对象的历史关联差异核验"
+      },
+      "confidence_label": "仅供检索与补证",
+      "data_boundary": "schema_and_relationship_reference_only",
+      "disposition": "verify_relation_before_knowledge_reuse",
+      "facts": [
+        {
+          "detail": "来源为检查发现；当前状态为已关闭。",
+          "evidence_id": "E-CASE-01",
+          "label": "工单结构已接收",
+          "relation": "工单 → 设备对象",
+          "source_scope": "故障工单受控字段",
+          "strength": "direct"
+        },
+        {
+          "detail": "设备族为机器人系统，部件族为运动执行部件。",
+          "evidence_id": "E-CASE-02",
+          "label": "设备类别与功能可作为检索入口",
+          "relation": "设备实例 → 设备类别 → 功能",
+          "source_scope": "设备实例、设备类别、功能关系",
+          "strength": "direct"
+        },
+        {
+          "detail": "关联状态为历史关联待核验，需业务人员核验，不视作已确认失效模式。",
+          "evidence_id": "E-CASE-03",
+          "label": "失效模式为历史关联候选",
+          "relation": "工单 → 失效模式",
+          "source_scope": "故障工单、失效模式",
+          "strength": "candidate"
+        }
+      ],
+      "gaps": [],
+      "schema_version": "2.0",
+      "tasks": [
+        {
+          "acceptance_criteria": "确认工单对象、设备类别与部件对象的关联状态，并记录核验依据。",
+          "approval_required": true,
+          "due_hint": "建议在当班内完成",
+          "evidence_ids": [
+            "E-CASE-01",
+            "E-CASE-02"
+          ],
+          "owner_role": "设备管理员",
+          "task_id": "TASK-REL-01",
+          "title": "核验设备对象与工单归属"
+        },
+        {
+          "acceptance_criteria": "记录检查现象、排查路径和是否同意复用历史失效模式；不同意时说明差异。",
+          "approval_required": true,
+          "due_hint": "建议在现场检查后完成",
+          "evidence_ids": [
+            "E-CASE-02",
+            "E-CASE-03"
+          ],
+          "owner_role": "维修工程师",
+          "task_id": "TASK-REL-02",
+          "title": "核验失效模式关联是否可复用"
+        },
+        {
+          "acceptance_criteria": "按异常发生区间、生产批次和检查结果判断是否需要扩大影响范围核验。",
+          "approval_required": true,
+          "due_hint": "建议在设备复机前完成",
+          "evidence_ids": [
+            "E-CASE-01"
+          ],
+          "owner_role": "质量工程师",
+          "task_id": "TASK-REL-03",
+          "title": "评估是否需要质量与工艺共同复核"
+        }
+      ],
+      "terra": {
+        "mode": "deterministic",
+        "note": "公开演示未调用外部模型。"
+      }
+    }
+  ],
+  "schema_version": "2.0",
+  "source_contract": {
+    "allowed_use": [
+      "对象定义",
+      "字段关系",
+      "关联完整性",
+      "协同闭环设计"
+    ],
+    "disallowed_use": [
+      "知识抽取",
+      "时序分析",
+      "真实设备状态推断",
+      "企业效果计算"
+    ],
+    "relation_path": "设备类别 → 设备实例 → 故障工单 → 失效模式 → 设备功能 → 设备类别"
+  }
+}

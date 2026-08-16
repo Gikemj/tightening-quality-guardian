@@ -1,0 +1,101 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "本地：检查 Python 与 Node 环境",
+      "type": "process",
+      "command": "${command:python.interpreterPath}",
+      "args": ["scripts/check_local_environment.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "验证：Python 全部测试",
+      "type": "process",
+      "command": "${command:python.interpreterPath}",
+      "args": ["-m", "unittest", "discover", "-s", "tests", "-v"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "验证：网页引擎测试",
+      "type": "process",
+      "command": "node",
+      "args": ["--test", "tests/web-engine.test.mjs"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "验证：网页脚本语法",
+      "type": "process",
+      "command": "node",
+      "args": ["--check", "docs/app.js"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "验证：风险引擎语法",
+      "type": "process",
+      "command": "node",
+      "args": ["--check", "docs/risk-engine.js"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "验证：公开产物与安全审计",
+      "type": "process",
+      "command": "${command:python.interpreterPath}",
+      "args": ["scripts/audit_repository.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "验证：全部提交门禁",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "生成：全部演示与评测资产",
+        "验证：Python 全部测试",
+        "验证：网页引擎测试",
+        "验证：风险引擎语法",
+        "验证：网页脚本语法",
+        "验证：公开产物与安全审计"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "生成：全部演示与评测资产",
+      "type": "process",
+      "command": "${command:python.interpreterPath}",
+      "args": ["scripts/build_all.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "网站：启动 localhost:8000",
+      "type": "process",
+      "command": "${command:python.interpreterPath}",
+      "args": ["-m", "http.server", "8000", "--bind", "127.0.0.1", "--directory", "docs"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "local-http-server",
+        "pattern": { "regexp": ".*" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "Serving HTTP on"
+        }
+      }
+    }
+  ]
+}

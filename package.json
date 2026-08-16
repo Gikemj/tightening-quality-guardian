@@ -3,10 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Static GitHub Pages demo and browser-side risk calculation for 质控前哨",
+  "description": "Static GitHub Pages demo consuming reproducible Python risk results for 质控前哨",
   "scripts": {
-    "test": "node --test tests/web-engine.test.mjs",
-    "serve": "python3 -m http.server 8000 --directory docs"
+    "test": "node --check docs/risk-engine.js && node --check docs/app.js && node --test tests/web-engine.test.mjs",
+    "build": "python scripts/build_all.py",
+    "build:web-only": "python scripts/build_demo_assets.py",
+    "build:all": "python scripts/build_all.py",
+    "evaluate": "python scripts/evaluate.py",
+    "evaluate:scenarios": "python scripts/evaluate_scenarios.py",
+    "serve": "python -m http.server 8000 --bind 127.0.0.1 --directory docs"
   },
   "engines": {
     "node": ">=20"

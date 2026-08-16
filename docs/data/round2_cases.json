@@ -1,0 +1,82 @@
+{
+  "cases": [
+    {
+      "action_category": "检查与复核",
+      "case_id": "CASE-DEMO-001",
+      "cause_category": "其他或未确认",
+      "completeness_grade": "高",
+      "component_family": "安全防护元件",
+      "equipment_family": "安全防护设备",
+      "failure_mode_link_status": "历史关联待核验",
+      "has_failure_mode_link": true,
+      "has_valid_equipment_link": true,
+      "is_synthetic": true,
+      "outcome_group": "处理中或待跟踪",
+      "phenomenon_category": "动作异常",
+      "relation_tier": "内容较完整候选",
+      "severity_band": "高",
+      "source_group": "检查发现",
+      "status_group": "待处理",
+      "structure_link_status": "设备类别—实例—工单—失效模式—功能链待业务复核",
+      "title": "巡检发现的安全防护对象关系复核"
+    },
+    {
+      "action_category": "其他处置",
+      "case_id": "CASE-DEMO-002",
+      "cause_category": "其他或未确认",
+      "completeness_grade": "低",
+      "component_family": "控制电气元件",
+      "equipment_family": "控制与电气设备",
+      "failure_mode_link_status": "未关联",
+      "has_failure_mode_link": false,
+      "has_valid_equipment_link": true,
+      "is_synthetic": true,
+      "outcome_group": "处理中或待跟踪",
+      "phenomenon_category": "报警事件",
+      "relation_tier": "仅工单结构记录",
+      "severity_band": "中",
+      "source_group": "设备报警或系统事件",
+      "status_group": "待处理",
+      "structure_link_status": "已关联设备对象，未形成可复核失效模式链",
+      "title": "控制与电气报警的工单补证"
+    },
+    {
+      "action_category": "维修后检查",
+      "case_id": "CASE-DEMO-003",
+      "cause_category": "设备因素",
+      "completeness_grade": "中",
+      "component_family": "运动执行部件",
+      "equipment_family": "机器人系统",
+      "failure_mode_link_status": "历史关联待核验",
+      "has_failure_mode_link": true,
+      "has_valid_equipment_link": true,
+      "is_synthetic": true,
+      "outcome_group": "已恢复或关闭",
+      "phenomenon_category": "位置或夹持异常",
+      "relation_tier": "设备-失效模式关联候选",
+      "severity_band": "中",
+      "source_group": "检查发现",
+      "status_group": "已关闭",
+      "structure_link_status": "结构链完整但类型一致性待业务复核",
+      "title": "机器人对象的历史关联差异核验"
+    }
+  ],
+  "data_boundary": "schema_and_relationship_reference_only",
+  "notice": "本文件中的案例、编号、工作状态和说明均为比赛演示合成内容。它们只沿用赛题数据包的数据结构、受控字段和关系链，不复现任何真实工单、设备标识或现场事实。",
+  "schema_version": "2.0",
+  "source_contract": {
+    "allowed_use": [
+      "对象定义",
+      "字段关系",
+      "关联完整性",
+      "协同闭环设计"
+    ],
+    "disallowed_use": [
+      "知识抽取",
+      "时序分析",
+      "真实设备状态推断",
+      "企业效果计算"
+    ],
+    "relation_path": "设备类别 → 设备实例 → 故障工单 → 失效模式 → 设备功能 → 设备类别"
+  }
+}

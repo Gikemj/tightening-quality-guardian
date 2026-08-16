@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>第二轮数据使用说明｜质控前哨 V2</title>
+    <link rel="stylesheet" href="./round2.css" />
+  </head>
+  <body>
+    <header class="topbar"><a class="brand" href="./round2.html"><span>哨</span><b>质控前哨</b><small>V2 · 数据使用说明</small></a></header>
+    <main class="page-shell">
+      <section class="intro"><div><p class="eyebrow">数据边界</p><h1>保留关系，不复制现场事实。</h1><p class="lede">本页说明第二轮公开演示如何使用赛题提供的设备场景闭环脱敏数据包。原始工作簿不上传、不训练、不供浏览器下载。</p></div></section>
+      <section class="section"><div class="section-head"><div><p class="eyebrow">可以使用</p><h2>对象、字段和关系设计</h2></div></div><div class="evidence-grid"><article class="ledger"><h3>对象定义</h3><ul><li><span>设备类别、设备实例、设备功能、失效模式和故障工单的字段角色。</span></li></ul></article><article class="ledger"><h3>关系约束</h3><ul><li><span>设备类别 → 设备实例 → 故障工单 → 失效模式 → 设备功能 → 设备类别。</span></li></ul></article><article class="ledger"><h3>闭环设计</h3><ul><li><span>关系完整性、人工核验、任务协同和经审核后的知识更新。</span></li></ul></article></div></section>
+      <section class="section"><div class="section-head"><div><p class="eyebrow">不使用</p><h2>不把脱敏包当作真实生产数据</h2></div></div><div class="evidence-grid"><article class="ledger"><h3>不做知识抽取</h3><ul><li><span>不从受控类别和脱敏关联中生成企业知识结论。</span></li></ul></article><article class="ledger"><h3>不做时序分析</h3><ul><li><span>数据不含可用于工艺趋势、设备健康或节拍判断的真实时间序列。</span></li></ul></article><article class="ledger"><h3>不做企业效果测算</h3><ul><li><span>不以公开演示案例计算产线准确率、停机损失或投资回报。</span></li></ul></article></div></section>
+      <section class="boundary-strip"><div><p class="eyebrow">公开演示</p><h2>所有案卷均为合成代表案例</h2></div><p>公开页面只含 CASE-DEMO 编号、合成状态和根据字段合同设计的关系流程。模型服务接收的也是最小化结构案卷，不含原始工作簿、人员信息、真实设备编号、精确时间、厂区工位或原始正文。</p><a href="./round2.html">返回演示</a></section>
+    </main>
+  </body>
+</html>

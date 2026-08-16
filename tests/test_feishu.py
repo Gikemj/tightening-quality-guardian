@@ -19,6 +19,13 @@ class FeishuPayloadTest(unittest.TestCase):
         self.assertIn("责任角色", action)
         self.assertIn("时限（分钟）", action)
         self.assertIn("验收依据", action)
+        self.assertEqual(action["生成依据"], card.recommended_actions[0].why)
+        self.assertEqual(
+            action["关联证据"], "、".join(card.recommended_actions[0].evidence_ids)
+        )
+        self.assertEqual(
+            action["候选原因"], "；".join(card.recommended_actions[0].candidate_causes)
+        )
         self.assertTrue(action["需人工审批"])
 
 

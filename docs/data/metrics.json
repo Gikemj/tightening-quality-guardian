@@ -1,22 +1,22 @@
 {
-  "evaluation_scope": "synthetic rolling-window validation for P03",
-  "samples": 49,
   "confusion_matrix": {
-    "tp": 17,
+    "fn": 1,
     "fp": 1,
     "tn": 30,
-    "fn": 1
+    "tp": 17
   },
-  "recall": 0.9444,
-  "precision": 0.9444,
-  "false_positive_rate": 0.0323,
-  "median_positive_score": 59.5,
-  "median_negative_score": 40,
+  "evaluation_scope": "synthetic rolling-window validation for P03",
   "evidence_traceability": 1.0,
-  "task_field_completeness": 1.0,
+  "false_positive_rate": 0.0323,
   "limitations": [
     "All measurements and labels are synthetic.",
     "The validation tests scenario reproducibility, not factory-wide generalization.",
     "Thresholds require recalibration on real equipment and stratification by model, program, and fastening point."
-  ]
+  ],
+  "median_negative_score": 40,
+  "median_positive_score": 59.5,
+  "precision": 0.9444,
+  "recall": 0.9444,
+  "samples": 49,
+  "task_field_completeness": 1.0
 }

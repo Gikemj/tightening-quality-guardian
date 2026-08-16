@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="质控前哨 V2：以关系证据分级推动设备质量风险闭环的公开演示。" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>质控前哨 V2｜关系证据闭环</title>
+    <link rel="stylesheet" href="./round2.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="质控前哨 V2 首页"><span>哨</span><b>质控前哨</b><small>V2 · 关系证据闭环</small></a>
+      <div class="topbar-meta"><span class="boundary-badge">公开合成案例</span><a href="https://github.com/Gikemj/tightening-quality-guardian/releases/download/v2-round2/quality-guardian-v2.mp4">观看 4 分演示</a><a href="./index.html">查看第一轮原型</a><a href="https://github.com/Gikemj/tightening-quality-guardian">源码与复现</a></div>
+    </header>
+
+    <main id="main-content" class="page-shell">
+      <section class="intro" id="top" aria-labelledby="intro-title">
+        <div>
+          <p class="eyebrow">设备质量风险闭环数字员工</p>
+          <h1 id="intro-title">先判断关系是否可信，再讨论处置。</h1>
+          <p class="lede">第二轮不把脱敏数据包装成时序预测样本。数字员工从工单、设备对象和失效模式的关联状态出发，区分已证实事实、历史候选和信息缺口，生成待审批的协同任务。</p>
+        </div>
+        <aside class="intro-contract" aria-label="数据使用边界">
+          <span>数据使用边界</span>
+          <strong>对象、字段与关系</strong>
+          <p>不做知识抽取、时序分析、真实状态推断或企业效果计算。</p>
+        </aside>
+      </section>
+
+      <section class="case-bar" aria-label="选择演示案例">
+        <div><span>当前案卷</span><strong id="case-title">正在读取…</strong><small id="case-meta">正在读取公开演示资产</small></div>
+        <label>切换合成案例<select id="case-select" aria-label="切换合成案例"></select></label>
+      </section>
+
+      <section class="summary-grid" aria-label="当前案卷摘要">
+        <article><span>处理方式</span><strong id="disposition">—</strong><small id="disposition-note">—</small></article>
+        <article><span>关系判断</span><strong id="confidence">—</strong><small>不等同于根因置信度</small></article>
+        <article><span>事实与候选</span><strong id="evidence-count">—</strong><small>候选关联必须现场核验</small></article>
+        <article><span>任务门禁</span><strong>人工审批</strong><small>公开页不写入外部系统</small></article>
+      </section>
+
+      <section class="section" id="relationship" aria-labelledby="relationship-title">
+        <div class="section-head"><div><p class="eyebrow">关系路径</p><h2 id="relationship-title">案卷从哪里来，能走到哪里</h2></div><p>关系链描述的是可用的检索范围。链路存在，不代表历史关联已被确认。</p></div>
+        <div class="relation-board" aria-label="设备质量关系路径">
+          <div class="relation-node"><small>对象</small><strong>设备实例</strong><span id="node-equipment">—</span></div>
+          <div class="relation-arrow"><span>所属类别</span><i aria-hidden="true">→</i></div>
+          <div class="relation-node"><small>知识入口</small><strong>设备类别与功能</strong><span>受控关系检索</span></div>
+          <div class="relation-arrow"><span>关联候选</span><i aria-hidden="true">→</i></div>
+          <div class="relation-node"><small>业务记录</small><strong>故障工单</strong><span id="node-workorder">—</span></div>
+          <div class="relation-arrow"><span>待业务核验</span><i aria-hidden="true">→</i></div>
+          <div class="relation-node accent"><small>候选知识</small><strong>失效模式</strong><span id="node-failure">—</span></div>
+        </div>
+        <p class="relation-caption">数据包提供的主链：设备类别 → 设备实例 → 故障工单 → 失效模式 → 设备功能 → 设备类别。公开演示只保留结构说明与自建合成案例。</p>
+      </section>
+
+      <section class="section evidence-section" id="evidence" aria-labelledby="evidence-title">
+        <div class="section-head"><div><p class="eyebrow">证据分级</p><h2 id="evidence-title">事实、候选关联和缺口分开处理</h2></div><p>系统没有“默认相信历史关联”的捷径。每条任务都要回到具体证据。</p></div>
+        <div class="evidence-grid">
+          <article class="ledger"><header><span class="dot direct"></span><h3>已证实的结构事实</h3></header><ul id="fact-list"></ul></article>
+          <article class="ledger"><header><span class="dot candidate"></span><h3>可检索但待核验的关联</h3></header><ul id="candidate-list"></ul></article>
+          <article class="ledger"><header><span class="dot gap"></span><h3>必须补齐的信息</h3></header><ul id="gap-list"></ul></article>
+        </div>
+      </section>
+
+      <section class="section agent-section" id="agent" aria-labelledby="agent-title">
+        <div class="section-head"><div><p class="eyebrow">受控智能体</p><h2 id="agent-title">分析不越过证据与权限边界</h2></div><p>Terra 只在服务端、经显式配置后参与文书整理。无凭证或输出不合规时，系统回退为确定性案卷。</p></div>
+        <div class="agent-layout">
+          <ol class="agent-steps" aria-label="数字员工执行步骤">
+            <li><span>01</span><div><strong>读取业务事件</strong><p>接收工单、巡检、复机确认或失效模式更新，不读取真实时序。</p></div></li>
+            <li><span>02</span><div><strong>核验对象与关系</strong><p>检查设备对象、类别、功能与工单的可用关联。</p></div></li>
+            <li><span>03</span><div><strong>形成证据案卷</strong><p>把直接事实、历史候选和缺口拆开，并附来源范围。</p></div></li>
+            <li><span>04</span><div><strong>受控 Terra 整理</strong><p>仅生成待核验说明和补证问题，所有内容须通过 JSON 与安全字段校验。</p></div></li>
+            <li><span>05</span><div><strong>审批后协同</strong><p>生成飞书多维表格任务草案，现场结果再用于人工审核后的知识更新。</p></div></li>
+          </ol>
+          <aside class="model-contract">
+            <div><span class="model-mark">T</span><div><small>可选模型服务</small><strong>CodeKey · Terra</strong></div></div>
+            <dl><div><dt>输入</dt><dd>最小化结构案卷</dd></div><div><dt>输出</dt><dd>受控 JSON 文书</dd></div><div><dt>限制</dt><dd>600 token，单次请求，12 秒超时</dd></div><div><dt>禁止</dt><dd>确认根因、自动动作、外部写入</dd></div></dl>
+            <button class="outline-button" id="model-toggle" type="button" aria-expanded="false">查看模型输入边界</button>
+            <pre id="model-preview" hidden></pre>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section workflow-section" id="workflow" aria-labelledby="workflow-title">
+        <div class="section-head"><div><p class="eyebrow">协同闭环</p><h2 id="workflow-title">任务草案先进入人工门禁</h2></div><p>责任人与验收条件写入任务草案。系统不代表现场人员完成检查，也不自动关闭工单。</p></div>
+        <div class="task-table-wrap"><table><thead><tr><th>任务</th><th>责任角色</th><th>建议时点</th><th>验收依据</th><th>关联证据</th></tr></thead><tbody id="task-table"></tbody></table></div>
+        <div class="workflow-footer"><div><strong>飞书多维表格字段映射</strong><span>案卷 ID、关系判断、责任角色、审批状态、验收依据、回写链接</span></div><button class="primary-button" id="task-preview" type="button">生成飞书任务预览</button><p id="task-feedback" aria-live="polite"></p></div>
+      </section>
+
+      <section class="boundary-strip" aria-labelledby="boundary-title">
+        <div><p class="eyebrow">部署说明</p><h2 id="boundary-title">公开演示的结论到此为止</h2></div>
+        <p id="boundary-text">正在读取…</p>
+        <a href="./data-boundary-round2.html">查看数据使用说明</a>
+      </section>
+    </main>
+
+    <footer><strong>质控前哨 V2</strong><span>赛力斯命题参赛原型。非赛力斯官方系统，未公开原始脱敏数据。</span></footer>
+    <script type="module" src="./round2.js"></script>
+  </body>
+</html>

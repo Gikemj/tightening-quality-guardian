@@ -1,0 +1,1118 @@
+[
+  {
+    "angle_deg": 93.176,
+    "current_a": 6.434,
+    "event_id": "EVT-00301",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:02:00",
+    "torque_nm": 48.354
+  },
+  {
+    "angle_deg": 96.977,
+    "current_a": 6.27,
+    "event_id": "EVT-00302",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:04:00",
+    "torque_nm": 48.267
+  },
+  {
+    "angle_deg": 98.571,
+    "current_a": 6.351,
+    "event_id": "EVT-00303",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:06:00",
+    "torque_nm": 48.012
+  },
+  {
+    "angle_deg": 94.008,
+    "current_a": 6.586,
+    "event_id": "EVT-00304",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:08:00",
+    "torque_nm": 48.086
+  },
+  {
+    "angle_deg": 92.208,
+    "current_a": 6.34,
+    "event_id": "EVT-00305",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:10:00",
+    "torque_nm": 48.357
+  },
+  {
+    "angle_deg": 94.034,
+    "current_a": 6.619,
+    "event_id": "EVT-00306",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:12:00",
+    "torque_nm": 48.148
+  },
+  {
+    "angle_deg": 94.272,
+    "current_a": 6.436,
+    "event_id": "EVT-00307",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:14:00",
+    "torque_nm": 48.001
+  },
+  {
+    "angle_deg": 98.237,
+    "current_a": 6.503,
+    "event_id": "EVT-00308",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:16:00",
+    "torque_nm": 48.695
+  },
+  {
+    "angle_deg": 98.059,
+    "current_a": 6.501,
+    "event_id": "EVT-00309",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:18:00",
+    "torque_nm": 48.492
+  },
+  {
+    "angle_deg": 93.058,
+    "current_a": 6.5,
+    "event_id": "EVT-00310",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:20:00",
+    "torque_nm": 47.883
+  },
+  {
+    "angle_deg": 97.409,
+    "current_a": 6.501,
+    "event_id": "EVT-00311",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:22:00",
+    "torque_nm": 48.959
+  },
+  {
+    "angle_deg": 94.497,
+    "current_a": 6.164,
+    "event_id": "EVT-00312",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:24:00",
+    "torque_nm": 49.166
+  },
+  {
+    "angle_deg": 95.124,
+    "current_a": 6.639,
+    "event_id": "EVT-00313",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:26:00",
+    "torque_nm": 47.772
+  },
+  {
+    "angle_deg": 94.612,
+    "current_a": 6.4,
+    "event_id": "EVT-00314",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:28:00",
+    "torque_nm": 47.819
+  },
+  {
+    "angle_deg": 91.95,
+    "current_a": 6.284,
+    "event_id": "EVT-00315",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:30:00",
+    "torque_nm": 47.853
+  },
+  {
+    "angle_deg": 97.185,
+    "current_a": 6.267,
+    "event_id": "EVT-00316",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:32:00",
+    "torque_nm": 48.23
+  },
+  {
+    "angle_deg": 98.122,
+    "current_a": 6.558,
+    "event_id": "EVT-00317",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:34:00",
+    "torque_nm": 48.854
+  },
+  {
+    "angle_deg": 88.6,
+    "current_a": 6.308,
+    "event_id": "EVT-00318",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:36:00",
+    "torque_nm": 47.516
+  },
+  {
+    "angle_deg": 92.071,
+    "current_a": 6.321,
+    "event_id": "EVT-00319",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:38:00",
+    "torque_nm": 48.399
+  },
+  {
+    "angle_deg": 93.343,
+    "current_a": 6.362,
+    "event_id": "EVT-00320",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:40:00",
+    "torque_nm": 48.208
+  },
+  {
+    "angle_deg": 93.439,
+    "current_a": 6.518,
+    "event_id": "EVT-00321",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:42:00",
+    "torque_nm": 48.319
+  },
+  {
+    "angle_deg": 96.826,
+    "current_a": 6.362,
+    "event_id": "EVT-00322",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:44:00",
+    "torque_nm": 48.593
+  },
+  {
+    "angle_deg": 92.764,
+    "current_a": 6.306,
+    "event_id": "EVT-00323",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:46:00",
+    "torque_nm": 48.66
+  },
+  {
+    "angle_deg": 94.95,
+    "current_a": 6.416,
+    "event_id": "EVT-00324",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:48:00",
+    "torque_nm": 47.528
+  },
+  {
+    "angle_deg": 98.625,
+    "current_a": 6.497,
+    "event_id": "EVT-00325",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:50:00",
+    "torque_nm": 48.268
+  },
+  {
+    "angle_deg": 97.272,
+    "current_a": 6.365,
+    "event_id": "EVT-00326",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:52:00",
+    "torque_nm": 48.674
+  },
+  {
+    "angle_deg": 96.314,
+    "current_a": 6.524,
+    "event_id": "EVT-00327",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:54:00",
+    "torque_nm": 48.153
+  },
+  {
+    "angle_deg": 92.157,
+    "current_a": 6.453,
+    "event_id": "EVT-00328",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:56:00",
+    "torque_nm": 48.646
+  },
+  {
+    "angle_deg": 96.186,
+    "current_a": 6.175,
+    "event_id": "EVT-00329",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T08:58:00",
+    "torque_nm": 48.292
+  },
+  {
+    "angle_deg": 96.418,
+    "current_a": 6.452,
+    "event_id": "EVT-00330",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:00:00",
+    "torque_nm": 48.277
+  },
+  {
+    "angle_deg": 95.686,
+    "current_a": 6.286,
+    "event_id": "EVT-00331",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:02:00",
+    "torque_nm": 48.215
+  },
+  {
+    "angle_deg": 97.846,
+    "current_a": 6.473,
+    "event_id": "EVT-00332",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:04:00",
+    "torque_nm": 46.4
+  },
+  {
+    "angle_deg": 94.187,
+    "current_a": 6.462,
+    "event_id": "EVT-00333",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:06:00",
+    "torque_nm": 47.434
+  },
+  {
+    "angle_deg": 98.43,
+    "current_a": 6.385,
+    "event_id": "EVT-00334",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:08:00",
+    "torque_nm": 48.515
+  },
+  {
+    "angle_deg": 96.223,
+    "current_a": 6.223,
+    "event_id": "EVT-00335",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:10:00",
+    "torque_nm": 48.756
+  },
+  {
+    "angle_deg": 92.53,
+    "current_a": 6.404,
+    "event_id": "EVT-00336",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:12:00",
+    "torque_nm": 48.017
+  },
+  {
+    "angle_deg": 94.873,
+    "current_a": 6.55,
+    "event_id": "EVT-00337",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:14:00",
+    "torque_nm": 47.681
+  },
+  {
+    "angle_deg": 94.109,
+    "current_a": 6.215,
+    "event_id": "EVT-00338",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:16:00",
+    "torque_nm": 48.326
+  },
+  {
+    "angle_deg": 97.18,
+    "current_a": 6.374,
+    "event_id": "EVT-00339",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:18:00",
+    "torque_nm": 49.05
+  },
+  {
+    "angle_deg": 93.064,
+    "current_a": 6.541,
+    "event_id": "EVT-00340",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:20:00",
+    "torque_nm": 48.153
+  },
+  {
+    "angle_deg": 94.67,
+    "current_a": 6.411,
+    "event_id": "EVT-00341",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:22:00",
+    "torque_nm": 47.317
+  },
+  {
+    "angle_deg": 96.102,
+    "current_a": 6.356,
+    "event_id": "EVT-00342",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:24:00",
+    "torque_nm": 48.479
+  },
+  {
+    "angle_deg": 93.997,
+    "current_a": 6.483,
+    "event_id": "EVT-00343",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:26:00",
+    "torque_nm": 47.519
+  },
+  {
+    "angle_deg": 95.21,
+    "current_a": 6.297,
+    "event_id": "EVT-00344",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:28:00",
+    "torque_nm": 48.473
+  },
+  {
+    "angle_deg": 94.652,
+    "current_a": 6.694,
+    "event_id": "EVT-00345",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:30:00",
+    "torque_nm": 48.283
+  },
+  {
+    "angle_deg": 94.841,
+    "current_a": 6.343,
+    "event_id": "EVT-00346",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:32:00",
+    "torque_nm": 47.896
+  },
+  {
+    "angle_deg": 95.563,
+    "current_a": 6.44,
+    "event_id": "EVT-00347",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:34:00",
+    "torque_nm": 48.49
+  },
+  {
+    "angle_deg": 92.601,
+    "current_a": 6.411,
+    "event_id": "EVT-00348",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:36:00",
+    "torque_nm": 48.81
+  },
+  {
+    "angle_deg": 93.117,
+    "current_a": 6.458,
+    "event_id": "EVT-00349",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:38:00",
+    "torque_nm": 49.514
+  },
+  {
+    "angle_deg": 94.681,
+    "current_a": 6.642,
+    "event_id": "EVT-00350",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:40:00",
+    "torque_nm": 47.522
+  },
+  {
+    "angle_deg": 99.491,
+    "current_a": 6.417,
+    "event_id": "EVT-00351",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:42:00",
+    "torque_nm": 48.34
+  },
+  {
+    "angle_deg": 93.694,
+    "current_a": 6.626,
+    "event_id": "EVT-00352",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:44:00",
+    "torque_nm": 47.545
+  },
+  {
+    "angle_deg": 93.33,
+    "current_a": 6.382,
+    "event_id": "EVT-00353",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:46:00",
+    "torque_nm": 48.773
+  },
+  {
+    "angle_deg": 94.217,
+    "current_a": 6.401,
+    "event_id": "EVT-00354",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:48:00",
+    "torque_nm": 49.236
+  },
+  {
+    "angle_deg": 92.733,
+    "current_a": 6.363,
+    "event_id": "EVT-00355",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:50:00",
+    "torque_nm": 47.585
+  },
+  {
+    "angle_deg": 95.365,
+    "current_a": 6.517,
+    "event_id": "EVT-00356",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:52:00",
+    "torque_nm": 48.192
+  },
+  {
+    "angle_deg": 92.362,
+    "current_a": 6.45,
+    "event_id": "EVT-00357",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:54:00",
+    "torque_nm": 47.61
+  },
+  {
+    "angle_deg": 94.47,
+    "current_a": 6.582,
+    "event_id": "EVT-00358",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:56:00",
+    "torque_nm": 48.008
+  },
+  {
+    "angle_deg": 97.87,
+    "current_a": 6.549,
+    "event_id": "EVT-00359",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T09:58:00",
+    "torque_nm": 48.325
+  },
+  {
+    "angle_deg": 94.534,
+    "current_a": 6.459,
+    "event_id": "EVT-00360",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:00:00",
+    "torque_nm": 48.648
+  },
+  {
+    "angle_deg": 96.646,
+    "current_a": 6.703,
+    "event_id": "EVT-00361",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:02:00",
+    "torque_nm": 47.864
+  },
+  {
+    "angle_deg": 95.521,
+    "current_a": 6.247,
+    "event_id": "EVT-00362",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:04:00",
+    "torque_nm": 46.853
+  },
+  {
+    "angle_deg": 96.122,
+    "current_a": 6.616,
+    "event_id": "EVT-00363",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:06:00",
+    "torque_nm": 48.486
+  },
+  {
+    "angle_deg": 95.055,
+    "current_a": 6.48,
+    "event_id": "EVT-00364",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:08:00",
+    "torque_nm": 47.232
+  },
+  {
+    "angle_deg": 93.686,
+    "current_a": 6.585,
+    "event_id": "EVT-00365",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:10:00",
+    "torque_nm": 47.127
+  },
+  {
+    "angle_deg": 98.281,
+    "current_a": 6.318,
+    "event_id": "EVT-00366",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:12:00",
+    "torque_nm": 47.465
+  },
+  {
+    "angle_deg": 96.254,
+    "current_a": 6.133,
+    "event_id": "EVT-00367",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:14:00",
+    "torque_nm": 48.308
+  },
+  {
+    "angle_deg": 94.28,
+    "current_a": 6.399,
+    "event_id": "EVT-00368",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:16:00",
+    "torque_nm": 46.808
+  },
+  {
+    "angle_deg": 93.25,
+    "current_a": 6.564,
+    "event_id": "EVT-00369",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:18:00",
+    "torque_nm": 49.012
+  },
+  {
+    "angle_deg": 90.716,
+    "current_a": 6.19,
+    "event_id": "EVT-00370",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:20:00",
+    "torque_nm": 47.851
+  },
+  {
+    "angle_deg": 95.916,
+    "current_a": 6.362,
+    "event_id": "EVT-00371",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:22:00",
+    "torque_nm": 47.293
+  },
+  {
+    "angle_deg": 91.306,
+    "current_a": 6.393,
+    "event_id": "EVT-00372",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:24:00",
+    "torque_nm": 48.103
+  },
+  {
+    "angle_deg": 95.357,
+    "current_a": 6.277,
+    "event_id": "EVT-00373",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:26:00",
+    "torque_nm": 48.107
+  },
+  {
+    "angle_deg": 94.601,
+    "current_a": 6.301,
+    "event_id": "EVT-00374",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:28:00",
+    "torque_nm": 48.588
+  },
+  {
+    "angle_deg": 94.013,
+    "current_a": 6.395,
+    "event_id": "EVT-00375",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:30:00",
+    "torque_nm": 47.113
+  },
+  {
+    "angle_deg": 94.026,
+    "current_a": 6.643,
+    "event_id": "EVT-00376",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:32:00",
+    "torque_nm": 48.444
+  },
+  {
+    "angle_deg": 95.42,
+    "current_a": 6.459,
+    "event_id": "EVT-00377",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:34:00",
+    "torque_nm": 48.56
+  },
+  {
+    "angle_deg": 95.16,
+    "current_a": 6.446,
+    "event_id": "EVT-00378",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:36:00",
+    "torque_nm": 47.794
+  },
+  {
+    "angle_deg": 94.469,
+    "current_a": 6.476,
+    "event_id": "EVT-00379",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:38:00",
+    "torque_nm": 47.397
+  },
+  {
+    "angle_deg": 96.018,
+    "current_a": 6.509,
+    "event_id": "EVT-00380",
+    "retry_count": 1.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:40:00",
+    "torque_nm": 48.852
+  },
+  {
+    "angle_deg": 91.517,
+    "current_a": 6.313,
+    "event_id": "EVT-00381",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:42:00",
+    "torque_nm": 49.696
+  },
+  {
+    "angle_deg": 93.1,
+    "current_a": 6.364,
+    "event_id": "EVT-00382",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:44:00",
+    "torque_nm": 47.213
+  },
+  {
+    "angle_deg": 97.374,
+    "current_a": 6.389,
+    "event_id": "EVT-00383",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:46:00",
+    "torque_nm": 48.973
+  },
+  {
+    "angle_deg": 94.482,
+    "current_a": 6.526,
+    "event_id": "EVT-00384",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:48:00",
+    "torque_nm": 48.984
+  },
+  {
+    "angle_deg": 97.251,
+    "current_a": 6.502,
+    "event_id": "EVT-00385",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:50:00",
+    "torque_nm": 47.559
+  },
+  {
+    "angle_deg": 96.181,
+    "current_a": 6.476,
+    "event_id": "EVT-00386",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:52:00",
+    "torque_nm": 48.231
+  },
+  {
+    "angle_deg": 99.039,
+    "current_a": 6.564,
+    "event_id": "EVT-00387",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:54:00",
+    "torque_nm": 48.403
+  },
+  {
+    "angle_deg": 93.58,
+    "current_a": 6.464,
+    "event_id": "EVT-00388",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:56:00",
+    "torque_nm": 48.291
+  },
+  {
+    "angle_deg": 100.246,
+    "current_a": 6.447,
+    "event_id": "EVT-00389",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T10:58:00",
+    "torque_nm": 46.706
+  },
+  {
+    "angle_deg": 95.094,
+    "current_a": 6.317,
+    "event_id": "EVT-00390",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:00:00",
+    "torque_nm": 48.008
+  },
+  {
+    "angle_deg": 91.279,
+    "current_a": 6.444,
+    "event_id": "EVT-00391",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:02:00",
+    "torque_nm": 48.804
+  },
+  {
+    "angle_deg": 95.876,
+    "current_a": 6.287,
+    "event_id": "EVT-00392",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:04:00",
+    "torque_nm": 47.795
+  },
+  {
+    "angle_deg": 97.495,
+    "current_a": 6.355,
+    "event_id": "EVT-00393",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:06:00",
+    "torque_nm": 46.635
+  },
+  {
+    "angle_deg": 93.728,
+    "current_a": 6.223,
+    "event_id": "EVT-00394",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:08:00",
+    "torque_nm": 48.227
+  },
+  {
+    "angle_deg": 98.06,
+    "current_a": 6.455,
+    "event_id": "EVT-00395",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:10:00",
+    "torque_nm": 48.12
+  },
+  {
+    "angle_deg": 93.679,
+    "current_a": 6.6,
+    "event_id": "EVT-00396",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:12:00",
+    "torque_nm": 48.41
+  },
+  {
+    "angle_deg": 96.489,
+    "current_a": 6.271,
+    "event_id": "EVT-00397",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:14:00",
+    "torque_nm": 47.604
+  },
+  {
+    "angle_deg": 93.96,
+    "current_a": 6.599,
+    "event_id": "EVT-00398",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:16:00",
+    "torque_nm": 48.129
+  },
+  {
+    "angle_deg": 94.196,
+    "current_a": 6.311,
+    "event_id": "EVT-00399",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:18:00",
+    "torque_nm": 47.812
+  },
+  {
+    "angle_deg": 95.702,
+    "current_a": 6.367,
+    "event_id": "EVT-00400",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:20:00",
+    "torque_nm": 48.103
+  },
+  {
+    "angle_deg": 93.214,
+    "current_a": 6.63,
+    "event_id": "EVT-00401",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:22:00",
+    "torque_nm": 50.087
+  },
+  {
+    "angle_deg": 91.209,
+    "current_a": 6.538,
+    "event_id": "EVT-00402",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:24:00",
+    "torque_nm": 46.852
+  },
+  {
+    "angle_deg": 91.419,
+    "current_a": 6.551,
+    "event_id": "EVT-00403",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:26:00",
+    "torque_nm": 49.106
+  },
+  {
+    "angle_deg": 90.766,
+    "current_a": 6.64,
+    "event_id": "EVT-00404",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:28:00",
+    "torque_nm": 48.386
+  },
+  {
+    "angle_deg": 93.71,
+    "current_a": 6.457,
+    "event_id": "EVT-00405",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:30:00",
+    "torque_nm": 47.812
+  },
+  {
+    "angle_deg": 97.969,
+    "current_a": 6.346,
+    "event_id": "EVT-00406",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:32:00",
+    "torque_nm": 47.142
+  },
+  {
+    "angle_deg": 92.136,
+    "current_a": 6.256,
+    "event_id": "EVT-00407",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:34:00",
+    "torque_nm": 46.082
+  },
+  {
+    "angle_deg": 96.414,
+    "current_a": 6.355,
+    "event_id": "EVT-00408",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:36:00",
+    "torque_nm": 48.077
+  },
+  {
+    "angle_deg": 93.944,
+    "current_a": 6.281,
+    "event_id": "EVT-00409",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:38:00",
+    "torque_nm": 47.948
+  },
+  {
+    "angle_deg": 95.345,
+    "current_a": 6.493,
+    "event_id": "EVT-00410",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:40:00",
+    "torque_nm": 48.291
+  },
+  {
+    "angle_deg": 92.366,
+    "current_a": 6.502,
+    "event_id": "EVT-00411",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:42:00",
+    "torque_nm": 46.954
+  },
+  {
+    "angle_deg": 97.995,
+    "current_a": 6.44,
+    "event_id": "EVT-00412",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:44:00",
+    "torque_nm": 48.11
+  },
+  {
+    "angle_deg": 95.203,
+    "current_a": 6.237,
+    "event_id": "EVT-00413",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:46:00",
+    "torque_nm": 48.734
+  },
+  {
+    "angle_deg": 96.145,
+    "current_a": 6.65,
+    "event_id": "EVT-00414",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:48:00",
+    "torque_nm": 47.913
+  },
+  {
+    "angle_deg": 96.968,
+    "current_a": 6.313,
+    "event_id": "EVT-00415",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:50:00",
+    "torque_nm": 48.094
+  },
+  {
+    "angle_deg": 95.167,
+    "current_a": 6.401,
+    "event_id": "EVT-00416",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:52:00",
+    "torque_nm": 48.405
+  },
+  {
+    "angle_deg": 97.003,
+    "current_a": 6.523,
+    "event_id": "EVT-00417",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:54:00",
+    "torque_nm": 48.426
+  },
+  {
+    "angle_deg": 95.785,
+    "current_a": 6.343,
+    "event_id": "EVT-00418",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:56:00",
+    "torque_nm": 48.022
+  },
+  {
+    "angle_deg": 97.072,
+    "current_a": 6.159,
+    "event_id": "EVT-00419",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T11:58:00",
+    "torque_nm": 47.946
+  },
+  {
+    "angle_deg": 93.368,
+    "current_a": 6.446,
+    "event_id": "EVT-00420",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T12:00:00",
+    "torque_nm": 49.524
+  },
+  {
+    "angle_deg": 95.625,
+    "current_a": 6.156,
+    "event_id": "EVT-00421",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T12:02:00",
+    "torque_nm": 48.65
+  },
+  {
+    "angle_deg": 95.768,
+    "current_a": 6.472,
+    "event_id": "EVT-00422",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T12:04:00",
+    "torque_nm": 47.665
+  },
+  {
+    "angle_deg": 96.863,
+    "current_a": 6.424,
+    "event_id": "EVT-00423",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T12:06:00",
+    "torque_nm": 48.164
+  },
+  {
+    "angle_deg": 94.765,
+    "current_a": 6.289,
+    "event_id": "EVT-00424",
+    "retry_count": 0.0,
+    "scenario_label": "normal",
+    "timestamp": "2026-07-14T12:08:00",
+    "torque_nm": 48.629
+  }
+]

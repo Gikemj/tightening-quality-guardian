@@ -4,5 +4,21 @@ __pycache__/
 .venv/
 venv/
 node_modules/
+*.egg-info/
 .DS_Store
 *.log
+.env
+.env.*
+!.env.example
+
+# Private live-integration artifacts (approver identity, request IDs, remote IDs).
+.local/
+
+# Build-isolation folders are local only. They can contain public derivatives
+# during a build but are never source material for a commit.
+.public-build-*/
+
+# Rendered media is distributed through the release, not the Pages source tree.
+video/assets/*.m4a
+video/assets/*.mp4
+video/assets/work-*/

@@ -8,26 +8,36 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  verify:
+    name: Python ${{ matrix.python-version }} verification
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    env:
+      PYTHONPATH: src
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
       - name: Rebuild deterministic demo artifacts
-        run: |
-          PYTHONPATH=src python scripts/generate_demo_data.py
-          PYTHONPATH=src python scripts/build_demo_assets.py
-          PYTHONPATH=src python scripts/evaluate.py
+        run: python scripts/build_all.py
       - name: Run Python tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
+        run: python -m unittest discover -s tests -v
       - name: Run browser-engine tests
         run: node --test tests/web-engine.test.mjs
+      - name: Check browser JavaScript syntax
+        run: |
+          node --check docs/risk-engine.js
+          node --check docs/app.js
+          node --check docs/round2.js
       - name: Audit public artifacts and safety boundaries
         run: python scripts/audit_repository.py
       - name: Verify generated artifacts are committed
+        if: matrix.python-version == '3.12'
         run: git diff --exit-code -- data docs/data outputs

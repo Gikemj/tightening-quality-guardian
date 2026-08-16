@@ -1,0 +1,95 @@
+{
+  "analysis_window": {
+    "baseline_count": 100,
+    "recent_count": 24
+  },
+  "card_id": "TG-24FE6C93FCFE64619D890D4247FA71D7",
+  "comparisons": [
+    {
+      "baseline": 48.126,
+      "current": 49.086,
+      "delta": 0.96,
+      "evidence_ids": [
+        "E-SPC-01"
+      ],
+      "label": "扭矩均值",
+      "metric_id": "torque_mean_nm",
+      "rule_ids": [
+        "MW-24"
+      ],
+      "status": "triggered",
+      "unit": "N·m"
+    },
+    {
+      "baseline": 1.0,
+      "current": 2.17,
+      "delta": 1.17,
+      "evidence_ids": [
+        "E-EQP-02"
+      ],
+      "label": "角度离散比",
+      "metric_id": "angle_dispersion_ratio",
+      "rule_ids": [
+        "angle_dispersion_and_retry_increase"
+      ],
+      "status": "triggered",
+      "unit": "倍"
+    },
+    {
+      "baseline": 0.01,
+      "current": 0.25,
+      "delta": 0.24,
+      "evidence_ids": [
+        "E-EQP-02"
+      ],
+      "label": "重试均值",
+      "metric_id": "retry_mean",
+      "rule_ids": [
+        "angle_dispersion_and_retry_increase"
+      ],
+      "status": "triggered",
+      "unit": "次/循环"
+    },
+    {
+      "baseline": 100.0,
+      "current": 100.0,
+      "delta": 0.0,
+      "evidence_ids": [
+        "E-SPC-01"
+      ],
+      "label": "规格内比例",
+      "metric_id": "in_spec_rate",
+      "rule_ids": [],
+      "status": "normal",
+      "unit": "%"
+    }
+  ],
+  "display_contract": "browser_read_only",
+  "generated_by": "torque_guard.risk.RiskAnalyzer",
+  "metrics": {
+    "angle_std_ratio": 2.17,
+    "baseline_in_spec_rate": 1.0,
+    "baseline_mean_nm": 48.126,
+    "baseline_sigma_nm": 0.617,
+    "calibration_days_remaining": 9,
+    "in_spec_rate": 1.0,
+    "mean_shift_sigma": 1.56,
+    "recent_cpk": 2.244,
+    "recent_mean_nm": 49.086,
+    "retry_baseline": 0.01,
+    "retry_recent": 0.25,
+    "rule_ids": [
+      "MW-24"
+    ]
+  },
+  "risk_level": "high",
+  "risk_score": 80,
+  "scenario": "risk",
+  "schema_version": "1.0",
+  "score_breakdown": {
+    "context": 13,
+    "equipment_health": 23,
+    "process_stability": 22,
+    "quality_impact": 22
+  }
+}

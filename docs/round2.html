@@ -20,7 +20,7 @@
       </a>
       <div class="topbar-meta">
         <a class="source-link" href="./admin.html">进入管理员工作台</a>
-        <a class="source-link" href="./video/quality-guardian-v2.mp4">观看 4 分钟演示</a>
+        <a class="source-link" href="./video/index.html">观看 4 分钟演示</a>
         <span class="system-presence"><i aria-hidden="true"></i>只读演示在线</span>
         <span class="demo-badge">比赛合成数据</span>
         <a class="source-link" href="https://github.com/Gikemj/tightening-quality-guardian">源码与复现</a>
@@ -90,16 +90,34 @@
             </div>
             <div class="station-replay-meta"><span>ST-FAS-07</span><span>TQ-17</span><span>P03</span></div>
           </header>
+          <div class="station-viewbar" aria-label="工位机位与回放速度">
+            <div class="station-shot-tabs" role="group" aria-label="切换工程机位">
+              <span class="station-viewbar-label">工程机位</span>
+              <button class="station-shot-tab is-selected" type="button" data-station-shot="overview" aria-pressed="true"><b>01</b><span>总览</span></button>
+              <button class="station-shot-tab" type="button" data-station-shot="tool" aria-pressed="false"><b>02</b><span>工具近景</span></button>
+              <button class="station-shot-tab" type="button" data-station-shot="point" aria-pressed="false"><b>03</b><span>P03 点位</span></button>
+              <button class="station-shot-tab" type="button" data-station-shot="signal" aria-pressed="false"><b>04</b><span>信号路径</span></button>
+            </div>
+            <div class="station-speed" role="group" aria-label="回放速度">
+              <span class="station-viewbar-label">回放速度</span>
+              <button class="station-speed-button" type="button" data-station-speed="1" aria-pressed="false">1×</button>
+              <button class="station-speed-button is-selected" type="button" data-station-speed="2" aria-pressed="true">2×</button>
+              <button class="station-speed-button" type="button" data-station-speed="4" aria-pressed="false">4×</button>
+            </div>
+          </div>
           <div class="station-stage">
             <div class="station-canvas-wrap" id="station-canvas-wrap">
               <canvas id="station-canvas" aria-label="总装拧紧工位三维工程示意"></canvas>
               <div class="station-stage-shade" aria-hidden="true"></div>
               <div class="station-scene-badge"><b>工程示意回放</b><span>比赛合成数据 · 不控制设备</span></div>
+              <div class="station-shot-card" aria-live="polite"><span id="station-shot-kicker">机位 01 · 总览</span><strong id="station-shot-title">确认工位、工具和关键点位</strong><p id="station-shot-detail">先锁定同一工位与同一程序分层，再观察过程信号如何进入风险卡。</p></div>
+              <div class="station-camera-crosshair" aria-hidden="true"><i></i><span></span></div>
               <button class="station-callout station-callout-station" type="button" data-station-focus="station"><b>ST-FAS-07</b><span>总装工位</span></button>
               <button class="station-callout station-callout-tool" type="button" data-station-focus="tool"><b>TQ-17</b><span>电动拧紧工具</span></button>
               <button class="station-callout station-callout-point" type="button" data-station-focus="point"><b>P03</b><span>关键紧固点</span></button>
               <button class="station-callout station-callout-signal" type="button" data-station-focus="signal"><b>组合信号</b><span>规格内但趋势变化</span></button>
               <div class="station-progress" aria-label="回放进度"><span id="station-progress-bar"></span></div>
+              <div class="station-timeline" aria-label="回放机位进度"><span class="station-timeline-track"></span><i data-station-marker="overview"></i><i data-station-marker="tool"></i><i data-station-marker="point"></i><i data-station-marker="signal"></i></div>
             </div>
             <aside class="station-readout" aria-label="工位回放读数">
               <div class="station-readout-top"><span id="station-replay-state" class="station-state station-state-idle">等待开始</span><span class="station-readout-clock" id="station-replay-clock">00:00</span></div>
@@ -146,7 +164,7 @@
 
         <aside class="ai-side-panel" id="ai-assistant" data-static-panel="true" aria-labelledby="ai-assistant-title">
           <div class="ai-side-head" id="ai-drag-handle"><div><span class="section-kicker">AI ANALYST</span><h2 id="ai-assistant-title">实时 AI 分析</h2></div><div class="ai-window-tools"><span class="ai-connection-chip" id="ai-connection-state">等待数据</span><button class="ai-window-button" id="ai-panel-dock" type="button" title="收进侧边" aria-label="收进侧边">收进侧边</button></div></div>
-          <p class="ai-side-note" id="ai-side-note">这里是风险卡问答入口。公开页面先依据当前证据和规则摘要回答，不要求外部服务才能演示。</p>
+          <p class="ai-side-note" id="ai-side-note">这里是风险卡问答入口。页面会优先尝试本机受控后台，后台未启动时明确切换到浏览器规则摘要，不会假装已经调用模型。</p>
           <div class="ai-summary" id="ai-live-summary">等待实时测试启动。</div>
           <div class="ai-trigger-box"><strong>当前触发原因</strong><ul id="ai-trigger-list"><li>尚无实时批次</li></ul></div>
           <div class="ai-chat-log" id="ai-chat-log" aria-live="polite"><div class="ai-message assistant">你可以问我：为什么触发？哪一个信号偏差最大？下一步需要核对什么？</div></div>
@@ -516,7 +534,7 @@
           </div>
           <div class="footer-links">
             <a href="https://activity.feishu.cn/future-talent?detail=sailisijituan">官方命题页</a>
-            <a href="./video/quality-guardian-v2.mp4">演示视频</a>
+            <a href="./video/index.html">演示视频</a>
             <a href="https://github.com/Gikemj/tightening-quality-guardian">源码与复现说明</a>
           </div>
         </footer>

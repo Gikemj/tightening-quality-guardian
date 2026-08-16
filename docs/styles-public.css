@@ -571,3 +571,118 @@ body.public-ui .graph-note > div > p { color: var(--muted) !important; }
   body.public-ui .station-callout-signal { right: 3%; bottom: 8%; }
   body.public-ui .station-signal-grid { grid-template-columns: 1fr; }
 }
+
+/* Round-two visual correction: the ink field is part of the work surface, not
+   a hidden decoration. Keep the paper translucent enough to show motion while
+   using a dark ink ramp for every readable label. */
+html.public-light { background: #dce8e3 !important; }
+body.public-ui {
+  --canvas: oklch(0.985 0.006 170);
+  --panel: oklch(0.925 0.018 170);
+  --ink: oklch(0.18 0.025 210);
+  --muted: oklch(0.32 0.025 205);
+  --border: oklch(0.73 0.035 185);
+  --border-strong: oklch(0.56 0.045 195);
+  --equipment: oklch(0.29 0.09 210);
+  --equipment-soft: oklch(0.91 0.045 190);
+  --calibration-soft: oklch(0.93 0.045 338);
+  background: #dce8e3 !important;
+}
+body.public-ui #ink-field { opacity: .98; mix-blend-mode: multiply; }
+body.public-ui main,
+body.public-ui .section-block,
+body.public-ui .hero { background: color-mix(in oklch, var(--canvas) 78%, transparent) !important; }
+body.public-ui .topbar { background: color-mix(in oklch, var(--canvas) 88%, transparent) !important; }
+body.public-ui .sidebar { background: color-mix(in oklch, var(--panel) 86%, transparent) !important; }
+body.public-ui .hero-copy > p,
+body.public-ui .station-replay-head p,
+body.public-ui .section-heading > p,
+body.public-ui .analysis-explainer-head p,
+body.public-ui .comparison-workbench-head p,
+body.public-ui .station-readout-main p,
+body.public-ui .station-focus p,
+body.public-ui .station-boundary,
+body.public-ui .live-analysis-boundary,
+body.public-ui .ai-side-note,
+body.public-ui .ai-boundary { color: var(--muted) !important; }
+body.public-ui h1,
+body.public-ui h2,
+body.public-ui h3,
+body.public-ui .hero-copy > p,
+body.public-ui .station-readout-main strong,
+body.public-ui .station-focus strong,
+body.public-ui .metric-strip strong { color: var(--ink) !important; }
+body.public-ui .section-kicker,
+body.public-ui .section-heading .section-kicker,
+body.public-ui .hero-eyebrow span:first-child { color: var(--equipment) !important; }
+body.public-ui .station-replay { background: color-mix(in oklch, var(--canvas) 90%, transparent) !important; border-color: var(--border-strong) !important; box-shadow: 0 10px 24px rgb(27 54 53 / 10%) !important; }
+body.public-ui .station-viewbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: 0 0 16px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 9px; background: color-mix(in oklch, var(--panel) 84%, transparent); }
+body.public-ui .station-shot-tabs,
+body.public-ui .station-speed { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+body.public-ui .station-viewbar-label { margin-right: 3px; color: var(--muted); font-size: 11px; font-weight: 700; }
+body.public-ui .station-shot-tab,
+body.public-ui .station-speed-button { min-height: 36px; display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; font: 600 12px/1.2 var(--font-sans); transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease; }
+body.public-ui .station-shot-tab b { color: var(--equipment); font: 700 11px/1 var(--font-mono); }
+body.public-ui .station-shot-tab:hover,
+body.public-ui .station-shot-tab:focus-visible,
+body.public-ui .station-speed-button:hover,
+body.public-ui .station-speed-button:focus-visible { border-color: var(--border-strong); background: var(--canvas); color: var(--ink); }
+body.public-ui .station-shot-tab.is-selected,
+body.public-ui .station-speed-button.is-selected { border-color: var(--equipment); background: var(--equipment); color: #fff; }
+body.public-ui .station-shot-tab.is-selected b { color: #dcefe9; }
+body.public-ui .station-speed { padding-left: 14px; border-left: 1px solid var(--border); }
+body.public-ui .station-canvas-wrap { min-height: 480px; border-color: #304b54; background: radial-gradient(circle at 54% 33%, rgb(87 145 151 / 28%), transparent 30%), radial-gradient(circle at 18% 90%, rgb(215 175 103 / 9%), transparent 32%), linear-gradient(145deg, #1d3239, #091318 78%); }
+body.public-ui #station-canvas { min-height: 480px; }
+body.public-ui .station-stage-shade { background: linear-gradient(90deg, rgb(3 12 16 / 13%), transparent 38%, transparent 66%, rgb(3 12 16 / 17%)); }
+body.public-ui .station-shot-card { position: absolute; z-index: 3; right: 18px; bottom: 38px; width: min(315px, 44%); display: grid; gap: 5px; padding: 12px 14px; border: 1px solid rgb(219 235 229 / 35%); border-radius: 8px; background: rgb(8 22 27 / 82%); color: #f3f8f5; pointer-events: none; box-shadow: 0 6px 18px rgb(0 0 0 / 18%); }
+body.public-ui .station-shot-card span { color: #e1bc76; font: 700 10px/1.3 var(--font-mono); letter-spacing: .06em; }
+body.public-ui .station-shot-card strong { color: #fff; font-size: 14px; line-height: 1.35; }
+body.public-ui .station-shot-card p { margin: 0; color: #c8d8d2; font-size: 11px; line-height: 1.5; }
+body.public-ui .station-camera-crosshair { position: absolute; z-index: 2; inset: 30% 45% 42% 45%; pointer-events: none; opacity: .7; }
+body.public-ui .station-camera-crosshair::before,
+body.public-ui .station-camera-crosshair::after { content: ""; position: absolute; background: rgb(219 235 229 / 35%); }
+body.public-ui .station-camera-crosshair::before { top: 50%; left: 0; right: 0; height: 1px; }
+body.public-ui .station-camera-crosshair::after { top: 0; bottom: 0; left: 50%; width: 1px; }
+body.public-ui .station-camera-crosshair i { position: absolute; inset: 14px; display: block; border: 1px solid rgb(219 235 229 / 34%); border-radius: 50%; }
+body.public-ui .station-camera-crosshair span { position: absolute; inset: 50%; display: block; width: 4px; height: 4px; border-radius: 50%; background: #e1bc76; transform: translate(-50%, -50%); }
+body.public-ui .station-timeline { position: absolute; z-index: 4; right: 16px; bottom: 14px; left: 16px; height: 13px; pointer-events: none; }
+body.public-ui .station-timeline-track { position: absolute; top: 5px; right: 0; left: 0; height: 2px; background: rgb(220 236 232 / 30%); }
+body.public-ui .station-timeline i { position: absolute; top: 1px; width: 10px; height: 10px; border: 2px solid #b8ccc6; border-radius: 50%; background: #102127; transform: translateX(-50%); }
+body.public-ui .station-timeline i:nth-of-type(1) { left: 0%; }
+body.public-ui .station-timeline i:nth-of-type(2) { left: 25%; }
+body.public-ui .station-timeline i:nth-of-type(3) { left: 50%; }
+body.public-ui .station-timeline i:nth-of-type(4) { left: 75%; }
+body.public-ui .station-timeline i.is-active { border-color: #e1bc76; background: #e1bc76; box-shadow: 0 0 0 4px rgb(225 188 118 / 18%); }
+body.public-ui .station-progress { bottom: 10px; height: 2px; opacity: .42; }
+body.public-ui .station-progress span { background: #e1bc76; }
+body.public-ui .station-callout { border-color: rgb(219 232 230 / 58%); background: rgb(10 27 33 / 86%); }
+body.public-ui .station-callout span { color: #d8e5e0; }
+body.public-ui .station-callout:hover,
+body.public-ui .station-callout:focus-visible,
+body.public-ui .station-callout.is-selected { border-color: #e1bc76; background: rgb(33 57 62 / 94%); }
+body.public-ui .station-signal-grid > div { background: color-mix(in oklch, var(--panel) 85%, transparent); border-color: var(--border); }
+body.public-ui .ai-chat-form input,
+body.public-ui input,
+body.public-ui select,
+body.public-ui textarea { color: var(--ink) !important; }
+body.public-ui .button:focus-visible,
+body.public-ui button:focus-visible,
+body.public-ui a:focus-visible,
+body.public-ui input:focus-visible,
+body.public-ui select:focus-visible,
+body.public-ui textarea:focus-visible { outline: 3px solid color-mix(in oklch, var(--equipment), white 55%); outline-offset: 2px; }
+body.public-ui .ai-chat-form button:disabled { opacity: .62; cursor: wait; }
+body.public-ui .ai-connection-chip.external { border-color: var(--state-ok) !important; background: var(--state-ok-soft) !important; color: var(--state-ok) !important; }
+
+@media (max-width: 760px) {
+  body.public-ui .station-viewbar { display: grid; gap: 10px; }
+  body.public-ui .station-speed { padding-left: 0; border-left: 0; border-top: 1px solid var(--border); padding-top: 9px; }
+  body.public-ui .station-shot-card { right: 12px; bottom: 33px; left: 12px; width: auto; }
+  body.public-ui .station-camera-crosshair { inset: 27% 43% 47% 43%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.public-ui .station-shot-tab,
+  body.public-ui .station-speed-button,
+  body.public-ui .station-callout { transition: none !important; }
+}

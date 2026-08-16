@@ -155,3 +155,33 @@ tbody tr:hover { background: #fbfcfc; }
   .capability-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+@media (max-width: 760px) {
+  .admin-topbar { height: auto; min-height: 64px; align-items: flex-start; gap: 12px; padding: 13px 16px; }
+  .topbar-actions { flex-wrap: wrap; justify-content: flex-end; gap: 8px 12px; line-height: 1.35; }
+  .topbar-actions .local-indicator { width: 100%; justify-content: flex-end; }
+  .admin-shell { display: block; min-height: 0; }
+  .admin-sidebar { padding: 10px 12px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .side-context, .side-boundary { display: none; }
+  .admin-sidebar nav { display: flex; overflow-x: auto; gap: 4px; padding: 0; }
+  .nav-link { flex: 0 0 auto; min-height: 40px; padding: 10px 11px; white-space: nowrap; }
+  .admin-main { padding: 24px 14px 60px; }
+  .page-heading, .section-title { display: block; }
+  .heading-actions { justify-content: flex-start; margin-top: 14px; }
+  .section-note { display: block; margin-top: 8px; }
+  .analysis-layout, .workflow-layout, .data-grid, .integration-layout, .monitor-layout, .simulator-layout { grid-template-columns: 1fr; }
+  .integration-api-panel { grid-column: auto; }
+  .simulator-result-grid { grid-template-columns: 1fr 1fr; }
+  .monitor-status-bar { grid-template-columns: 1fr 1fr; }
+  .monitor-status-bar > div:first-child { grid-column: 1 / -1; }
+  .notice { align-items: flex-start; flex-direction: column; }
+  .notice code { margin-left: 0; }
+}
+@media (max-width: 460px) {
+  .admin-brand small { display: none; }
+  .topbar-actions { font-size: 11px; }
+  .topbar-actions span[id="health-label"] { display: none; }
+  .metric-grid, .case-grid, .simulator-result-grid, .detail-list { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .monitor-status-bar { grid-template-columns: 1fr; }
+  .monitor-status-bar > div:first-child { grid-column: auto; }
+}

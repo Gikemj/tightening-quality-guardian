@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="质控前哨第二轮项目演示视频，包含总装拧紧工位、多信号风险识别与人工闭环。" />
+    <title>质控前哨 · 第二轮项目演示</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; background: #0d171b; color: #f2f6f4; }
+      * { box-sizing: border-box; }
+      body { min-height: 100vh; margin: 0; background: radial-gradient(circle at 72% 12%, rgba(80, 129, 133, .24), transparent 32rem), #0d171b; }
+      main { width: min(1180px, calc(100% - 36px)); margin: 0 auto; padding: 38px 0 56px; }
+      header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
+      .eyebrow { margin: 0 0 9px; color: #a8c4bc; font: 650 11px/1.3 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .14em; }
+      h1 { margin: 0; max-width: 20ch; font-size: clamp(27px, 4vw, 48px); line-height: 1.15; letter-spacing: -.03em; text-wrap: balance; }
+      .lede { max-width: 62ch; margin: 12px 0 0; color: #c8d5d1; line-height: 1.7; }
+      nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 9px; }
+      a { color: #d9b36d; }
+      nav a { min-height: 40px; display: inline-flex; align-items: center; padding: 9px 13px; border: 1px solid rgba(211, 226, 221, .28); border-radius: 8px; color: #eff5f2; text-decoration: none; font-size: 13px; }
+      nav a:hover, nav a:focus-visible { border-color: #d9b36d; background: rgba(217, 179, 109, .13); }
+      .video-shell { overflow: hidden; border: 1px solid rgba(205, 224, 218, .28); border-radius: 12px; background: #111f24; box-shadow: 0 12px 30px rgba(0, 0, 0, .25); }
+      video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #081014; }
+      .video-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; border-top: 1px solid rgba(205, 224, 218, .15); color: #b7c9c3; font-size: 13px; }
+      .video-meta strong { color: #f2f6f4; }
+      .boundary { margin: 18px 0 0; color: #aabdb7; font-size: 12px; line-height: 1.65; }
+      @media (max-width: 720px) { main { width: min(100% - 24px, 1180px); padding-top: 24px; } header { display: block; } nav { justify-content: flex-start; margin-top: 18px; } }
+      @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="eyebrow">QUALITY GUARDIAN · ROUND TWO</p>
+          <h1>设备质量风险主动管控演示</h1>
+          <p class="lede">从总装拧紧工位的过程信号开始，展示多信号趋势识别、证据关系链、候选原因与人工审批闭环。视频与在线演示使用同一组 ST-FAS-07 / TQ-17 / P03 合成数据口径。</p>
+        </div>
+        <nav aria-label="视频导航">
+          <a href="../round2.html">返回第二轮演示</a>
+          <a href="../admin.html">管理员工作台</a>
+          <a href="./quality-guardian-v2.mp4" download>下载 MP4</a>
+        </nav>
+      </header>
+      <section class="video-shell" aria-label="项目演示视频播放器">
+        <video controls preload="metadata" playsinline poster="./poster.jpg">
+          <source src="./quality-guardian-v2.mp4" type="video/mp4" />
+          <track kind="subtitles" srclang="zh" label="中文字幕" src="./quality-guardian-v2.srt" default />
+          当前浏览器不支持 HTML5 视频，请使用“下载 MP4”查看。
+        </video>
+        <div class="video-meta"><strong>质控前哨 · 第二轮项目演示</strong><span>250 秒 · 1920×1080 · H.264/AAC · 中文字幕</span></div>
+      </section>
+      <p class="boundary">边界说明：本视频是比赛合成演示，不代表赛力斯官方产品，不使用赛力斯内部数据，也不会连接 PLC、停线或修改工具参数。</p>
+    </main>
+  </body>
+</html>

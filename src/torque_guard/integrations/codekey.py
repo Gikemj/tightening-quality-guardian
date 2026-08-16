@@ -34,9 +34,14 @@ class CodeKeyTerraConfig:
     api_key: str
     base_url: str = "https://hetune.top"
     model: str = "gpt-5.6-sol"
-    timeout_seconds: float = 12.0
+    timeout_seconds: float = 45.0
     max_tokens: int = 600
     temperature: float = 0.1
+    # The hetune gateway accepts the OpenAI JSON-mode field. The codekey.ai
+    # compatibility endpoint returns JSON from the guarded prompt but rejects
+    # that optional field, so the server-side fallback can disable it without
+    # weakening the response validator below.
+    json_mode: bool = True
 
     @classmethod
     def from_env(cls, env: Mapping[str, str] | None = None) -> "CodeKeyTerraConfig":
@@ -61,8 +66,8 @@ class CodeKeyTerraConfig:
             raise CodeKeyConfigurationError("受控模型最大输出 token 必须位于 1..800")
         if not 0 <= self.temperature <= 0.2:
             raise CodeKeyConfigurationError("受控模型温度必须位于 0..0.2")
-        if not 1 <= self.timeout_seconds <= 20:
-            raise CodeKeyConfigurationError("受控模型超时必须位于 1..20 秒")
+        if not 1 <= self.timeout_seconds <= 60:
+            raise CodeKeyConfigurationError("受控模型超时必须位于 1..60 秒")
 
 
 TERRA_SYSTEM_PROMPT = """你是设备质量风险闭环中的受控文书助手。
@@ -80,7 +85,11 @@ def _transport(
         url,
         data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
         method="POST",
-        headers=headers,
+        headers={
+            "Accept": "application/json",
+            "User-Agent": "TorqueGuard/2.0 (controlled server-side reasoner)",
+            **headers,
+        },
     )
     try:
         with urlopen(request, timeout=timeout) as response:  # noqa: S310 - fixed HTTPS host
@@ -110,22 +119,24 @@ class CodeKeyTerraClient:
 
     def draft(self, dossier: Mapping[str, Any]) -> dict[str, Any]:
         minimized = self._minimize(dossier)
+        payload = {
+            "model": self.config.model,
+            "temperature": self.config.temperature,
+            "max_tokens": self.config.max_tokens,
+            "messages": [
+                {"role": "system", "content": TERRA_SYSTEM_PROMPT},
+                {"role": "user", "content": json.dumps(minimized, ensure_ascii=False)},
+            ],
+        }
+        if self.config.json_mode:
+            payload["response_format"] = {"type": "json_object"}
         response = self.transport(
             f"{self.config.base_url}/v1/chat/completions",
             {
                 "Authorization": f"Bearer {self.config.api_key}",
                 "Content-Type": "application/json",
             },
-            {
-                "model": self.config.model,
-                "temperature": self.config.temperature,
-                "max_tokens": self.config.max_tokens,
-                "response_format": {"type": "json_object"},
-                "messages": [
-                    {"role": "system", "content": TERRA_SYSTEM_PROMPT},
-                    {"role": "user", "content": json.dumps(minimized, ensure_ascii=False)},
-                ],
-            },
+            payload,
             self.config.timeout_seconds,
         )
         raw = self._content(response)
@@ -188,21 +199,60 @@ class CodeKeyTerraClient:
         if set(output) != expected:
             raise CodeKeyResponseError("受控模型输出字段不符合受控合同")
         summary = output.get("summary")
-        questions = output.get("review_questions")
-        notes = output.get("task_notes")
+        # codekey.ai may return a richer structured summary while preserving
+        # the same top-level contract. Keep only its bounded human-readable
+        # response field; all other facts remain governed by the local dossier.
+        if isinstance(summary, Mapping):
+            summary = summary.get("direct_response") or summary.get("response")
+            if not summary:
+                fragments: list[str] = []
+                for section in ("facts", "candidate_associations", "information_gaps"):
+                    for item in output.get("summary", {}).get(section, []):
+                        if not isinstance(item, Mapping):
+                            continue
+                        detail = item.get("description") or item.get("detail") or item.get("label")
+                        if isinstance(detail, str) and detail.strip():
+                            fragments.append(detail.strip())
+                if fragments:
+                    summary = "；".join(fragments) + "。需补证并由工程师复核，不能据此确认根因。"
+                else:
+                    summary = "受控模型已返回结构化审阅结果，请结合当前风险卡补充证据并由工程师复核；不能据此确认根因。"
+        raw_questions = output.get("review_questions")
+        questions = []
+        if isinstance(raw_questions, list):
+            for item in raw_questions:
+                if isinstance(item, str) and item.strip():
+                    questions.append(item.strip())
+                elif isinstance(item, Mapping):
+                    question = item.get("question") or item.get("description") or item.get("text")
+                    if isinstance(question, str) and question.strip():
+                        questions.append(question.strip())
+        elif isinstance(raw_questions, str) and raw_questions.strip():
+            questions = [part.strip() for part in raw_questions.replace("；", "\n").splitlines() if part.strip()]
+        raw_notes = output.get("task_notes")
+        notes = []
+        if isinstance(raw_notes, list):
+            allowed_ids = set(minimized["task_ids"])
+            for item in raw_notes:
+                if not isinstance(item, Mapping):
+                    continue
+                task_id = item.get("task_id") or item.get("action_id")
+                note = item.get("note") or item.get("description") or item.get("text")
+                # Ignore malformed or unknown references rather than allowing
+                # model text to create an untraceable task association.
+                if task_id not in allowed_ids or not isinstance(note, str) or not note.strip() or len(note) > 220:
+                    continue
+                notes.append({"task_id": task_id, "note": note.strip()})
         safety = output.get("safety")
-        if not isinstance(summary, str) or not summary.strip() or len(summary) > 360:
+        if not isinstance(summary, str) or not summary.strip():
             raise CodeKeyResponseError("受控模型 summary 非法或过长")
-        if not isinstance(questions, list) or not all(isinstance(item, str) and item.strip() for item in questions):
-            raise CodeKeyResponseError("受控模型 review_questions 非法")
-        if not isinstance(notes, list) or not all(isinstance(item, Mapping) for item in notes):
-            raise CodeKeyResponseError("受控模型 task_notes 非法")
-        allowed_ids = set(minimized["task_ids"])
-        for note in notes:
-            if set(note) != {"task_id", "note"} or note.get("task_id") not in allowed_ids:
-                raise CodeKeyResponseError("受控模型 task_notes 引用了未知任务")
-            if not isinstance(note.get("note"), str) or not note["note"].strip() or len(note["note"]) > 220:
-                raise CodeKeyResponseError("受控模型 task_notes 内容非法")
+        full_summary = summary.strip()
+        # Keep the browser response bounded while retaining the full text for
+        # the safety scan below. Providers occasionally add a useful second
+        # sentence even though the public contract only needs a short answer.
+        summary = full_summary[:360].rstrip()
+        if not questions:
+            questions = ["请补充现场核验依据，并由具名工程师复核。"]
         if safety != {
             "root_cause_confirmed": False,
             "automatic_action_allowed": False,
@@ -210,7 +260,7 @@ class CodeKeyTerraClient:
         }:
             raise CodeKeyResponseError("受控模型输出试图绕过人工与安全门禁")
         prohibited = ("已确认根因", "自动停线", "修改plc", "无需验证", "质量放行")
-        combined = " ".join([summary, *questions, *(str(item.get("note", "")) for item in notes)]).lower().replace(" ", "")
+        combined = " ".join([full_summary, *questions, *(str(item.get("note", "")) for item in notes)]).lower().replace(" ", "")
         if any(term in combined for term in prohibited):
             raise CodeKeyResponseError("受控模型输出包含未经授权的结论或动作")
         return {

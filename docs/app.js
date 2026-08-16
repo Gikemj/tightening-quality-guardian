@@ -26,10 +26,13 @@ const state = {
 let sidebarNavigationLock = null;
 let sidebarNavigationTimer = 0;
 let liveAnalysisTimer = null;
-const isPublicPreview = typeof window !== "undefined"
-  && (window.location.hostname.endsWith("github.io") || window.location.protocol === "file:");
-let liveBackendMode = isPublicPreview ? "static" : "unknown";
+// Probe the optional localhost control plane even from the GitHub Pages build.
+// If it is not running, the page falls back to the deterministic public replay.
+// This keeps the online page usable while allowing a reviewer with the guarded
+// server running to exercise the real Terra-backed question path.
+let liveBackendMode = "unknown";
 let relationRunToken = 0;
+let aiChatStatus = null;
 const localLiveState = {
   running: false,
   sequence: 0,
@@ -1658,8 +1661,10 @@ function renderAiSnapshot(payload) {
   const card = payload?.card;
   if (!card) {
     const browserReplay = payload?.source === "browser_static_replay" || liveBackendMode === "static";
-    stateChip.textContent = browserReplay ? "浏览器摘要" : payload?.lastError ? "后台异常" : "等待数据";
-    stateChip.className = `ai-connection-chip ${payload?.lastError && !browserReplay ? "error" : ""}`;
+    if (!aiChatStatus) {
+      stateChip.textContent = browserReplay ? "浏览器回退" : payload?.lastError ? "后台异常" : "等待数据";
+      stateChip.className = `ai-connection-chip ${payload?.lastError && !browserReplay ? "error" : ""}`;
+    }
     summary.textContent = browserReplay ? "等待开始回放。回答将基于公开风险卡和合成数据。" : payload?.lastError || "等待实时测试启动。";
     triggerList.replaceChildren();
     const item = document.createElement("li");
@@ -1670,8 +1675,10 @@ function renderAiSnapshot(payload) {
   const reasons = card.analysis_provenance?.trigger_reasons || [];
   const facts = card.observed_facts || [];
   const causes = (card.candidate_causes || []).slice(0, 3).map((item) => item.cause).filter(Boolean);
-  stateChip.textContent = payload.running ? "实时跟随" : "已更新";
-  stateChip.className = `ai-connection-chip ${payload.running ? "running" : ""}`;
+  if (!aiChatStatus) {
+    stateChip.textContent = payload.running ? "实时跟随" : "已更新";
+    stateChip.className = `ai-connection-chip ${payload.running ? "running" : ""}`;
+  }
   summary.textContent = [
     `第 ${payload.sequence || 0} 批 · ${String(card.risk_level || "unknown").toUpperCase()} ${card.risk_score ?? "—"}/100`,
     facts.at(-1) || "RiskAnalyzer 已完成本批分析。",
@@ -2139,24 +2146,26 @@ function bindInteractions() {
     submit.disabled = true;
     try {
       let result;
-      if (liveBackendMode === "static") {
-        result = { answer: localAnalystAnswer(question), usedExternalApi: false };
-      } else {
-        try {
-          const response = await fetch("http://127.0.0.1:8010/api/ai/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ question }),
-            signal: AbortSignal.timeout?.(2200),
-          });
-          const payload = await response.json().catch(() => ({}));
-          if (!response.ok) throw new Error(payload.error || `AI 请求失败（HTTP ${response.status}）`);
-          result = payload;
-          liveBackendMode = "backend";
-        } catch (error) {
-          liveBackendMode = "static";
-          result = { answer: localAnalystAnswer(question), usedExternalApi: false, externalError: error instanceof Error ? error.message : "外部服务未连接" };
-        }
+      // Always give the guarded localhost service a chance. This also lets a
+      // reviewer start the server after opening GitHub Pages and try again.
+      try {
+        // A reachable local service may need several seconds for the guarded
+        // Terra call. When the page is static-only, fail fast and keep the
+        // clearly labelled deterministic browser answer.
+        const aiTimeoutMs = liveBackendMode === "backend" ? 30000 : 2200;
+        const response = await fetch("http://127.0.0.1:8010/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }),
+          signal: AbortSignal.timeout?.(aiTimeoutMs),
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.error || `AI 请求失败（HTTP ${response.status}）`);
+        result = payload;
+        liveBackendMode = "backend";
+      } catch (error) {
+        liveBackendMode = "static";
+        result = { answer: localAnalystAnswer(question), usedExternalApi: false, externalError: error instanceof Error ? error.message : "本机受控后台未连接" };
       }
       if (pending) {
         pending.className = "ai-message assistant";
@@ -2164,12 +2173,13 @@ function bindInteractions() {
       }
       const stateChip = $("#ai-connection-state");
       if (stateChip) {
-        stateChip.textContent = result.usedExternalApi ? "外部 API 已回答" : "浏览器规则摘要";
+        aiChatStatus = { external: Boolean(result.usedExternalApi) };
+        stateChip.textContent = result.usedExternalApi ? "外部 API 已回答" : "浏览器回退";
         stateChip.className = `ai-connection-chip ${result.usedExternalApi ? "external" : ""}`;
       }
       const note = $("#ai-side-note");
       if (note) note.textContent = result.externalError && !result.usedExternalApi
-        ? `外部服务不可用，已用浏览器内的确定性规则摘要回答。`
+        ? "本机受控后台未连接，已用浏览器内的确定性规则摘要回答；启动管理员服务后可调用 Terra。"
         : result.usedExternalApi ? "回答来自后台连接的外部 API，实时风险上下文已随问题发送。" : "回答来自当前风险卡的确定性规则摘要。";
     } catch (error) {
       if (pending) {

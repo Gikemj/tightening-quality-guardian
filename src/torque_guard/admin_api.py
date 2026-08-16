@@ -15,6 +15,7 @@ import os
 import sys
 import threading
 import time
+from dataclasses import replace
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -550,9 +551,11 @@ class AdminService:
         answer = ""
         used_external = False
         terra_used = False
+        terra_provider = None
+        terra_model = None
         if os.getenv("CODEKEY_API_KEY", "").strip():
             try:
-                terra = CodeKeyTerraClient(CodeKeyTerraConfig.from_env()).draft(self._terra_dossier(question, status))
+                terra, terra_config = self._draft_with_controlled_fallback(self._terra_dossier(question, status))
                 answer = terra["summary"]
                 if terra.get("review_questions"):
                     answer += "\n待核对：" + "；".join(terra["review_questions"][:3])
@@ -561,6 +564,8 @@ class AdminService:
                     answer += "\n任务备注：" + "；".join(notes[:3])
                 terra_used = True
                 used_external = True
+                terra_provider = terra_config.base_url
+                terra_model = terra_config.model
             except (CodeKeyResponseError, ValueError, OSError) as exc:
                 external_error = f"受控文书模型调用失败：{exc}"
         if not answer and endpoint and (config.get("authType") == "none" or self._monitor_key):
@@ -598,13 +603,35 @@ class AdminService:
                 external_error = str(exc)
         elif endpoint and config.get("authType") != "none" and not self._monitor_key:
             external_error = "后台重启后 API Key 未重新填写"
-        elif not endpoint and not external_error:
+        elif not endpoint and not external_error and not terra_used:
             external_error = "后台尚未配置 API 地址"
         if not answer:
             answer = self._local_ai_answer(question, status, external_error)
-        result = {"answer": answer, "source": "hetune_reasoner" if terra_used else ("external_api" if used_external else "local_rule_fallback"), "usedExternalApi": used_external, "externalError": external_error, "provider": "Hetune" if terra_used else None, "model": CodeKeyTerraConfig.from_env().model if terra_used else None, "at": _now(), "sequence": status.get("sequence", 0), "cardId": (status.get("card") or {}).get("card_id")}
+        result = {"answer": answer, "source": "controlled_reasoner" if terra_used else ("external_api" if used_external else "local_rule_fallback"), "usedExternalApi": used_external, "externalError": external_error, "provider": terra_provider, "model": terra_model, "at": _now(), "sequence": status.get("sequence", 0), "cardId": (status.get("card") or {}).get("card_id")}
         self.audit("ai.chat", {"source": result["source"], "sequence": result["sequence"]})
         return result
+
+    @staticmethod
+    def _draft_with_controlled_fallback(dossier: dict[str, Any]) -> tuple[dict[str, Any], CodeKeyTerraConfig]:
+        """Try the configured gateway, then the approved CodeKey alias only.
+
+        The current credential is accepted by ``codekey.ai`` while the
+        requested ``hetune.top`` alias can reject the same token. Both hosts
+        are explicitly allow-listed by ``CodeKeyTerraConfig``. The fallback is
+        server-side, keeps the same bounded prompt/output validator, and never
+        exposes the key or accepts an arbitrary endpoint.
+        """
+        config = CodeKeyTerraConfig.from_env()
+        candidates = [config]
+        if config.base_url == "https://hetune.top":
+            candidates.append(replace(config, base_url="https://codekey.ai", json_mode=False, max_tokens=420))
+        errors: list[str] = []
+        for candidate in candidates:
+            try:
+                return CodeKeyTerraClient(candidate).draft(dossier), candidate
+            except (CodeKeyResponseError, ValueError, OSError) as exc:
+                errors.append(f"{candidate.base_url}: {exc}")
+        raise CodeKeyResponseError("；".join(errors))
 
     def _simulator_config(self) -> dict[str, Any]:
         value = self._read_json(self.simulator_config_path, {})

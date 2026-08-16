@@ -4,6 +4,7 @@ import test from "node:test";
 
 const html = await readFile(new URL("../docs/round2.html", import.meta.url), "utf8");
 const script = await readFile(new URL("../docs/round2.js", import.meta.url), "utf8");
+const videoPage = await readFile(new URL("../docs/video/index.html", import.meta.url), "utf8");
 
 test("round-two public demo exposes callable case actions", () => {
   for (const id of ["case-select", "run-case", "copy-dossier", "retry-data", "model-toggle", "task-preview"]) {
@@ -17,5 +18,7 @@ test("round-two public demo exposes callable case actions", () => {
 });
 
 test("public video and subtitle assets are linked from the page", () => {
-  assert.match(html, /video\/quality-guardian-v2\.mp4/);
+  assert.match(html, /video\/index\.html/);
+  assert.match(videoPage, /quality-guardian-v2\.mp4/);
+  assert.match(videoPage, /quality-guardian-v2\.srt/);
 });

@@ -29,8 +29,23 @@ if (canvas) {
   function paint(now = performance.now()) {
     const elapsed = reducedMotion.matches ? 0 : now - startedAt;
     context.clearRect(0, 0, width, height);
-    context.fillStyle = "#e8e9e6";
-    context.fillRect(0, 0, width, height);
+
+    // Transparent pigment lets the page's cool paper tone remain readable
+    // while the moving washes are visibly present around and beneath panels.
+    const wash = (x, y, radius, alpha) => {
+      const gradient = context.createRadialGradient(x, y, radius * 0.08, x, y, radius);
+      gradient.addColorStop(0, `rgba(44, 78, 79, ${alpha})`);
+      gradient.addColorStop(0.48, `rgba(70, 111, 108, ${alpha * 0.35})`);
+      gradient.addColorStop(1, "rgba(70, 111, 108, 0)");
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.fill();
+    };
+    const drift = reducedMotion.matches ? 0 : elapsed * 0.00003;
+    wash(width * (0.16 + Math.sin(drift * 1.7) * 0.035), height * 0.18, Math.max(180, width * 0.2), 0.24);
+    wash(width * (0.82 + Math.cos(drift * 1.2) * 0.04), height * 0.72, Math.max(220, width * 0.24), 0.18);
+    wash(width * (0.46 + Math.sin(drift * 0.8) * 0.05), height * 1.04, Math.max(190, width * 0.22), 0.14);
 
     streams.forEach((stream, streamIndex) => {
       const baseY = (stream.offset * 1.18 - 0.08) * height;
@@ -43,8 +58,8 @@ if (canvas) {
         if (step === 0) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
-      context.strokeStyle = streamIndex % 4 === 0 ? "rgba(75, 82, 83, 0.095)" : "rgba(133, 139, 136, 0.075)";
-      context.lineWidth = stream.width * (streamIndex % 5 === 0 ? 2.4 : 1.25);
+      context.strokeStyle = streamIndex % 4 === 0 ? "rgba(35, 66, 68, 0.20)" : "rgba(62, 94, 92, 0.13)";
+      context.lineWidth = stream.width * (streamIndex % 5 === 0 ? 3.2 : 1.65);
       context.stroke();
     });
 
@@ -55,8 +70,8 @@ if (canvas) {
       const y = height * (0.18 + ((index * 13) % 47) / 100);
       context.beginPath();
       context.arc(x, y, 34 + index * 7, Math.PI * 0.1, Math.PI * 1.15);
-      context.strokeStyle = "rgba(109, 116, 112, 0.045)";
-      context.lineWidth = 2;
+      context.strokeStyle = "rgba(48, 84, 82, 0.09)";
+      context.lineWidth = 2.4;
       context.stroke();
     }
   }

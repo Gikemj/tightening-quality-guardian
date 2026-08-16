@@ -4,13 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="质控前哨：主动管控拧紧设备质量风险的比赛原型。" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#e9eceb" />
     <title>质控前哨｜设备质量风险数字员工</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./styles-public.css" />
   </head>
   <body class="public-ui">
+    <canvas id="ink-field" aria-hidden="true"></canvas>
     <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="topbar">
       <a class="brand" href="#top" aria-label="质控前哨首页">
@@ -19,7 +20,7 @@
       </a>
       <div class="topbar-meta">
         <a class="source-link" href="./admin.html">进入管理员工作台</a>
-        <a class="source-link" href="./video/quality-guardian-v2.mp4">观看演示视频</a>
+        <a class="source-link" href="./video/quality-guardian-v2.mp4">观看 4 分钟演示</a>
         <span class="system-presence"><i aria-hidden="true"></i>只读演示在线</span>
         <span class="demo-badge">比赛合成数据</span>
         <a class="source-link" href="https://github.com/Gikemj/tightening-quality-guardian">源码与复现</a>
@@ -36,7 +37,8 @@
           <small>总装关键拧紧工位（模拟）</small>
         </div>
         <nav>
-          <a class="active" href="#overview">数据概览</a>
+          <a class="active" href="#station-replay">工位回放</a>
+          <a href="#overview">风险概览</a>
           <a href="#comparison">对比分析</a>
           <a href="#risk-analysis">触发原因</a>
           <a href="#evidence">证据来源</a>
@@ -62,12 +64,12 @@
             </div>
             <p id="main-lead">页面将从 Python 生成的风险卡与只读分析结果中读取当前结论。</p>
             <div class="hero-actions">
-              <button class="button primary live-test-button" id="start-live-test" type="button">开始实时测试</button>
-              <button class="button secondary live-test-button" id="stop-live-test" type="button" disabled>停止实时测试</button>
+              <button class="button primary live-test-button" id="start-live-test" type="button">开始工位回放</button>
+              <button class="button secondary live-test-button" id="stop-live-test" type="button" disabled>暂停回放</button>
               <button class="button text-button" id="inject-risk" type="button" aria-pressed="true">查看固定演示</button>
               <button class="button text-button" id="reset-baseline" type="button" aria-pressed="false">恢复基线窗口</button>
             </div>
-            <p class="live-test-help" id="live-test-help">点击“开始实时测试”后，页面会在浏览器内回放一批合成拧紧数据；评委无需启动服务即可看到指标、证据和风险卡变化。</p>
+          <p class="live-test-help" id="live-test-help">先从工位回放开始。数据、风险卡和证据链会在同一页面同步变化。</p>
             <p class="load-state" id="load-state" aria-live="polite">正在载入可复现演示数据…</p>
             <p class="sr-only" id="scenario-announcement" aria-live="polite" aria-atomic="true"></p>
           </div>
@@ -77,6 +79,47 @@
             <div class="score-scale" aria-hidden="true"><span>LOW</span><span>MEDIUM</span><span>HIGH</span></div>
             <p>用于运行期排队，不替代正式 PFMEA 的 S/O/D 或 RPN。</p>
           </aside>
+        </section>
+
+        <section class="station-replay" id="station-replay" aria-labelledby="station-replay-title">
+          <header class="station-replay-head">
+            <div>
+              <span class="section-kicker">STATION REPLAY · SYNTHETIC WORKCELL</span>
+              <h2 id="station-replay-title">先看工位，再看风险卡</h2>
+              <p>这是一个按同一工位、同一工具、同一紧固点组织的工程示意回放。点击标注可查看它如何进入证据链。</p>
+            </div>
+            <div class="station-replay-meta"><span>ST-FAS-07</span><span>TQ-17</span><span>P03</span></div>
+          </header>
+          <div class="station-stage">
+            <div class="station-canvas-wrap" id="station-canvas-wrap">
+              <canvas id="station-canvas" aria-label="总装拧紧工位三维工程示意"></canvas>
+              <div class="station-stage-shade" aria-hidden="true"></div>
+              <div class="station-scene-badge"><b>工程示意回放</b><span>比赛合成数据 · 不控制设备</span></div>
+              <button class="station-callout station-callout-station" type="button" data-station-focus="station"><b>ST-FAS-07</b><span>总装工位</span></button>
+              <button class="station-callout station-callout-tool" type="button" data-station-focus="tool"><b>TQ-17</b><span>电动拧紧工具</span></button>
+              <button class="station-callout station-callout-point" type="button" data-station-focus="point"><b>P03</b><span>关键紧固点</span></button>
+              <button class="station-callout station-callout-signal" type="button" data-station-focus="signal"><b>组合信号</b><span>规格内但趋势变化</span></button>
+              <div class="station-progress" aria-label="回放进度"><span id="station-progress-bar"></span></div>
+            </div>
+            <aside class="station-readout" aria-label="工位回放读数">
+              <div class="station-readout-top"><span id="station-replay-state" class="station-state station-state-idle">等待开始</span><span class="station-readout-clock" id="station-replay-clock">00:00</span></div>
+              <div class="station-readout-main"><span>当前窗口</span><strong id="station-window-label">前 100 条基线</strong><p id="station-replay-cue">点击“开始工位回放”，观察 P03 从稳定窗口进入待复核状态。</p></div>
+              <div class="station-signal-grid" aria-label="工位信号摘要">
+                <div><span>扭矩</span><strong id="station-torque-value">48.13</strong><small>N·m · 规格 43–53</small></div>
+                <div><span>角度离散</span><strong id="station-angle-value">1.00×</strong><small>相对基线</small></div>
+                <div><span>重试</span><strong id="station-retry-value">0.010</strong><small>次/循环</small></div>
+              </div>
+              <div class="station-controls" role="group" aria-label="工位回放控制">
+                <button class="button primary" id="station-start" type="button">开始回放</button>
+                <button class="button secondary" id="station-pause" type="button" disabled>暂停</button>
+                <button class="button secondary" id="station-replay-button" type="button">重播</button>
+                <button class="button text-button" id="station-baseline" type="button">查看基线</button>
+              </div>
+              <div class="station-focus" id="station-focus" aria-live="polite"><span class="station-focus-label">当前焦点</span><strong id="station-focus-title">等待选择工位对象</strong><p id="station-focus-detail">标注会把现场对象与风险卡字段对应起来。</p></div>
+              <div class="station-actions"><button class="button secondary" id="station-show-evidence" type="button">查看对应证据</button><a class="button text-button" href="./admin.html">打开管理员工作台 →</a></div>
+            </aside>
+          </div>
+          <p class="station-boundary"><strong>边界说明：</strong>三维画面是合成工位的可视化回放，不是赛力斯真实产线扫描，也不会连接 PLC、停线或修改工具参数。</p>
         </section>
 
         <section class="live-analysis-panel" id="live-analysis" aria-labelledby="live-analysis-title">
@@ -484,6 +527,8 @@
       <select id="case-select"></select><button id="run-case" type="button"></button><button id="copy-dossier" type="button"></button><button id="retry-data" type="button"></button>
       <button id="model-toggle" type="button"></button><button id="task-preview" type="button"></button>
     </section>
+    <script type="module" src="./ink-field.js"></script>
+    <script type="module" src="./station-replay.js"></script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

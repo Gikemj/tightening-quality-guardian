@@ -89,77 +89,146 @@
       .cause-layout { display: grid; grid-template-columns: 1.05fr .95fr; gap: 24px; margin-top: 42px; }.cause-list { padding: 25px; }.cause-list h3, .action-sheet h3 { font-size: 24px; }.cause { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: start; margin-top: 17px; padding-top: 17px; border-top: 1px solid var(--line); }.cause:first-of-type { margin-top: 24px; }.cause-num { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--amber-soft); color: var(--amber); font: 700 14px "SFMono-Regular", Menlo, monospace; }.cause strong { display: block; font-size: 19px; }.cause p { margin-top: 5px; color: var(--muted); font-size: 15px; line-height: 1.45; }.confidence { color: var(--amber); font: 700 15px "SFMono-Regular", Menlo, monospace; }.action-sheet { padding: 25px; background: var(--ink); color: #fff; border-color: var(--ink); }.action-sheet p { margin-top: 9px; color: #c7d4db; font-size: 16px; line-height: 1.5; }.action { display: grid; grid-template-columns: 34px 1fr; gap: 12px; margin-top: 19px; padding: 14px 0; border-top: 1px solid #3a4b55; }.action b { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); font: 700 13px "SFMono-Regular", Menlo, monospace; }.action strong { font-size: 18px; }.action small { display: block; margin-top: 4px; color: #b8c7ce; font-size: 14px; }
       .workflow-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 40px; }.workflow { padding: 25px; }.workflow h3 { font-size: 24px; }.workflow-track { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 28px; }.step { min-height: 125px; padding: 15px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfc; }.step.current { border-color: #e6bdc7; background: var(--accent-soft); }.step b { color: var(--muted); font: 700 13px "SFMono-Regular", Menlo, monospace; }.step strong { display: block; margin-top: 11px; font-size: 17px; line-height: 1.3; }.step small { display: block; margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.35; }.workflow-note { margin-top: 22px; padding: 14px 16px; border-radius: 8px; color: var(--amber); background: var(--amber-soft); font-size: 16px; }.audit { padding: 25px; }.audit h3 { font-size: 24px; }.audit-row { display: grid; grid-template-columns: 1fr 1.2fr .8fr; gap: 14px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 16px; }.audit-row span { color: var(--muted); }.audit-row strong { font-size: 16px; }.audit-row small { color: var(--green); font-size: 14px; }
       .guard-layout { display: grid; grid-template-columns: .95fr 1.05fr; gap: 20px; margin-top: 43px; }.guard-box { padding: 28px; }.guard-box.dark { background: var(--ink); border-color: var(--ink); color: #fff; }.guard-box h3 { font-size: 25px; }.guard-box p { margin-top: 14px; color: var(--muted); font-size: 18px; line-height: 1.6; }.guard-box.dark p { color: #c9d6dc; }.guard-list { display: grid; gap: 11px; margin-top: 19px; }.guard-list div { display: flex; gap: 12px; align-items: start; padding-top: 11px; border-top: 1px solid var(--line); font-size: 17px; line-height: 1.45; }.guard-list div:before { content: "×"; color: var(--red); font: 700 22px/1 "SFMono-Regular", Menlo, monospace; }.api-flow { display: grid; grid-template-columns: 1fr 48px 1fr 48px 1fr; gap: 6px; align-items: center; margin-top: 27px; }.api-node { min-height: 116px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfc; }.api-node b { color: var(--accent); font: 700 13px "SFMono-Regular", Menlo, monospace; }.api-node strong { display: block; margin-top: 11px; font-size: 18px; }.api-node small { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }.api-arrow { color: var(--blue); text-align: center; font-size: 24px; }
+      .station-scene { background: #f4f6f7; }.station-lede { max-width: 1120px; margin-top: 14px; color: #54656d; font-size: 24px; line-height: 1.5; }.station-video-stage { display: grid; grid-template-columns: 1.45fr .55fr; gap: 22px; margin-top: 30px; }.station-video-canvas { position: relative; height: 565px; overflow: hidden; border: 1px solid #3c4b55; border-radius: 12px; background: radial-gradient(circle at 50% 30%, #314954 0%, #16262e 55%, #101a20 100%); }.station-video-grid { position: absolute; inset: 0; opacity: .35; background: linear-gradient(rgba(181,207,207,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(181,207,207,.18) 1px, transparent 1px); background-size: 56px 42px; transform: perspective(500px) rotateX(60deg) translateY(220px) scale(1.4); transform-origin: center bottom; }.station-video-frame { position: absolute; background: #71808a; box-shadow: 0 0 0 1px rgba(210,226,226,.12); }.frame-top { top: 112px; left: 120px; right: 120px; height: 13px; }.frame-left { top: 112px; bottom: 94px; left: 126px; width: 13px; }.frame-right { top: 112px; bottom: 94px; right: 126px; width: 13px; }.station-video-panel { position: absolute; left: 245px; right: 245px; bottom: 176px; height: 78px; background: #b9c2c3; box-shadow: inset 0 0 0 1px rgba(20,32,38,.25); }.station-video-deck { position: absolute; left: 325px; right: 325px; bottom: 154px; height: 24px; background: #547784; }.station-video-tool { position: absolute; left: 50%; top: 92px; width: 50px; height: 154px; transform: translateX(-50%); transform-origin: center top; }.station-video-tool:before { content: ""; position: absolute; left: 5px; right: 5px; top: 0; height: 106px; border-radius: 4px; background: #d6dad8; box-shadow: 0 0 0 1px rgba(255,255,255,.2); }.station-video-tool:after { content: ""; position: absolute; left: 0; right: 0; top: 99px; height: 20px; background: #24313a; }.station-video-tool span { position: absolute; left: 18px; top: 116px; width: 14px; height: 38px; background: #c5a165; }.station-video-tool i { position: absolute; right: -8px; top: 42px; width: 9px; height: 64px; background: #547784; }.station-video-point { position: absolute; left: calc(50% - 28px); bottom: 142px; width: 56px; height: 56px; border: 4px solid #c28c50; border-radius: 50%; color: #f1c681; text-align: center; opacity: .95; }.station-video-point b { display: block; margin-top: 12px; font: 700 13px "SFMono-Regular", Menlo, monospace; }.station-video-point small { position: absolute; top: 58px; left: -20px; width: 100px; color: #c6d2d1; font-size: 12px; }.station-video-label, .station-video-signal { position: absolute; display: grid; gap: 3px; padding: 10px 12px; border: 1px solid rgba(219,232,230,.45); border-radius: 7px; background: rgba(18,31,38,.82); color: #edf4f1; }.station-video-label b, .station-video-signal b { color: #f1c681; font: 700 14px "SFMono-Regular", Menlo, monospace; }.station-video-label small, .station-video-signal small { color: #c6d2d1; font-size: 12px; }.label-station { top: 190px; left: 28px; }.label-tool { top: 128px; right: 36px; }.station-video-signal { right: 30px; bottom: 78px; }.station-video-signal b { color: #e8bf7a; }.station-video-badge { position: absolute; top: 22px; left: 24px; padding: 8px 10px; border-left: 2px solid #d4a867; background: rgba(13,23,28,.72); color: #ecf4f1; font-size: 13px; }.station-video-readout { min-height: 565px; padding: 25px; background: #fff; }.station-video-readout-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 17px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 14px; }.station-video-readout h3 { margin-top: 25px; font-size: 29px; line-height: 1.25; }.station-video-readout p { margin-top: 14px; color: var(--muted); font-size: 18px; line-height: 1.55; }.station-video-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 35px; }.station-video-metrics div { padding: 13px 11px; border: 1px solid var(--line); background: #f8faf9; }.station-video-metrics span, .station-video-metrics small { display: block; color: var(--muted); font-size: 12px; }.station-video-metrics strong { display: block; margin: 9px 0 4px; font: 700 21px "SFMono-Regular", Menlo, monospace; }.station-video-progress { height: 5px; margin-top: 42px; background: #e2e8e9; }.station-video-progress i { display: block; width: 0; height: 100%; background: var(--accent); transform-origin: left center; }
       .close { display: flex; flex-direction: column; justify-content: center; }.close .title { max-width: 1450px; margin-top: 24px; font-size: 86px; }.close .lede { max-width: 1000px; }.url { margin-top: 42px; color: var(--blue); font: 700 25px "SFMono-Regular", Menlo, monospace; }
       .transition { z-index: 5; pointer-events: none; background: var(--ink); transform: translateX(-1920px); }
+      #caption-layer { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
+      .caption { inset: auto 116px 104px; display: flex; justify-content: center; min-height: 48px; padding: 10px 22px; border: 1px solid rgba(220, 233, 242, .24); border-radius: 8px; background: rgba(18, 36, 45, .93); color: #ffffff; font-size: 25px; font-weight: 600; line-height: 1.45; letter-spacing: .01em; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, .28); }
+      .caption span { max-width: 1540px; }
+      @media (prefers-reduced-motion: reduce) { .caption { transition: none; } }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="161" data-width="1920" data-height="1080">
-      <audio id="narration" data-start="0" data-duration="155.2" data-track-index="7" src="assets/narration.m4a" data-volume="1"></audio>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="250" data-width="1920" data-height="1080">
+      <audio id="narration" data-start="0" data-duration="250" data-track-index="7" src="assets/narration.m4a" data-volume="1"></audio>
 
-      <section id="scene-1" class="scene clip" data-start="0" data-duration="21.5" data-track-index="1">
+      <section id="scene-1" class="scene clip" data-start="0" data-duration="24" data-track-index="1">
         <div class="topline"><strong>质控前哨 / 设备质量风险数字员工</strong><span class="mono">ROUND 2 · SYNTHETIC DEMO</span></div>
         <div class="hero-grid"><div><h1 id="s1-title" class="title">把拧紧工位的弱信号，交给正确的人。</h1><p id="s1-lede" class="lede">从一个工位、一个工具和一个紧固点开始，记录数据怎样变成风险卡，再变成一项可验收的工程任务。</p><div id="s1-chips" class="station-line"><span class="station-chip">ST-FAS-07</span><span class="station-chip">TQ-17</span><span class="station-chip">P03</span><span class="tag">比赛合成数据</span></div></div><article id="s1-note" class="hero-note"><strong>本片只讲一个闭环</strong><p>过程信号 → 风险识别 → 证据核对 → 人工门禁。系统不会替工程师确认根因或执行生产动作。</p></article></div>
         <div class="footer"><span>总装关键拧紧工位（模拟）</span><span>质控前哨 V2</span></div>
       </section>
 
-      <section id="scene-2" class="scene clip" data-start="21.5" data-duration="21.5" data-track-index="1">
+      <section id="scene-2" class="scene clip" data-start="24" data-duration="28" data-track-index="1">
         <div class="topline"><strong>01 / 先把观察窗口定下来</strong><span class="mono">ST-FAS-07 · P03</span></div>
         <h2 id="s2-title" class="title small">不是看一个数字，<br />而是对照一段过程。</h2>
         <div id="s2-dashboard" class="dashboard"><aside class="dash-side"><div class="dash-brand"><span class="brand-mark">QG</span><span>质控前哨</span></div><small>设备质量风险驾驶舱</small><div class="nav"><span class="active">风险台账</span><span>信号窗口</span><span>证据来源</span><span>任务闭环</span></div></aside><div class="dash-main"><div class="dash-head"><div><h3>ST-FAS-07 · P03</h3><p>总装关键拧紧工位 / 公开浏览器回放</p></div><span class="status">窗口已加载</span></div><div class="metrics"><div class="metric"><span>基线样本</span><strong>100</strong><small>同车型 / 同工位</small></div><div class="metric"><span>最近窗口</span><strong>24</strong><small>按时间顺序回放</small></div><div class="metric"><span>扭矩规格</span><strong>43–53</strong><small>N·m</small></div><div class="metric alert"><span>风险顺序</span><strong>HIGH</strong><small>需要优先核对</small></div></div><div class="chart-row"><div class="chart-panel"><header><strong>扭矩窗口对照</strong><span class="mono">baseline / recent</span></header><div class="chart"><i class="bar" style="height:42%"></i><i class="bar" style="height:46%"></i><i class="bar" style="height:48%"></i><i class="bar" style="height:45%"></i><i class="bar mid" style="height:57%"></i><i class="bar mid" style="height:66%"></i><i class="bar hot" style="height:74%"></i><i class="bar hot" style="height:81%"></i><i class="bar hot" style="height:77%"></i><i class="bar hot" style="height:86%"></i></div><div class="chart-note"><span>基线均值 48.2 N·m</span><span class="delta">最近均值 +1.56σ</span></div></div><div id="s2-risk" class="risk-preview"><header><span class="tag high">优先核对</span><span class="mono">RC-P03-001</span></header><h4>窗口内多信号同向变化</h4><p>单点仍在规格内，过程稳定性出现偏移。</p><dl><div><dt>风险指数</dt><dd>82 / 100</dd></div><div><dt>状态</dt><dd>待审批</dd></div></dl></div></div></div></div>
         <div class="footer"><span>基线与最近窗口使用同一分层口径</span><span>数据均为比赛合成数据</span></div>
       </section>
 
-      <section id="scene-3" class="scene clip" data-start="43" data-duration="25" data-track-index="1">
+      <section id="scene-3" class="scene clip" data-start="52" data-duration="28" data-track-index="1">
         <div class="topline"><strong>02 / 多信号一起看</strong><span class="mono">RULE SET · SPC + EQUIPMENT</span></div>
         <h2 id="s3-title" class="title small">规格内，不等于过程没有变化。</h2>
         <div class="signal-grid"><article id="s3-table" class="panel signal-panel"><h3>最近 24 次与基线窗口</h3><p>数值先保留单位，变化再交给规则解释。</p><table class="signal-table"><thead><tr><th>信号</th><th>基线</th><th>最近</th></tr></thead><tbody><tr><td>扭矩均值偏移</td><td>0.00σ</td><td class="delta">+1.56σ</td></tr><tr><td>角度离散度</td><td>1.00×</td><td class="delta">2.17×</td></tr><tr><td>重试 / 循环</td><td>0.010</td><td class="delta">0.250</td></tr><tr><td>规格内比例</td><td>99.0%</td><td>95.8%</td></tr></tbody></table></article><article id="s3-window" class="panel signal-panel"><h3>触发关系</h3><p>规则不把异常写成根因，只决定它是否值得先查。</p><div class="window-strip"><div class="window-box"><span>扭矩</span><strong>+1.56σ</strong></div><div class="window-box alert"><span>角度</span><strong>2.17×</strong></div><div class="window-box alert"><span>重试</span><strong>0.250</strong></div><div class="window-box"><span>节拍</span><strong>+8.4%</strong></div><div class="window-box alert"><span>组合</span><strong>命中</strong></div></div><div class="risk-preview" style="margin-top:22px"><header><span class="tag warn">观察窗口</span><span class="mono">SPC-RECENT-24</span></header><p>建议补充工具标定、套筒状态和近期换料记录，再进入人工审批。</p></div></article></div>
         <div class="footer"><span>动态风险指数用于排队，不替代正式 PFMEA 的 S/O/D 或 RPN</span><span>观察 ≠ 结论</span></div>
       </section>
 
-      <section id="scene-4" class="scene clip" data-start="68" data-duration="21" data-track-index="1">
+      <section id="scene-4" class="scene clip" data-start="80" data-duration="28" data-track-index="1">
         <div class="topline"><strong>03 / 风险卡要能回到证据</strong><span class="mono">EVIDENCE GRAPH · REV 2026.08</span></div>
         <h2 id="s4-title" class="title small">每个判断，都留下来源和缺口。</h2>
         <div class="evidence-layout"><div class="evidence-column"><article id="s4-e1" class="panel evidence-item"><b>SPC</b><div><h3>窗口偏移</h3><p>最近 24 次、基线 100 次，保留指标与计算口径。</p></div></article><article id="s4-e2" class="panel evidence-item"><b>EQP</b><div><h3>设备信号</h3><p>TQ-17 的重试、节拍与标定状态，按工位回溯。</p></div></article><article id="s4-e3" class="panel evidence-item"><b>PLAN</b><div><h3>控制计划 / PFMEA</h3><p>只引用匹配的工位、功能和失效模式条目。</p></div></article></div><article id="s4-graph" class="panel graph"><h3>关系路径</h3><p>证据链可展开，候选原因保持待验证状态。</p><div class="graph-chain"><div class="graph-node"><strong>工位</strong><small>ST-FAS-07</small></div><div class="graph-arrow">→</div><div class="graph-node"><strong>工具</strong><small>TQ-17</small></div><div class="graph-arrow">→</div><div class="graph-node"><strong>紧固点</strong><small>P03</small></div><div class="graph-arrow">→</div><div class="graph-node"><strong>规则</strong><small>SPC + 重试</small></div><div class="graph-arrow">→</div><div class="graph-node"><strong>风险卡</strong><small>待审批</small></div></div><p class="graph-foot">缺少现场证据时，系统显示“待补证”，不会用模型补齐事实。</p></article></div>
         <div class="footer"><span>数据、文档、版本指纹和规则编号均可定位</span><span>事实与推断分开显示</span></div>
       </section>
 
-      <section id="scene-5" class="scene clip" data-start="89" data-duration="22.5" data-track-index="1">
+      <section id="scene-5" class="scene clip" data-start="108" data-duration="26" data-track-index="1">
         <div class="topline"><strong>04 / 候选原因只负责提出下一步</strong><span class="mono">CANDIDATE CAUSES · HUMAN CHECK</span></div>
         <h2 id="s5-title" class="title small">把“可能是什么”写成“下一步查什么”。</h2>
         <div class="cause-layout"><article id="s5-causes" class="panel cause-list"><h3>候选原因</h3><div class="cause"><span class="cause-num">1</span><div><strong>工具标定漂移</strong><p>检查 TQ-17 最近一次标定记录和复核结果。</p></div><span class="confidence">0.62</span></div><div class="cause"><span class="cause-num">2</span><div><strong>套筒或接头磨损</strong><p>核对更换记录，并用同批样件复测。</p></div><span class="confidence">0.48</span></div><div class="cause"><span class="cause-num">3</span><div><strong>连接件摩擦特性变化</strong><p>对比近期来料批次和扭矩角度曲线。</p></div><span class="confidence">0.35</span></div></article><article id="s5-actions" class="panel action-sheet"><h3>建议动作草案</h3><p>生成给工程师审核的任务预览，不直接写入外部系统。</p><div class="action"><b>01</b><div><strong>补看标定与换件记录</strong><small>责任：设备工程师 · 24 小时内</small></div></div><div class="action"><b>02</b><div><strong>抽取同批样件复测</strong><small>责任：质量工程师 · 留存曲线与结果</small></div></div><div class="action"><b>03</b><div><strong>审批后进入验证窗口</strong><small>验收：证据 ID、复测结论、责任人</small></div></div></article></div>
         <div class="footer"><span>候选原因不是根因确认</span><span>动作需要具名审批</span></div>
       </section>
 
-      <section id="scene-6" class="scene clip" data-start="111.5" data-duration="21.5" data-track-index="1">
+      <section id="scene-6" class="scene clip" data-start="134" data-duration="28" data-track-index="1">
         <div class="topline"><strong>05 / 管理员工作台</strong><span class="mono">APPROVAL GATE · AUDIT TRAIL</span></div>
         <h2 id="s6-title" class="title small">每一次推进，都留下谁、依据和状态。</h2>
         <div class="workflow-layout"><article id="s6-workflow" class="panel workflow"><h3>风险卡工作流</h3><div class="workflow-track"><div class="step current"><b>01</b><strong>待审批</strong><small>当前状态</small></div><div class="step"><b>02</b><strong>已审批</strong><small>具名责任人</small></div><div class="step"><b>03</b><strong>任务已建</strong><small>字段完整</small></div><div class="step"><b>04</b><strong>验证中</strong><small>现场证据</small></div><div class="step"><b>05</b><strong>已结案</strong><small>人工确认</small></div></div><p class="workflow-note">没有审批，任务不会创建；验证缺少证据，结案动作会被拒绝。</p></article><article id="s6-audit" class="panel audit"><h3>操作审计</h3><div class="audit-row"><span class="mono">09:12:08</span><strong>运行风险分析</strong><small>已记录</small></div><div class="audit-row"><span class="mono">09:12:14</span><strong>提交审批 · quality.owner</strong><small>待处理</small></div><div class="audit-row"><span class="mono">09:12:22</span><strong>查看证据 · E-SPC-01</strong><small>已记录</small></div><div class="audit-row"><span class="mono">09:12:41</span><strong>保存任务预览</strong><small>未写入外部系统</small></div></article></div>
         <div class="footer"><span>管理员页面可直接在线打开，不要求启动本地服务</span><span>状态机拒绝越级动作</span></div>
       </section>
 
-      <section id="scene-7" class="scene clip" data-start="133" data-duration="20" data-track-index="1">
+      <section id="scene-7" class="scene clip" data-start="162" data-duration="26" data-track-index="1">
         <div class="topline"><strong>06 / 公开边界</strong><span class="mono">SERVICE CONTROL · FALLBACK</span></div>
         <h2 id="s7-title" class="title small">模型整理文书，工程师保留判断。</h2>
-        <div class="guard-layout"><article id="s7-terra" class="panel guard-box dark"><h3>Terra · 服务端受控调用</h3><p>企业部署时只传最小案卷。固定 JSON、低随机性、超时回退，密钥不进浏览器。</p><div class="api-flow"><div class="api-node"><b>INPUT</b><strong>风险卡摘要</strong><small>脱敏字段</small></div><div class="api-arrow">→</div><div class="api-node"><b>MODEL</b><strong>Terra / 受控</strong><small>字段校验</small></div><div class="api-arrow">→</div><div class="api-node"><b>OUTPUT</b><strong>确定性摘要</strong><small>人工复核</small></div></div></article><article id="s7-limits" class="panel guard-box"><h3>公开页面明确不做</h3><div class="guard-list"><div>不自动停线，不修改 PLC 参数</div><div>不确认根因，不判断质量放行</div><div>不向真实飞书租户写入数据</div><div>调用失败时回到规则摘要，仍保留审计记录</div></div></article></div>
+        <div class="guard-layout"><article id="s7-terra" class="panel guard-box dark"><h3>受控文书助手 · 服务端调用</h3><p>企业部署时只传最小案卷。固定 JSON、低随机性、超时回退，密钥不进浏览器；当前模型配置为 gpt-5.6-sol。</p><div class="api-flow"><div class="api-node"><b>INPUT</b><strong>风险卡摘要</strong><small>脱敏字段</small></div><div class="api-arrow">→</div><div class="api-node"><b>MODEL</b><strong>受控模型</strong><small>字段校验</small></div><div class="api-arrow">→</div><div class="api-node"><b>OUTPUT</b><strong>待核验摘要</strong><small>人工复核</small></div></div></article><article id="s7-limits" class="panel guard-box"><h3>公开页面明确不做</h3><div class="guard-list"><div>不自动停线，不修改 PLC 参数</div><div>不确认根因，不判断质量放行</div><div>不向真实飞书租户写入数据</div><div>调用失败时回到规则摘要，仍保留审计记录</div></div></article></div>
         <div class="footer"><span>所有记录均为比赛合成数据</span><span>边界先于扩展</span></div>
       </section>
 
-      <section id="scene-8" class="scene clip close" data-start="153" data-duration="8" data-track-index="1">
+      <section id="scene-8-station" class="scene clip station-scene" data-start="188" data-duration="32" data-track-index="1">
+        <div class="topline"><strong>07 / 回到工位看一遍</strong><span class="mono">ST-FAS-07 · TQ-17 · P03</span></div>
+        <h2 id="s8-title" class="title small">先看现场对象，再看风险卡。</h2>
+        <p class="station-lede">这不是产线扫描，而是一段可重复的工程示意回放：工具、紧固点、组合信号与待核验动作保持同一口径。</p>
+        <div id="s8-station-stage" class="station-video-stage">
+          <div class="station-video-canvas">
+            <div class="station-video-grid"></div>
+            <div class="station-video-frame frame-top"></div><div class="station-video-frame frame-left"></div><div class="station-video-frame frame-right"></div>
+            <div class="station-video-panel"></div><div class="station-video-deck"></div>
+            <div id="s8-tool" class="station-video-tool"><span></span><i></i></div>
+            <div id="s8-point" class="station-video-point"><b>P03</b><small>关键紧固点</small></div>
+            <div class="station-video-label label-station"><b>ST-FAS-07</b><small>总装工位</small></div>
+            <div class="station-video-label label-tool"><b>TQ-17</b><small>电动拧紧工具</small></div>
+            <div id="s8-signal" class="station-video-signal"><b>组合信号</b><small>规格内 · 趋势变化</small></div>
+            <div class="station-video-badge">工程示意回放 · 比赛合成数据</div>
+          </div>
+          <aside class="station-video-readout panel"><div class="station-video-readout-head"><span id="s8-state" class="tag warn">等待回放</span><span class="mono">00:00–00:32</span></div><h3 id="s8-readout-title">P03 · 前 100 条基线</h3><p id="s8-readout-copy">工具落下前先确认对象、程序和窗口，不把一个画面当成真实设备结论。</p><div class="station-video-metrics"><div><span>扭矩</span><strong id="s8-torque">48.13</strong><small>N·m</small></div><div><span>角度离散</span><strong id="s8-angle">1.00×</strong><small>相对基线</small></div><div><span>重试</span><strong id="s8-retry">0.010</strong><small>次/循环</small></div></div><div class="station-video-progress"><i id="s8-progress"></i></div></aside>
+        </div>
+        <div class="footer"><span>只展示工程示意，不控制 PLC、工具或产线</span><span>从对象回到证据</span></div>
+      </section>
+      <section id="scene-9" class="scene clip close" data-start="220" data-duration="30" data-track-index="1">
         <div class="topline"><strong>质控前哨 V2</strong><span class="mono">SERES BUSINESS CHALLENGE</span></div>
-        <h1 id="s8-title" class="title">先把一个工位做深，再把收益交给数据验证。</h1>
-        <p id="s8-lede" class="lede">驾驶舱、管理员工作台和项目源码已经放在固定链接中，评委可以直接回放风险分析、推进审批并查看证据链。</p>
-        <p id="s8-url" class="url">gikemj.github.io/tightening-quality-guardian/round2.html</p>
+        <h1 id="s9-title" class="title">先把一个工位做深，再把收益交给数据验证。</h1>
+        <p id="s9-lede" class="lede">驾驶舱、管理员工作台和项目源码已经放在固定链接中，评委可以直接回放风险分析、推进审批并查看证据链。</p>
+        <p id="s9-url" class="url">gikemj.github.io/tightening-quality-guardian/round2.html</p>
         <div class="footer"><span>GitHub · 在线演示 · 视频</span><span>谢谢观看</span></div>
       </section>
 
-      <div id="transition-1" class="transition clip" data-start="21.05" data-duration="0.55" data-track-index="4"></div>
-      <div id="transition-2" class="transition clip" data-start="42.55" data-duration="0.55" data-track-index="4"></div>
-      <div id="transition-3" class="transition clip" data-start="67.55" data-duration="0.55" data-track-index="4"></div>
-      <div id="transition-4" class="transition clip" data-start="88.55" data-duration="0.55" data-track-index="4"></div>
-      <div id="transition-5" class="transition clip" data-start="111.05" data-duration="0.55" data-track-index="4"></div>
-      <div id="transition-6" class="transition clip" data-start="132.55" data-duration="0.55" data-track-index="4"></div>
-      <div id="transition-7" class="transition clip" data-start="152.55" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-1" class="transition clip" data-start="23.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-2" class="transition clip" data-start="51.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-3" class="transition clip" data-start="79.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-4" class="transition clip" data-start="107.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-5" class="transition clip" data-start="133.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-6" class="transition clip" data-start="161.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-7" class="transition clip" data-start="187.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="transition-8" class="transition clip" data-start="219.5" data-duration="0.55" data-track-index="4"></div>
+      <div id="caption-layer" aria-hidden="true">
+        <div id="cg-0" class="caption clip"><span>这次演示不从一个大而全的平台开始。</span></div>
+        <div id="cg-1" class="caption clip"><span>我们把范围收在总装一处关键拧紧工位，只看一个工具、一个程序和一个紧固点。</span></div>
+        <div id="cg-2" class="caption clip"><span>对象是 ST-FAS-07、TQ-17 和 P03。</span></div>
+        <div id="cg-3" class="caption clip"><span>页面中的记录是比赛合成数据，作用是把判断方法讲清楚，不冒充企业内部数据。</span></div>
+        <div id="cg-4" class="caption clip"><span>先把观察窗口定下来。</span></div>
+        <div id="cg-5" class="caption clip"><span>系统按同一车型、同一工位和同一程序建立一百条基线，再按时间取最近二十四条。</span></div>
+        <div id="cg-6" class="caption clip"><span>扭矩、角度、重试次数、节拍和标定状态一起进入分析。</span></div>
+        <div id="cg-7" class="caption clip"><span>这样做的目的很简单：先保证比较对象一致，再讨论变化。</span></div>
+        <div id="cg-8" class="caption clip"><span>评委可以在网页里点击“开始工位回放”，看到对象、读数和风险卡在同一页面推进。</span></div>
+        <div id="cg-9" class="caption clip"><span>这一窗口里，扭矩仍在四十三到五十三牛米的规格范围内。</span></div>
+        <div id="cg-10" class="caption clip"><span>可是最近均值偏移了一点五六个标准差，角度离散度变成基线的二点一七倍，重试均值从零点零一零升到零点二五零次每循环。</span></div>
+        <div id="cg-11" class="caption clip"><span>多个信号一起变化，才值得优先核对。</span></div>
+        <div id="cg-12" class="caption clip"><span>系统在这里做的是排序和留证，不是宣布设备故障，也不是替工程师下结论。</span></div>
+        <div id="cg-13" class="caption clip"><span>把对象放回工位，才能知道每条证据从哪里来。</span></div>
+        <div id="cg-14" class="caption clip"><span>回放画面中的 ST-FAS-07 是工位，TQ-17 是工具，P03 是紧固点。</span></div>
+        <div id="cg-15" class="caption clip"><span>工具信号进入过程规则，过程规则再连接质量影响。</span></div>
+        <div id="cg-16" class="caption clip"><span>画面是程序化工程示意，不是产线扫描，不会连接 PLC，也不会修改工具参数。</span></div>
+        <div id="cg-17" class="caption clip"><span>它只是帮助评委用几秒钟看懂一条关系链。</span></div>
+        <div id="cg-18" class="caption clip"><span>风险卡保留原始窗口、触发规则、设备状态和知识引用。</span></div>
+        <div id="cg-19" class="caption clip"><span>PFMEA、控制计划与历史案例都必须回到匹配的工位和失效模式。</span></div>
+        <div id="cg-20" class="caption clip"><span>候选原因包括工具标定漂移、套筒或接头磨损、连接件摩擦特性变化。</span></div>
+        <div id="cg-21" class="caption clip"><span>它们都只是待验证假设；</span></div>
+        <div id="cg-22" class="caption clip"><span>每个假设后面都写清楚要补什么证据、由谁检查、用什么结果接受或排除。</span></div>
+        <div id="cg-23" class="caption clip"><span>下一步不是把一句模型回答变成任务，而是先形成工程师可审阅的动作草案。</span></div>
+        <div id="cg-24" class="caption clip"><span>比如检查标定记录和套筒状态，用合格备件做对比拧紧，对当前批次做抽检，再决定是否扩大追溯范围。</span></div>
+        <div id="cg-25" class="caption clip"><span>动作有责任角色、时间提示、验收字段和证据编号。</span></div>
+        <div id="cg-26" class="caption clip"><span>没有具名审批，任务不会创建；</span></div>
+        <div id="cg-27" class="caption clip"><span>没有验证记录，风险不能结案。</span></div>
+        <div id="cg-28" class="caption clip"><span>管理员工作台把这条链路完整展示出来。</span></div>
+        <div id="cg-29" class="caption clip"><span>评委可以运行分析、生成一批临时数据、查看知识关系和接口契约，再沿着待审批、已审批、任务已建、验证中、已验证和已结案推进。</span></div>
+        <div id="cg-30" class="caption clip"><span>每次动作都留下操作者、前后状态和备注。</span></div>
+        <div id="cg-31" class="caption clip"><span>系统允许退回和重开，避免把一次错误判断直接写成最终事实。</span></div>
+        <div id="cg-32" class="caption clip"><span>模型只负责整理文书，不替代工程判断。</span></div>
+        <div id="cg-33" class="caption clip"><span>企业服务端可以把最小化、脱敏后的案卷交给受控模型，输出固定 JSON，并限制长度、温度、超时和可引用的任务编号。</span></div>
+        <div id="cg-34" class="caption clip"><span>密钥不会进入浏览器。</span></div>
+        <div id="cg-35" class="caption clip"><span>外部调用失败时，系统回到同一套确定性规则摘要。</span></div>
+        <div id="cg-36" class="caption clip"><span>公开页面不连接真实飞书租户，不自动停线，不修改 PLC，也不确认根因或质量放行。</span></div>
+        <div id="cg-37" class="caption clip"><span>最后回到这一个工位。</span></div>
+        <div id="cg-38" class="caption clip"><span>我们没有先承诺覆盖所有产线，而是先把一个窗口、一张风险卡和一条审批链做完整。</span></div>
+        <div id="cg-39" class="caption clip"><span>进入企业带教阶段后，再用真实字段校准窗口、阈值和验收指标，重点看风险卡补证率、任务字段完整率、审批退回原因和复测通过率。</span></div>
+        <div id="cg-40" class="caption clip"><span>驾驶舱、管理员工作台、视频和仓库源码使用同一组口径，评委可以直接复核每一步。</span></div>
+      </div>
     </div>
     <script>
       window.__timelines = window.__timelines || {};
@@ -169,32 +238,96 @@
       enter("#s1-lede", 1.1, { x: -24, y: 0, duration: .55, ease: "sine.out" });
       enter("#s1-chips", 1.8, { y: 18, duration: .45, ease: "power2.out" });
       enter("#s1-note", 1.35, { x: 28, y: 0, duration: .65, ease: "power3.out" });
-      enter("#s2-title", 21.75, { x: -34, y: 0, duration: .7, ease: "expo.out" });
-      enter("#s2-dashboard", 23.1, { y: 26, duration: .8, ease: "power2.out" });
-      enter("#s2-risk", 26.0, { scale: .96, y: 0, duration: .55, ease: "back.out(1.2)" });
-      enter("#s3-title", 43.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
-      enter("#s3-table", 45.2, { x: -24, y: 0, duration: .6, ease: "power3.out" });
-      enter("#s3-window", 46.0, { x: 24, y: 0, duration: .6, ease: "sine.out" });
-      enter("#s4-title", 68.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
-      enter("#s4-e1", 70.2, { y: 20, duration: .45, ease: "power3.out" });
-      enter("#s4-e2", 71.0, { y: 20, duration: .45, ease: "sine.out" });
-      enter("#s4-e3", 71.8, { y: 20, duration: .45, ease: "expo.out" });
-      enter("#s4-graph", 70.8, { x: 28, y: 0, duration: .7, ease: "power2.out" });
-      enter("#s5-title", 89.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
-      enter("#s5-causes", 91.2, { x: -26, y: 0, duration: .6, ease: "power3.out" });
-      enter("#s5-actions", 91.9, { x: 26, y: 0, duration: .6, ease: "sine.out" });
-      enter("#s6-title", 111.75, { x: -34, y: 0, duration: .65, ease: "expo.out" });
-      enter("#s6-workflow", 113.7, { y: 23, duration: .6, ease: "power3.out" });
-      enter("#s6-audit", 114.5, { y: 23, duration: .6, ease: "sine.out" });
-      enter("#s7-title", 133.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
-      enter("#s7-terra", 135.2, { x: -24, y: 0, duration: .6, ease: "power3.out" });
-      enter("#s7-limits", 136.0, { x: 24, y: 0, duration: .6, ease: "sine.out" });
-      enter("#s8-title", 153.25, { y: 44, duration: .7, ease: "expo.out" });
-      enter("#s8-lede", 154.15, { x: -22, y: 0, duration: .55, ease: "power2.out" });
-      enter("#s8-url", 155.0, { y: 16, duration: .45, ease: "sine.out" });
-      ["#transition-1", "#transition-2", "#transition-3", "#transition-4", "#transition-5", "#transition-6", "#transition-7"].forEach((selector, index) => {
-        const start = [21.05, 42.55, 67.55, 88.55, 111.05, 132.55, 152.55][index];
+      enter("#s2-title", 24.25, { x: -34, y: 0, duration: .7, ease: "expo.out" });
+      enter("#s2-dashboard", 25.6, { y: 26, duration: .8, ease: "power2.out" });
+      enter("#s2-risk", 28.5, { scale: .96, y: 0, duration: .55, ease: "back.out(1.2)" });
+      enter("#s3-title", 52.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
+      enter("#s3-table", 54.2, { x: -24, y: 0, duration: .6, ease: "power3.out" });
+      enter("#s3-window", 55.0, { x: 24, y: 0, duration: .6, ease: "sine.out" });
+      enter("#s4-title", 80.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
+      enter("#s4-e1", 82.2, { y: 20, duration: .45, ease: "power3.out" });
+      enter("#s4-e2", 83.0, { y: 20, duration: .45, ease: "sine.out" });
+      enter("#s4-e3", 83.8, { y: 20, duration: .45, ease: "expo.out" });
+      enter("#s4-graph", 82.8, { x: 28, y: 0, duration: .7, ease: "power2.out" });
+      enter("#s5-title", 108.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
+      enter("#s5-causes", 110.2, { x: -26, y: 0, duration: .6, ease: "power3.out" });
+      enter("#s5-actions", 110.9, { x: 26, y: 0, duration: .6, ease: "sine.out" });
+      enter("#s6-title", 134.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
+      enter("#s6-workflow", 136.2, { y: 23, duration: .6, ease: "power3.out" });
+      enter("#s6-audit", 137.0, { y: 23, duration: .6, ease: "sine.out" });
+      enter("#s7-title", 162.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
+      enter("#s7-terra", 164.2, { x: -24, y: 0, duration: .6, ease: "power3.out" });
+      enter("#s7-limits", 165.0, { x: 24, y: 0, duration: .6, ease: "sine.out" });
+      enter("#s8-title", 188.25, { x: -34, y: 0, duration: .65, ease: "expo.out" });
+      enter("#s8-station-stage", 190.0, { y: 25, duration: .75, ease: "power2.out" });
+      enter("#s8-tool", 192.0, { y: -78, duration: .85, ease: "power2.inOut" });
+      enter("#s8-point", 193.0, { scale: .82, duration: .55, ease: "back.out(1.3)" });
+      enter("#s8-signal", 198.0, { x: 20, y: 0, duration: .55, ease: "sine.out" });
+      tl.to("#s8-tool", { y: 95, duration: 4.5, ease: "sine.inOut", repeat: 2, yoyo: true }, 201.0);
+      tl.to("#s8-point", { scale: 1.14, opacity: .58, duration: .7, ease: "sine.inOut", repeat: 5, yoyo: true }, 201.0);
+      tl.to("#s8-progress", { width: "100%", duration: 14.0, ease: "none" }, 200.0);
+      tl.to("#s8-state", { textContent: "等待工程师复核", color: "#a33139", backgroundColor: "#f9e8e9", duration: .2 }, 211.5);
+      tl.to("#s8-readout-title", { textContent: "P03 · 最近 24 条风险窗口", duration: .2 }, 211.5);
+      tl.to("#s8-readout-copy", { textContent: "扭矩仍在规格内，但角度离散和重试同向变化，风险卡只提出待核验动作。", duration: .2 }, 211.5);
+      tl.to("#s8-torque", { textContent: "49.09", duration: .2 }, 211.5);
+      tl.to("#s8-angle", { textContent: "2.17×", duration: .2 }, 211.5);
+      tl.to("#s8-retry", { textContent: "0.250", duration: .2 }, 211.5);
+      enter("#s9-title", 220.25, { y: 44, duration: .7, ease: "expo.out" });
+      enter("#s9-lede", 221.15, { x: -22, y: 0, duration: .55, ease: "power2.out" });
+      enter("#s9-url", 222.0, { y: 16, duration: .45, ease: "sine.out" });
+      ["#transition-1", "#transition-2", "#transition-3", "#transition-4", "#transition-5", "#transition-6", "#transition-7", "#transition-8"].forEach((selector, index) => {
+        const start = [23.5, 51.5, 79.5, 107.5, 133.5, 161.5, 187.5, 219.5][index];
         tl.fromTo(selector, { x: -1920, opacity: 1 }, { x: 1920, opacity: 1, duration: .55, ease: "power4.inOut" }, start);
+      });
+      const captionGroups = [
+        [0.250, 3.665],
+        [3.785, 11.016],
+        [11.136, 16.359],
+        [16.479, 23.650],
+        [24.250, 26.243],
+        [26.363, 33.735],
+        [33.855, 38.837],
+        [38.957, 44.138],
+        [44.258, 51.650],
+        [52.250, 57.548],
+        [57.668, 69.078],
+        [69.198, 72.662],
+        [72.782, 79.650],
+        [80.250, 84.315],
+        [84.435, 92.178],
+        [92.298, 96.750],
+        [96.870, 104.032],
+        [104.152, 107.650],
+        [108.250, 113.040],
+        [113.160, 119.100],
+        [119.220, 125.159],
+        [125.279, 127.387],
+        [127.507, 133.650],
+        [134.250, 141.284],
+        [141.404, 150.920],
+        [151.040, 155.798],
+        [155.918, 158.814],
+        [158.934, 161.650],
+        [162.250, 165.864],
+        [165.984, 178.032],
+        [178.152, 181.968],
+        [182.088, 187.650],
+        [188.250, 192.058],
+        [192.178, 204.026],
+        [204.146, 206.261],
+        [206.381, 211.247],
+        [211.367, 219.650],
+        [220.250, 222.243],
+        [222.363, 229.937],
+        [230.057, 242.016],
+        [242.136, 249.650]
+      ];
+      captionGroups.forEach(([start, end], index) => {
+        const el = document.getElementById("cg-" + index);
+        if (!el) return;
+        tl.fromTo(el, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .18, ease: "power2.out" }, start);
+        tl.to(el, { opacity: 0, y: -6, duration: .12, ease: "power2.in" }, end - .12);
+        tl.set(el, { opacity: 0 }, end);
       });
       window.__timelines.main = tl;
     </script>

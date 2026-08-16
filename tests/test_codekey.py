@@ -26,8 +26,8 @@ class CodeKeyTerraClientTest(unittest.TestCase):
         )
         result = client.draft(self._dossier())
 
-        self.assertEqual(seen["url"], "https://codekey.ai/v1/chat/completions")
-        self.assertEqual(seen["payload"]["model"], "terra")
+        self.assertEqual(seen["url"], "https://hetune.top/v1/chat/completions")
+        self.assertEqual(seen["payload"]["model"], "gpt-5.6-sol")
         self.assertEqual(seen["payload"]["max_tokens"], 600)
         self.assertNotIn("test-secret", str(result))
         self.assertTrue(result["safety"]["human_approval_required"])
@@ -48,10 +48,15 @@ class CodeKeyTerraClientTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             CodeKeyTerraConfig(api_key="x", base_url="https://example.com").validate()
 
+    def test_base_url_rejects_non_exact_allowed_hosts(self):
+        for base_url in ("https://hetune.top.evil.example", "https://hetune.top/path?x=1", "http://hetune.top"):
+            with self.subTest(base_url=base_url), self.assertRaises(ValueError):
+                CodeKeyTerraConfig(api_key="x", base_url=base_url).validate()
+
     def test_empty_optional_environment_uses_guarded_defaults(self):
         config = CodeKeyTerraConfig.from_env({"CODEKEY_API_KEY": "test-secret", "CODEKEY_BASE_URL": "", "CODEKEY_TERRA_MODEL": ""})
-        self.assertEqual(config.base_url, "https://codekey.ai")
-        self.assertEqual(config.model, "terra")
+        self.assertEqual(config.base_url, "https://hetune.top")
+        self.assertEqual(config.model, "gpt-5.6-sol")
 
 
 if __name__ == "__main__":

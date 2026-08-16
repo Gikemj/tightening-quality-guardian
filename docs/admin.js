@@ -78,7 +78,7 @@ async function staticApi(path, options = {}) {
   ] };
   if (path === "/api/knowledge") return staticSummary(state).knowledge;
   if (path === "/api/data") return { events: { records: (state.series || []).length, path: "data/tightening_events_demo.csv" }, files: [{ path: "data/tightening_events_demo.csv", kind: "synthetic events", size: 42000, modified: "2026-08-17T09:00:00+08:00" }, { path: "outputs/risk_card.json", kind: "risk card", size: 9000, modified: "2026-08-17T09:00:00+08:00" }] };
-  if (path === "/api/integration") return { mode: "preview", liveWriteEnabled: false, configuredKeys: [], requiredKeys: ["FEISHU_APP_ID", "FEISHU_APP_SECRET"], message: "公开管理员工作台不配置企业凭证，不执行外部写入。", terra: { configured: false, provider: "CodeKey", model: "terra", baseUrl: "https://codekey.ai", keyLoaded: false, serverSideOnly: true, message: "公开页面不加载密钥，使用浏览器内确定性摘要。" } };
+  if (path === "/api/integration") return { mode: "preview", liveWriteEnabled: false, configuredKeys: [], requiredKeys: ["FEISHU_APP_ID", "FEISHU_APP_SECRET"], message: "公开管理员工作台不配置企业凭证，不执行外部写入。", terra: { configured: false, provider: "Hetune（OpenAI 兼容接口）", model: "gpt-5.6-sol", baseUrl: "https://hetune.top", keyLoaded: false, serverSideOnly: true, message: "公开页面不加载密钥，使用浏览器内确定性摘要。" } };
   if (path === "/api/openapi") return { endpoints: [
     { method: "GET", path: "/api/summary", purpose: "读取风险、健康与工作流摘要" },
     { method: "POST", path: "/api/risk/run", purpose: "运行公开风险分析回放" },
@@ -262,7 +262,7 @@ function renderIntegration(data) {
   const terraReady = terra.configured === true && terra.keyLoaded === true;
   $("#terra-status").textContent = terraReady ? "SERVER READY" : "BROWSER FALLBACK";
   $("#terra-status").className = `status-chip ${terraReady ? "status-implemented" : "status-guarded"}`;
-  $("#terra-details").innerHTML = [["服务商", terra.provider || "CodeKey"], ["模型", terra.model || "terra"], ["Base URL", terra.baseUrl || "https://codekey.ai"], ["密钥状态", terraReady ? "已从服务端环境载入" : "未载入（安全回退）"], ["输出边界", terra.serverSideOnly === false ? "异常" : "服务端调用，人工审批"]].map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
+  $("#terra-details").innerHTML = [["服务商", terra.provider || "Hetune（OpenAI 兼容接口）"], ["模型", terra.model || "gpt-5.6-sol"], ["Base URL", terra.baseUrl || "https://hetune.top"], ["密钥状态", terraReady ? "已从服务端环境载入" : "未载入（安全回退）"], ["输出边界", terra.serverSideOnly === false ? "异常" : "服务端调用，人工审批"]].map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
 }
 
 function renderMonitor(status, hydrateForm = false) {

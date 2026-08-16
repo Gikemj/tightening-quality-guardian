@@ -66,7 +66,7 @@ class CodeKeyTerraConfig:
 
 
 TERRA_SYSTEM_PROMPT = """你是设备质量风险闭环中的受控文书助手。
-输入只包含脱敏关系数据的事实、候选关联和缺失字段。你只能基于 evidence_id 组织待核验说明和补证问题。
+输入只包含脱敏关系数据的事实、候选关联、缺失字段和评审问题。你只能基于这些字段组织待核验说明和补证问题，并直接回应评审问题。
 禁止确认根因、推断真实设备状态、判断质量放行、建议停线、修改 PLC 或工具参数、创建外部任务。
 事实、候选关联和信息缺口必须分开。若证据不足，明确写“需补证”。
 严格返回 JSON 对象，字段仅包含 summary、review_questions、task_notes、safety。
@@ -140,6 +140,7 @@ class CodeKeyTerraClient:
         if not all(isinstance(value, (dict, list)) for value in (case, facts, gaps, tasks)):
             raise CodeKeyResponseError("Terra 输入必须是结构化关系案卷")
         return {
+            "question": str(dossier.get("question", "")).strip()[:2000],
             "case": {
                 key: case.get(key)
                 for key in (

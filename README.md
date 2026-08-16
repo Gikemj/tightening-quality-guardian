@@ -4,28 +4,33 @@
 [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-7b2f68)](https://gikemj.github.io/tightening-quality-guardian/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-23313a)](LICENSE)
 
-面向设备对象、故障工单与失效模式关系核验的设备质量风险闭环原型。
+面向总装关键拧紧工位的设备质量风险主动管控原型。
 
 > 本仓库是“2026 AI 先锋未来人才大赛”赛力斯集团命题的独立参赛原型。设备、工艺、质量和历史案例均为比赛合成数据，未使用赛力斯内部数据。
 
-**报名项目：质控前哨 V2｜队伍名称：智造哨兵**
+**报名项目：质控前哨｜队伍名称：智造哨兵**
 
 **官方命题：如果你加入赛力斯超级工厂团队，你如何打造一名会主动管控设备质量风险的 AI数字员工？**
 
-## 统一演示入口
+![质控前哨风险台账演示](assets/dashboard-preview.png)
 
-统一入口把设备过程信号、SPC 对照、风险卡、知识关系链、证据分级和工单补证放在同一条演示路径中。关系判断仍以赛题提供的对象、字段和关系结构为边界，不把脱敏快照用于知识抽取、时序分析或真实状态推断。
+## 评委固定入口
 
-- [打开统一设备质量风险演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)
-- [观看带中文字幕的 4 分 25 秒演示视频](https://gikemj.github.io/tightening-quality-guardian/video/quality-guardian-v2.mp4)
-- [第二轮完整提交稿](docs/round2-submission.md)
-- [数据使用与公开边界](docs/data-boundary-round2.html)
-- [关系证据数字员工实现](src/torque_guard/round2.py)
-- [Terra 的服务端受控接入](src/torque_guard/integrations/codekey.py)
+- [统一在线演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)：新版拧紧质量风险驾驶舱、实时合成回放、SPC 对照、证据链、任务门禁与独立评测集中在同一页。
+- [演示视频（含中文字幕）](https://gikemj.github.io/tightening-quality-guardian/video/quality-guardian-v2.mp4)：按“工位窗口—多信号识别—证据核对—人工闭环”讲解新版项目，不展示第一轮原型入口。
+- [第二轮参赛稿](docs/round2-submission.md)：与在线页面的工位、字段、关系链和安全边界保持同一口径。
+- [数据边界说明](docs/data-boundary-round2.html)：说明公开案例、设备信号和企业数据之间的使用边界。
+- [公开管理员工作台](https://gikemj.github.io/tightening-quality-guardian/admin.html)：评委无需安装或启动服务即可查看风险、证据、工作流、数据模拟器、接口契约与操作审计；所有按钮都在当前浏览器内产生可复现变化。
 
-在线页的主路径是一个可重放的本地工作流：点击“开始主动研判”，观察感知、检测、关系检索和风险卡生成；风险窗口随后停在“等待具名工程师审批”，可按顺序演示“通过审批 → 提交现场验证 → 审核回写案例”。点击“退回补证”会回到人工复核，不会把候选原因改写成根因。切换到稳定窗口后，流程停在常规监控，异常任务按钮保持禁用。证据行、候选原因、风险卡 JSON、工具调用轨迹和三个关系案卷均可在同一页展开查看。
+### 企业部署扩展
 
-页面所有操作都在浏览器本地完成，不携带企业凭证，也不会创建真实飞书任务；页面加载失败时可用“重试读取”恢复。浏览器端可通过 `window.round2Demo.runProcess()`、`window.round2Demo.approveProcess()`、`window.round2Demo.submitVerification()`、`window.round2Demo.reviewKnowledgeWriteback()`、`window.round2Demo.selectCase(0)` 和 `window.round2Demo.getModelPayload()` 调用同一套演示接口。
+仓库保留可选的管理员服务端实现，用于企业授权环境接入 Terra 与飞书。公开页面不加载密钥，也不依赖这一路径。若进入企业部署，将 `.env.example` 复制为 `.env`，填写服务端 `CODEKEY_API_KEY`（以及可选的 `CODEKEY_BASE_URL=https://codekey.ai`、`CODEKEY_TERRA_MODEL=terra`），再运行：
+
+```bash
+PYTHONPATH=src python3 scripts/admin_server.py
+```
+
+该服务只用于受控部署验证。Terra 只接收最小化的脱敏风险卡摘要，用于整理复核说明和任务备注；输出必须通过结构校验，不能确认根因、停线、改 PLC 或替代工程师审批。密钥不会进入网页、日志、截图或提交记录。
 
 ## 四十强提交材料
 
@@ -171,8 +176,6 @@ VS Code 已提供调试与任务配置：
 - `.vscode/launch.json` 的 Python 调试配置会自动读取项目根目录 `.env`。普通 VS Code 终端直接执行 CLI 时不会自动读取 `.env`，必须先在当前终端设置所需环境变量；不要把真实密钥提交到仓库。
 
 ### Bash / Make
-
-需要 Python 3.10 或以上版本；本机若默认 `python3` 仍为 3.9，可显式执行 `make PYTHON=python3.11 all`。
 
 ```bash
 git clone https://github.com/Gikemj/tightening-quality-guardian.git

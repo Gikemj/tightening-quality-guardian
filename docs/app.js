@@ -14,6 +14,8 @@ const state = {
   scenarioMetrics: null,
   graph: null,
   graphError: null,
+  relationReports: [],
+  relationIndex: 0,
   mode: "risk",
   previewPrepared: { risk: false, baseline: false },
   adminDemoStep: 0,
@@ -23,8 +25,180 @@ const state = {
 
 let sidebarNavigationLock = null;
 let sidebarNavigationTimer = 0;
+let liveAnalysisTimer = null;
+const isPublicPreview = typeof window !== "undefined"
+  && (window.location.hostname.endsWith("github.io") || window.location.protocol === "file:");
+let liveBackendMode = isPublicPreview ? "static" : "unknown";
+let relationRunToken = 0;
+const localLiveState = {
+  running: false,
+  sequence: 0,
+  payload: null,
+};
 
 const $ = (selector) => document.querySelector(selector);
+
+const LIVE_ANALYSIS_API = "http://127.0.0.1:8010/api/live-analysis";
+const LIVE_SIMULATOR_API = "http://127.0.0.1:8010/api/simulator";
+
+function cloneJson(value) {
+  return value == null ? value : JSON.parse(JSON.stringify(value));
+}
+
+function activeRelationReport() {
+  return state.relationReports[state.relationIndex] || null;
+}
+
+function relationReportText(report = activeRelationReport()) {
+  if (!report) return "暂无公开案卷";
+  const record = report.case || {};
+  const direct = (report.facts || []).filter((item) => item.strength === "direct").map((item) => item.label).join("、") || "无";
+  const candidate = (report.facts || []).filter((item) => item.strength === "candidate").map((item) => item.label).join("、") || "无";
+  const gaps = (report.gaps || []).map((item) => item.label).join("、") || "无";
+  const tasks = (report.tasks || []).map((item) => item.title).join("；") || "无";
+  return [
+    `案卷：${record.case_id || "—"}｜${record.title || "—"}`,
+    `关系层级：${record.relation_tier || "—"}；完整度：${record.completeness_grade || "—"}`,
+    `直接事实：${direct}`,
+    `待核验关联：${candidate}`,
+    `信息缺口：${gaps}`,
+    `任务草案：${tasks}`,
+    "公开演示：只生成浏览器预览，不创建外部任务。",
+  ].join("\n");
+}
+
+function renderRelationCase() {
+  const report = activeRelationReport();
+  if (!report) return;
+  const record = report.case || {};
+  text("#relation-case-title", `${record.case_id || "—"} · ${record.title || "公开合成案卷"}`);
+  text("#relation-case-tier", record.relation_tier || "关系待核验");
+  text("#relation-case-description", `${report.confidence_label || "当前关系状态待核验"}。${record.structure_link_status || "页面只展示受控字段关系。"}`);
+  text("#relation-case-equipment", record.equipment_family || "—");
+  text("#relation-case-component", record.component_family || "—");
+  text("#relation-case-state", `${record.status_group || "—"} · ${record.outcome_group || "—"}`);
+  text("#relation-case-completeness", record.completeness_grade || "—");
+  text("#relation-case-disposition", report.disposition || "—");
+  const facts = document.querySelector("#relation-case-facts");
+  const gaps = document.querySelector("#relation-case-gaps");
+  const evidence = [...(report.facts || []), ...(report.gaps || [])];
+  text("#relation-case-evidence-count", `${evidence.length} 条字段级记录 · ${report.tasks?.length || 0} 项待审批任务`);
+  if (facts) {
+    const rows = (report.facts || []).map((item) => `<li><strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.detail)}</span><small>${escapeHtml(item.strength === "candidate" ? "关联候选" : "直接事实")} · ${escapeHtml(item.evidence_id)}</small></li>`);
+    facts.innerHTML = rows.length ? rows.join("") : "<li>当前没有直接事实记录。</li>";
+  }
+  if (gaps) {
+    const rows = (report.gaps || []).map((item) => `<li><strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.detail)}</span><small>需补证 · ${escapeHtml(item.evidence_id)}</small>`);
+    gaps.innerHTML = rows.length ? rows.join("") : "<li>当前没有登记的信息缺口。</li>";
+  }
+  const tasks = document.querySelector("#relation-case-tasks");
+  if (tasks) {
+    tasks.innerHTML = (report.tasks || []).map((item) => `<tr><td><strong>${escapeHtml(item.title)}</strong><br><code>${escapeHtml(item.task_id)}</code></td><td>${escapeHtml(item.owner_role)}</td><td>${escapeHtml(item.due_hint)}</td><td>${escapeHtml(item.acceptance_criteria)}</td><td>${(item.evidence_ids || []).map((id) => `<code>${escapeHtml(id)}</code>`).join("<br>")}</td></tr>`).join("") || `<tr><td colspan="5">当前案卷没有任务草案。</td></tr>`;
+  }
+  const output = $("#relation-case-output");
+  if (output && !output.hidden) output.textContent = JSON.stringify({ ...report, public_demo_boundary: "browser_static_read_only" }, null, 2);
+}
+
+async function loadRelationCases() {
+  const response = await fetch("./data/round2_reports.json", { cache: "no-store" });
+  if (!response.ok) throw new Error(`关系案卷读取失败（HTTP ${response.status}）`);
+  const payload = await response.json();
+  if (payload.schema_version !== "2.0" || payload.data_boundary !== "schema_and_relationship_reference_only" || !Array.isArray(payload.reports)) {
+    throw new Error("关系案卷不符合公开数据边界合同");
+  }
+  state.relationReports = payload.reports;
+  const select = $("#relation-case-select");
+  if (select) {
+    select.replaceChildren(...payload.reports.map((report, index) => {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = `${report.case.case_id} · ${report.case.title}`;
+      return option;
+    }));
+  }
+  renderRelationCase();
+}
+
+function bindRelationCaseInteractions() {
+  const select = $("#relation-case-select");
+  select?.addEventListener("change", () => {
+    state.relationIndex = Math.max(0, Math.min(Number(select.value) || 0, state.relationReports.length - 1));
+    $("#relation-case-output")?.setAttribute("hidden", "");
+    text("#relation-case-status", "已切换案卷，等待关系核验");
+    renderRelationCase();
+  });
+  $("#relation-case-rerun")?.addEventListener("click", () => {
+    const token = ++relationRunToken;
+    const stages = ["读取对象与工单字段", "区分直接事实与关联候选", "检查缺口并生成任务草案"];
+    let index = 0;
+    const tick = () => {
+      if (token !== relationRunToken) return;
+      if (index >= stages.length) {
+        text("#relation-case-status", "关系核验完成：页面未写入外部系统");
+        return;
+      }
+      text("#relation-case-status", `正在${stages[index]}…`);
+      index += 1;
+      window.setTimeout(tick, 180);
+    };
+    tick();
+  });
+  $("#relation-case-copy")?.addEventListener("click", async () => {
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard API unavailable");
+      await navigator.clipboard.writeText(relationReportText());
+      text("#relation-case-status", "案卷摘要已复制");
+    } catch {
+      text("#relation-case-status", "浏览器未授权剪贴板，可直接查看页面字段");
+    }
+  });
+  $("#relation-case-preview")?.addEventListener("click", () => {
+    const report = activeRelationReport();
+    const output = $("#relation-case-output");
+    if (!report || !output) return;
+    output.hidden = false;
+    output.textContent = JSON.stringify({
+      case: report.case,
+      evidence_ids: [...(report.facts || []), ...(report.gaps || [])].map((item) => item.evidence_id),
+      task_ids: (report.tasks || []).map((item) => item.task_id),
+      human_approval_required: true,
+      external_write: false,
+      public_demo_mode: report.terra?.mode || "deterministic",
+    }, null, 2);
+    text("#relation-case-status", `任务预览已更新，共 ${(report.tasks || []).length} 项，需具名审批后才能执行`);
+  });
+}
+
+function buildLocalLivePayload(running = localLiveState.running) {
+  const baseCard = cloneJson(state.cards.risk);
+  const baseSeries = cloneJson(state.series.risk || []);
+  if (!baseCard || !baseSeries.length) return { active: false, running: false, lastError: "公开演示数据尚未载入。" };
+
+  const sequence = Math.max(1, localLiveState.sequence || 1);
+  const offset = ((sequence % 5) - 2) * 0.015;
+  const series = baseSeries.map((event, index) => ({
+    ...event,
+    torque_nm: Number((Number(event.torque_nm) + offset + ((index + sequence) % 7 === 0 ? 0.04 : 0)).toFixed(3)),
+  }));
+  const card = {
+    ...baseCard,
+    card_id: `${baseCard.card_id}-BROWSER-${String(sequence).padStart(2, "0")}`,
+    created_at: "2026-08-17T09:00:00+08:00",
+  };
+  const latestEvents = series.slice(Math.max(0, series.length - 24));
+  return {
+    active: true,
+    running,
+    source: "browser_static_replay",
+    scenario: "规格内扭矩漂移（浏览器回放）",
+    sequence,
+    card,
+    series,
+    history: series,
+    latestEvents,
+    boundary: "浏览器回放。数据为比赛合成样例，不代表真实工厂数据，也不会访问外部系统或执行生产动作。",
+  };
+}
 
 const text = (selector, value) => {
   const element = $(selector);
@@ -140,7 +314,7 @@ export function comparisonViewModel(card, generatedResult) {
     window: `前 ${result.baselineCount} 条基线 vs 最近 ${result.recentCount} 条当前窗口`,
     rows,
     nextStep: result.attributionRequired
-      ? `先由具名工程师复核证据，再查看 ${card.recommended_actions.length} 项本地处置任务预览；网页不会直接派单。`
+      ? `先由具名工程师复核证据，再查看 ${card.recommended_actions.length} 项浏览器处置任务预览；网页不会直接派单。`
       : "当前没有触发异常规则，继续按相同分层滚动监控，无需归因或创建处置任务。",
   };
 }
@@ -417,10 +591,10 @@ function installAdminWorkbench() {
   section.setAttribute("aria-labelledby", "admin-workbench-title");
   section.innerHTML = `
     <div class="section-heading">
-      <div><span class="section-kicker">LOCAL READ-ONLY ADMIN</span><h2 id="admin-workbench-title">管理员审计台</h2></div>
+      <div><span class="section-kicker">PUBLIC READ-ONLY ADMIN</span><h2 id="admin-workbench-title">管理员审计台</h2></div>
       <div class="workflow-action">
         <span id="admin-overall" tabindex="-1" aria-live="polite">正在核对</span>
-        <button class="button secondary" id="admin-copy-command" type="button">复制本地复现命令</button>
+        <button class="button secondary" id="admin-copy-command" type="button">复制复现命令</button>
         <button class="button primary" id="admin-export-summary" type="button">导出当前分析摘要</button>
       </div>
     </div>
@@ -920,8 +1094,8 @@ function workflowPresentation(card, result) {
   }
   if (result.externalTasksConfirmed) {
     return {
-      title: "外部任务记录已核验并与本地工作流一致",
-      workflowStatus: "外部同步成功；远端记录与本地任务状态均已核验",
+      title: "外部任务记录已核验并与公开工作流一致",
+      workflowStatus: "外部同步成功；远端记录与公开任务状态均已核验",
       rowStatus: "外部已同步",
       rowClass: "created",
       buttonText: "外部任务已同步",
@@ -935,11 +1109,11 @@ function workflowPresentation(card, result) {
   return {
     title: "工程师确认后查看点检与追溯任务预览",
     workflowStatus: previewPrepared
-      ? "本地任务预览已就绪，未发送到任何外部系统"
+      ? "浏览器任务预览已就绪，未发送到任何外部系统"
       : "等待具名工程师确认；当前未创建外部任务",
-    rowStatus: previewPrepared ? "本地预览" : "待确认",
+    rowStatus: previewPrepared ? "浏览器预览" : "待确认",
     rowClass: previewPrepared ? "created" : "pending",
-    buttonText: previewPrepared ? "本地预览已就绪" : "人工确认并查看本地任务预览",
+    buttonText: previewPrepared ? "浏览器预览已就绪" : "人工确认并查看任务预览",
     buttonDisabled: previewPrepared,
     syncLabel: result.externalSyncPersisted ? "未尝试外部同步" : "公开预览 · 无外部同步记录",
     blocked: false,
@@ -1263,6 +1437,358 @@ function renderMetrics() {
   text("#eval-samples", `${state.metrics.samples} 个滚动窗口`);
 }
 
+function renderLiveAnalysis(payload) {
+  const chip = $("#live-analysis-state");
+  const card = payload?.card || null;
+  const latest = payload?.latestEvents?.[payload.latestEvents.length - 1] || {};
+  if (!chip) return;
+  if (!payload?.active || !card) {
+    const browserReplay = payload?.source === "browser_static_replay" || liveBackendMode === "static";
+    chip.textContent = browserReplay ? "浏览器回放待启动" : payload?.lastError ? "后台连接异常" : "未启动";
+    chip.className = `live-state-chip ${payload?.lastError && !browserReplay ? "error" : ""}`;
+    text("#live-analysis-note", browserReplay ? "公开页面默认使用浏览器回放，点击开始测试后会推进一批确定性合成数据。" : payload?.lastError || "等待读取临时数据分析。");
+    text("#live-analysis-score", "—");
+    text("#live-analysis-level", "等待模拟数据");
+    text("#live-analysis-scenario", "—");
+    text("#live-analysis-sequence", "—");
+    text("#live-analysis-torque", "—");
+    text("#live-analysis-time", "—");
+    updateLiveTestControls(false, Boolean(payload?.lastError && !browserReplay));
+    renderLiveTerminal(payload);
+    renderAiSnapshot(payload);
+    return;
+  }
+  chip.textContent = payload.running ? "实时运行中" : "已收到一批";
+  chip.className = `live-state-chip ${payload.running ? "running" : ""}`;
+  text("#live-analysis-note", `浏览器合成流 · ${payload.scenario || "—"} · 第 ${payload.sequence || 0} 批；结果来自 Python RiskAnalyzer。`);
+  text("#live-analysis-score", `${card.risk_score ?? "—"}`);
+  text("#live-analysis-level", `${levelLabel(card.risk_level)} · ${workflowStatusLabels[card.status] || card.status || "—"}`);
+  text("#live-analysis-scenario", payload.scenario || "—");
+  text("#live-analysis-sequence", String(payload.sequence || 0));
+  text("#live-analysis-torque", latest.torque_nm == null ? "—" : `${latest.torque_nm} N·m`);
+  text("#live-analysis-time", card.created_at ? new Date(card.created_at).toLocaleString("zh-CN", { hour12: false }) : "—");
+  updateLiveTestControls(Boolean(payload.running), false);
+  renderLiveDashboard(payload);
+  renderLiveTerminal(payload);
+  renderAiSnapshot(payload);
+}
+
+function updateLiveTestControls(running, hasError = false) {
+  const start = $("#start-live-test");
+  const stop = $("#stop-live-test");
+  const help = $("#live-test-help");
+  if (start) start.disabled = running;
+  if (stop) stop.disabled = !running;
+  if (!help) return;
+  if (hasError) {
+    help.textContent = "当前使用浏览器回放，评委无需启动服务；风险卡、曲线和证据摘要仍会完整更新。";
+    help.classList.remove("error");
+  } else if (running) {
+    help.textContent = liveBackendMode === "backend"
+      ? "实时测试运行中：页面每 2 秒推进一个确定性合成批次。"
+      : "浏览器回放运行中：每 2 秒推进一个确定性合成批次。";
+    help.classList.remove("error");
+  } else {
+    help.textContent = "点击“开始实时测试”后，页面会回放合成批次，风险卡、曲线和证据摘要会同步更新。";
+    help.classList.remove("error");
+  }
+}
+
+function liveEvidence(card, evidenceId) {
+  return card?.evidence?.find((item) => item.evidence_id === evidenceId)?.data || {};
+}
+
+function animateLivePath(pathElement, values) {
+  if (!pathElement || values.length < 2) return;
+  const target = pathFor(values, 880, 260, 43, 53);
+  const parsePath = (value) => [...String(value || "").matchAll(/[ML](-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g)].map((match) => [Number(match[1]), Number(match[2])]);
+  const nextPoints = parsePath(target);
+  const currentPoints = parsePath(pathElement.getAttribute("d"));
+  if (currentPoints.length !== nextPoints.length) {
+    pathElement.setAttribute("d", target);
+    return;
+  }
+  window.cancelAnimationFrame(pathElement._liveAnimationFrame || 0);
+  const started = performance.now();
+  const duration = 420;
+  const tick = (now) => {
+    const progress = Math.min(1, (now - started) / duration);
+    const eased = 1 - ((1 - progress) ** 3);
+    const d = nextPoints.map((point, index) => {
+      const from = currentPoints[index];
+      const x = from[0] + ((point[0] - from[0]) * eased);
+      const y = from[1] + ((point[1] - from[1]) * eased);
+      return `${index === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`;
+    }).join(" ");
+    pathElement.setAttribute("d", d);
+    if (progress < 1) pathElement._liveAnimationFrame = window.requestAnimationFrame(tick);
+  };
+  pathElement._liveAnimationFrame = window.requestAnimationFrame(tick);
+}
+
+function renderLiveDashboard(payload) {
+  const card = payload.card;
+  const series = Array.isArray(payload.history) && payload.history.length
+    ? payload.history
+    : (Array.isArray(payload.series) ? payload.series : []);
+  const spc = liveEvidence(card, "E-SPC-01");
+  const equipment = liveEvidence(card, "E-EQP-02");
+  const latest = series.at(-1) || payload.latestEvents?.at(-1) || {};
+  const riskLevel = card.risk_level || "low";
+  const riskChip = $("#risk-chip");
+  if (riskChip) {
+    riskChip.className = `risk-chip risk-${riskLevel}`;
+    riskChip.textContent = levelLabel(riskLevel);
+  }
+  text("#risk-score", String(card.risk_score ?? "—"));
+  text(".breadcrumb", `实时测试 / 第 ${payload.sequence || 0} 批 / ${card.card_id}`);
+  text("#main-title", `${riskLevel === "high" ? "实时测试发现高风险信号" : riskLevel === "medium" ? "实时测试发现中风险信号" : "实时测试窗口稳定"}`);
+  text("#main-lead", `${payload.scenario || "浏览器合成场景"} · ${card.observed_facts?.at(-1) || card.inference || "RiskAnalyzer 已完成本批分析"}`);
+  text("#metric-state", workflowStatusLabels[card.status] || card.status || "实时分析完成");
+  text("#metric-state-note", payload.running ? "持续测试中，等待下一批" : "已完成一批实时测试");
+  const shift = Number(spc.mean_shift_sigma);
+  text("#metric-shift", Number.isFinite(shift) ? `${shift.toFixed(2)}σ` : "—");
+  text("#metric-in-spec", Number.isFinite(Number(spc.in_spec_rate)) ? formatPercent(Number(spc.in_spec_rate)) : "—");
+  text("#metric-retry", Number.isFinite(Number(equipment.retry_recent)) ? `${Number(equipment.retry_recent).toFixed(3)} 次/循环` : "—");
+  text("#metric-baseline-note", `第 ${payload.sequence || 0} 批 · 基线 ${spc.baseline_mean_nm != null ? Number(spc.baseline_mean_nm).toFixed(2) : "—"} N·m`);
+  text("#metric-spec-note", "来自当前实时批次的 24 条窗口");
+  text("#metric-retry-note", "设备信号同步分析");
+  text("#chart-heading", `实时扭矩趋势 · ${card.fastening_point || "P03"}`);
+  text("#chart-latest", latest.torque_nm == null ? "—" : `${Number(latest.torque_nm).toFixed(2)} N·m`);
+  text("#chart-window", series.length ? `${series[0].timestamp.slice(11, 16)}–${latest.timestamp.slice(11, 16)}` : "—");
+  text("#chart-baseline-label", spc.baseline_mean_nm != null ? `实时基线 ${Number(spc.baseline_mean_nm).toFixed(2)} N·m` : "实时基线");
+  text("#chart-title", `${card.fastening_point || "P03"} 第 ${payload.sequence || 0} 批扭矩趋势`);
+  text("#signal-summary", `实时第 ${payload.sequence || 0} 批：风险 ${card.risk_score ?? "—"} 分，${spc.rule_ids?.length ? `触发 ${spc.rule_ids.join("、")}` : "未触发 SPC 规则"}。`);
+  text("#signal-rules", spc.rule_ids?.length ? spc.rule_ids.join("、") : "未触发规则");
+  text("#signal-calibration", "来自实时模拟批次");
+  text("#signal-product-impact", card.affected_scope?.summary || "合成数据，仅用于演示分析");
+  text("#signal-required-evidence", `${card.evidence?.length || 0} 条证据已关联到本批风险卡`);
+  if (series.length >= 2) {
+    const values = series.map((row) => Number(row.torque_nm));
+    if (values.every(Number.isFinite)) {
+      animateLivePath($("#torque-line"), values);
+      const chart = $(".trend-chart");
+      if (chart) {
+        chart.classList.remove("live-updating");
+        void chart.offsetWidth;
+        chart.classList.add("live-updating");
+      }
+      const baseline = Number(spc.baseline_mean_nm);
+      if (Number.isFinite(baseline)) {
+        const baselineY = 260 - ((baseline - 43) / 10) * 260;
+        $("#baseline-line")?.setAttribute("y1", baselineY);
+        $("#baseline-line")?.setAttribute("y2", baselineY);
+      }
+      const marker = $("#live-latest-marker");
+      const latestValue = Number(latest.torque_nm);
+      if (marker && Number.isFinite(latestValue)) {
+        marker.setAttribute("cx", "880");
+        marker.setAttribute("cy", String(260 - ((latestValue - 43) / 10) * 260));
+      }
+      $("#risk-zone")?.setAttribute("display", "none");
+    }
+  }
+}
+
+function renderLiveTerminal(payload) {
+  const output = $("#live-terminal-output");
+  const status = $("#live-terminal-status");
+  const relations = $("#live-relations-grid");
+  if (!output || !status || !relations) return;
+  const card = payload?.card;
+  if (!card) {
+    const browserReplay = payload?.source === "browser_static_replay" || liveBackendMode === "static";
+    status.textContent = browserReplay ? "浏览器回放" : payload?.lastError ? "连接异常" : "等待启动";
+    status.className = payload?.lastError && !browserReplay ? "error" : "";
+    output.textContent = browserReplay ? "公开页面尚未启动回放。点击开始测试后，这里会显示批次、指标变化和证据关系。" : payload?.lastError || "等待实时测试。点击开始测试后，这里会显示批次、指标变化和证据关系。";
+    return;
+  }
+  const series = Array.isArray(payload.series) ? payload.series : (payload.latestEvents || []);
+  const recent = series.slice(Math.max(0, series.length - 24));
+  const latest = recent.at(-1) || {};
+  const spc = liveEvidence(card, "E-SPC-01");
+  const equipment = liveEvidence(card, "E-EQP-02");
+  const baseline = Number(spc.baseline_mean_nm);
+  const torque = Number(latest.torque_nm);
+  const torqueError = Number.isFinite(torque) && Number.isFinite(baseline) ? torque - baseline : NaN;
+  const ruleText = spc.rule_ids?.length ? spc.rule_ids.join(", ") : "none";
+  const lines = [
+    `[${new Date().toLocaleTimeString("zh-CN", { hour12: false })}] BATCH #${payload.sequence || 0}  ${payload.scenario || "unknown"}`,
+    `events=${series.length}  recent_window=${recent.length}  card=${card.card_id}`,
+    `torque  latest=${Number.isFinite(torque) ? torque.toFixed(3) : "—"} N·m  baseline=${Number.isFinite(baseline) ? baseline.toFixed(3) : "—"} N·m  error=${Number.isFinite(torqueError) ? `${torqueError >= 0 ? "+" : ""}${torqueError.toFixed(3)} N·m` : "—"}`,
+    `angle   dispersion_ratio=${Number(equipment.angle_std_ratio || 0).toFixed(3)}x  retry=${Number(equipment.retry_recent || 0).toFixed(3)}/cycle  retry_delta=${(Number(equipment.retry_recent || 0) - Number(equipment.retry_baseline || 0)).toFixed(3)}`,
+    `signals current_shift=${Number(equipment.current_shift_sigma || 0).toFixed(2)}σ  cycle_shift=${Number(equipment.cycle_time_shift_sigma || 0).toFixed(2)}σ  in_spec=${Number(spc.in_spec_rate || 0).toFixed(3)}`,
+    `rules   ${ruleText}  =>  risk=${String(card.risk_level || "unknown").toUpperCase()} ${card.risk_score ?? "—"}/100`,
+    `trace   E-SPC-01 → E-EQP-02 → ${card.evidence?.length || 0} evidence items → workflow:${card.status || "unknown"}`,
+    "",
+    "recent samples:"
+  ];
+  recent.slice(-6).forEach((event) => {
+    lines.push(`  ${String(event.timestamp || "").slice(11, 19)}  torque=${Number(event.torque_nm).toFixed(3)}  angle=${Number(event.angle_deg).toFixed(2)}  retry=${event.retry_count ?? 0}  ${event.result || "—"}`);
+  });
+  output.textContent = lines.join("\n");
+  status.textContent = payload.running ? "运行中" : "已完成一批";
+  status.className = payload.running ? "running" : "";
+  const relationItems = [
+    `原始事件 ${series.length} 条`,
+    "→",
+    `SPC ${ruleText}`,
+    "→",
+    `${card.evidence?.length || 0} 条证据`,
+    "→",
+    `风险卡 ${String(card.risk_level || "").toUpperCase()} ${card.risk_score ?? "—"}`,
+  ];
+  relations.replaceChildren();
+  relationItems.forEach((value) => {
+    const item = document.createElement("span");
+    item.textContent = value;
+    relations.appendChild(item);
+  });
+}
+
+function renderAiSnapshot(payload) {
+  const stateChip = $("#ai-connection-state");
+  const summary = $("#ai-live-summary");
+  const triggerList = $("#ai-trigger-list");
+  if (!stateChip || !summary || !triggerList) return;
+  const card = payload?.card;
+  if (!card) {
+    const browserReplay = payload?.source === "browser_static_replay" || liveBackendMode === "static";
+    stateChip.textContent = browserReplay ? "浏览器摘要" : payload?.lastError ? "后台异常" : "等待数据";
+    stateChip.className = `ai-connection-chip ${payload?.lastError && !browserReplay ? "error" : ""}`;
+    summary.textContent = browserReplay ? "等待开始回放。回答将基于公开风险卡和合成数据。" : payload?.lastError || "等待实时测试启动。";
+    triggerList.replaceChildren();
+    const item = document.createElement("li");
+    item.textContent = "尚无实时批次";
+    triggerList.appendChild(item);
+    return;
+  }
+  const reasons = card.analysis_provenance?.trigger_reasons || [];
+  const facts = card.observed_facts || [];
+  const causes = (card.candidate_causes || []).slice(0, 3).map((item) => item.cause).filter(Boolean);
+  stateChip.textContent = payload.running ? "实时跟随" : "已更新";
+  stateChip.className = `ai-connection-chip ${payload.running ? "running" : ""}`;
+  summary.textContent = [
+    `第 ${payload.sequence || 0} 批 · ${String(card.risk_level || "unknown").toUpperCase()} ${card.risk_score ?? "—"}/100`,
+    facts.at(-1) || "RiskAnalyzer 已完成本批分析。",
+    `评估：${causes.length ? `优先核对 ${causes.join("、")}` : "当前没有足够证据形成候选原因"}。`,
+  ].join("\n");
+  triggerList.replaceChildren();
+  [...reasons, ...(causes.length ? [`候选原因：${causes.join("、")}`] : [])].forEach((reason) => {
+    const item = document.createElement("li");
+    item.textContent = reason;
+    triggerList.appendChild(item);
+  });
+  if (!reasons.length && !causes.length) {
+    const item = document.createElement("li");
+    item.textContent = "未触发异常规则，保持监控";
+    triggerList.appendChild(item);
+  }
+}
+
+function appendAiMessage(kind, value) {
+  const log = $("#ai-chat-log");
+  if (!log) return null;
+  const message = document.createElement("div");
+  message.className = `ai-message ${kind}`;
+  message.textContent = value;
+  log.appendChild(message);
+  log.scrollTop = log.scrollHeight;
+  return message;
+}
+
+function localAnalystAnswer(question) {
+  const payload = localLiveState.payload;
+  const card = payload?.card || activeCard();
+  const result = payload?.card
+    ? null
+    : activeAnalysis();
+  const evidence = card?.evidence || [];
+  const triggers = card?.analysis_provenance?.trigger_reasons || [];
+  const causes = (card?.candidate_causes || []).slice(0, 2).map((item) => item.cause).filter(Boolean);
+  const lower = String(question || "").toLowerCase();
+  if (lower.includes("下一步") || lower.includes("怎么") || lower.includes("核对")) {
+    const action = card?.recommended_actions?.[0];
+    return `建议先由质量工程师复核${action?.title || "当前风险卡的首项现场验证"}。依据为 ${action?.evidence_ids?.join("、") || evidence.slice(0, 2).map((item) => item.evidence_id).join("、") || "当前证据"}。系统只生成任务预览，不替代现场判定。`;
+  }
+  if (lower.includes("原因") || lower.includes("根因")) {
+    return `${causes.length ? `当前仅形成候选假设：${causes.join("、")}。` : "当前没有足够证据形成候选原因。"} 候选关联必须通过点检、抽检或批次核对确认，不能直接当作根因。`;
+  }
+  if (lower.includes("证据") || lower.includes("依据")) {
+    return `本批风险卡保留 ${evidence.length} 条证据，其中直接数据、设备信号和受控知识分别记录来源与定位。${triggers.length ? `触发说明：${triggers.join("；")}` : "当前未触发异常规则，保持监控。"}`;
+  }
+  const score = payload?.card?.risk_score ?? result?.score ?? "—";
+  const level = payload?.card?.risk_level ? levelLabel(payload.card.risk_level) : result ? levelLabel(result.level) : "当前风险";
+  const observations = (card?.observed_facts || []).slice(0, 3).join("；");
+  return `当前${level}，处理排序指数 ${score}/100。${observations || card?.inference || "系统已完成同口径窗口对照"} 所有处置动作仍需具名工程师审批。`;
+}
+
+async function simulatorRequest(path) {
+  if (liveBackendMode !== "static") {
+    try {
+      const response = await fetch(`${LIVE_SIMULATOR_API}/${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+        signal: AbortSignal.timeout?.(1200),
+      });
+      if (!response.ok) throw new Error(`后台请求失败（HTTP ${response.status}）`);
+      liveBackendMode = "backend";
+      return response.json();
+    } catch (error) {
+      liveBackendMode = "static";
+    }
+  }
+
+  if (path === "start") {
+    localLiveState.running = true;
+    localLiveState.sequence += 1;
+  } else if (path === "stop") {
+    localLiveState.running = false;
+  } else if (path === "generate") {
+    localLiveState.sequence += 1;
+  }
+  localLiveState.payload = buildLocalLivePayload(localLiveState.running);
+  return localLiveState.payload;
+}
+
+async function pollLiveAnalysis() {
+  if (liveBackendMode === "static" && localLiveState.payload) {
+    renderLiveAnalysis(localLiveState.payload);
+    return localLiveState.payload;
+  }
+  try {
+    const response = await fetch(LIVE_ANALYSIS_API, { cache: "no-store", signal: AbortSignal.timeout?.(1200) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    liveBackendMode = "backend";
+    const payload = await response.json();
+    renderLiveAnalysis(payload);
+    return payload;
+  } catch (error) {
+    liveBackendMode = "static";
+    if (localLiveState.payload) {
+      renderLiveAnalysis(localLiveState.payload);
+      return localLiveState.payload;
+    }
+    const payload = { active: false, running: false, source: "browser_static_replay", lastError: "当前使用浏览器回放模式。" };
+    localLiveState.payload = payload;
+    renderLiveAnalysis(payload);
+    return payload;
+  }
+}
+
+function scheduleLiveAnalysisPoll() {
+  if (typeof window === "undefined" || typeof window.setTimeout !== "function") return;
+  liveAnalysisTimer = window.setTimeout(async () => {
+    if (liveBackendMode === "static" && localLiveState.running) {
+      localLiveState.sequence += 1;
+      localLiveState.payload = buildLocalLivePayload(true);
+    }
+    await pollLiveAnalysis();
+    scheduleLiveAnalysisPoll();
+  }, 2000);
+}
+
 const scenarioLabels = {
   hidden_torque_drift: "规格内扭矩漂移",
   sensor_zero_drift: "传感器零漂",
@@ -1344,7 +1870,147 @@ function announceScenario() {
   );
 }
 
+function installAiWindow() {
+  const panel = $("#ai-assistant");
+  const handle = $("#ai-drag-handle");
+  const dockButton = $("#ai-panel-dock");
+  if (!panel || !handle || !dockButton || typeof window === "undefined") return;
+  if (panel.dataset.staticPanel === "true") return;
+  const storageKey = "torque-guard.ai-window.v1";
+  let saved = null;
+  try { saved = JSON.parse(window.localStorage.getItem(storageKey) || "null"); } catch { saved = null; }
+  const clamp = (value, minimum, maximum) => Math.min(Math.max(value, minimum), maximum);
+  const viewportBounds = () => ({
+    maxLeft: Math.max(8, window.innerWidth - panel.offsetWidth - 8),
+    maxTop: Math.max(72, window.innerHeight - panel.offsetHeight - 8),
+  });
+  let floatingPosition = {
+    left: Number.isFinite(saved?.floatingLeft) ? Number(saved.floatingLeft) : Number(saved?.left),
+    top: Number.isFinite(saved?.floatingTop) ? Number(saved.floatingTop) : Number(saved?.top),
+  };
+  let floatingSize = {
+    width: Number.isFinite(saved?.floatingWidth) ? Number(saved.floatingWidth) : Number(saved?.width),
+    height: Number.isFinite(saved?.floatingHeight) ? Number(saved.floatingHeight) : Number(saved?.height),
+  };
+  const save = () => {
+    try {
+      const rect = panel.getBoundingClientRect();
+      window.localStorage.setItem(storageKey, JSON.stringify({
+        left: rect.left,
+        top: rect.top,
+        width: panel.offsetWidth,
+        height: panel.offsetHeight,
+        docked: panel.classList.contains("is-docked"),
+        dockSide: panel.dataset.dockSide || "right",
+        floatingLeft: floatingPosition.left,
+        floatingTop: floatingPosition.top,
+        floatingWidth: floatingSize.width,
+        floatingHeight: floatingSize.height,
+      }));
+    } catch { /* localStorage may be unavailable in private contexts */ }
+  };
+  const positionFloating = (left, top, persist = true) => {
+    panel.classList.remove("is-docked");
+    delete panel.dataset.dockSide;
+    panel.style.right = "auto";
+    if (Number.isFinite(floatingSize.width)) panel.style.width = `${floatingSize.width}px`;
+    if (Number.isFinite(floatingSize.height)) panel.style.height = `${floatingSize.height}px`;
+    const bounds = viewportBounds();
+    const requestedLeft = Number.isFinite(Number(left)) ? Number(left) : 12;
+    const requestedTop = Number.isFinite(Number(top)) ? Number(top) : 76;
+    floatingPosition = {
+      left: clamp(requestedLeft, 8, bounds.maxLeft),
+      top: clamp(requestedTop, 72, bounds.maxTop),
+    };
+    panel.style.left = `${floatingPosition.left}px`;
+    panel.style.top = `${floatingPosition.top}px`;
+    dockButton.textContent = "收进侧边";
+    dockButton.title = "收进侧边";
+    dockButton.setAttribute("aria-label", "收进侧边");
+    dockButton.setAttribute("aria-expanded", "true");
+    if (persist) save();
+  };
+  const dock = (side = "right") => {
+    if (!panel.classList.contains("is-docked")) {
+      const rect = panel.getBoundingClientRect();
+      floatingPosition = { left: rect.left, top: rect.top };
+      floatingSize = { width: rect.width, height: rect.height };
+    }
+    panel.classList.add("is-docked");
+    panel.dataset.dockSide = side === "left" ? "left" : "right";
+    panel.style.right = side === "left" ? "auto" : "0px";
+    panel.style.left = side === "left" ? "0px" : "auto";
+    panel.style.top = `${clamp(panel.offsetTop || floatingPosition.top || 88, 76, Math.max(76, window.innerHeight - 170))}px`;
+    dockButton.textContent = "展开";
+    dockButton.title = "展开 AI 窗口";
+    dockButton.setAttribute("aria-label", "展开 AI 窗口");
+    dockButton.setAttribute("aria-expanded", "false");
+    save();
+  };
+  if (Number.isFinite(floatingSize.width)) {
+    floatingSize.width = clamp(floatingSize.width, 320, Math.min(560, window.innerWidth - 36));
+    panel.style.width = `${floatingSize.width}px`;
+  }
+  if (Number.isFinite(floatingSize.height)) {
+    floatingSize.height = clamp(floatingSize.height, 360, Math.max(360, window.innerHeight - 112));
+    panel.style.height = `${floatingSize.height}px`;
+  }
+  if (saved?.docked) dock(saved.dockSide);
+  else if (Number.isFinite(floatingPosition.left) && Number.isFinite(floatingPosition.top)) positionFloating(floatingPosition.left, floatingPosition.top);
+  else positionFloating(panel.getBoundingClientRect().left, panel.getBoundingClientRect().top, false);
+
+  let drag = null;
+  handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button") || panel.classList.contains("is-docked")) return;
+    const rect = panel.getBoundingClientRect();
+    drag = { startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top };
+    panel.classList.add("is-dragging");
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener("pointermove", (event) => {
+    if (!drag) return;
+    const left = drag.left + event.clientX - drag.startX;
+    const top = drag.top + event.clientY - drag.startY;
+    panel.style.right = "auto";
+    panel.style.left = `${clamp(left, 8, Math.max(8, window.innerWidth - panel.offsetWidth - 8))}px`;
+    panel.style.top = `${clamp(top, 72, Math.max(72, window.innerHeight - panel.offsetHeight - 8))}px`;
+    floatingPosition = { left: panel.getBoundingClientRect().left, top: panel.getBoundingClientRect().top };
+    if (event.clientX > window.innerWidth - 42) panel.dataset.edgeHint = "right";
+    else if (event.clientX < 42) panel.dataset.edgeHint = "left";
+    else delete panel.dataset.edgeHint;
+  });
+  const finishDrag = (event) => {
+    if (!drag) return;
+    if (event.type === "pointerup" && event.clientX > window.innerWidth - 42) dock("right");
+    else if (event.type === "pointerup" && event.clientX < 42) dock("left");
+    else save();
+    drag = null;
+    panel.classList.remove("is-dragging");
+    delete panel.dataset.edgeHint;
+    if (handle.hasPointerCapture?.(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  };
+  handle.addEventListener("pointerup", finishDrag);
+  handle.addEventListener("pointercancel", finishDrag);
+  dockButton.addEventListener("click", () => {
+    if (panel.classList.contains("is-docked")) positionFloating(floatingPosition.left || Math.max(12, window.innerWidth - 444), floatingPosition.top || 88);
+    else dock();
+  });
+  if (typeof ResizeObserver === "function") {
+    new ResizeObserver(() => {
+      if (panel.classList.contains("is-docked")) return;
+      floatingSize = { width: panel.offsetWidth, height: panel.offsetHeight };
+      save();
+    }).observe(panel);
+  }
+  window.addEventListener("resize", () => {
+    if (panel.classList.contains("is-docked")) return;
+    const rect = panel.getBoundingClientRect();
+    positionFloating(rect.left, rect.top);
+  });
+}
+
 function bindInteractions() {
+  installAiWindow();
   bindSidebarNavigation();
 
   $("#admin-open")?.addEventListener("click", () => {
@@ -1389,13 +2055,13 @@ function bindInteractions() {
     try {
       if (!navigator.clipboard?.writeText) throw new Error("Clipboard API unavailable");
       await navigator.clipboard.writeText(reproductionCommands().join("\n"));
-      text("#admin-copy-command", "本地复现命令已复制");
+      text("#admin-copy-command", "复现命令已复制");
     } catch (error) {
       text("#admin-copy-command", "复制失败，请检查浏览器权限");
       button.title = error instanceof Error ? error.message : "复制失败";
     } finally {
       setTimeout(() => {
-        text("#admin-copy-command", "复制本地复现命令");
+        text("#admin-copy-command", "复制复现命令");
         button.title = "";
       }, 2200);
     }
@@ -1454,6 +2120,92 @@ function bindInteractions() {
     render();
     announceScenario();
     $("#risk-analysis").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  $("#ai-chat-form")?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const input = form.elements.question;
+    const question = input.value.trim();
+    if (!question) return;
+    const submit = form.querySelector("button[type=submit]");
+    input.value = "";
+    appendAiMessage("user", question);
+    const pending = appendAiMessage("assistant pending", "正在整理当前风险卡…");
+    submit.disabled = true;
+    try {
+      let result;
+      if (liveBackendMode === "static") {
+        result = { answer: localAnalystAnswer(question), usedExternalApi: false };
+      } else {
+        try {
+          const response = await fetch("http://127.0.0.1:8010/api/ai/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question }),
+            signal: AbortSignal.timeout?.(2200),
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(payload.error || `AI 请求失败（HTTP ${response.status}）`);
+          result = payload;
+          liveBackendMode = "backend";
+        } catch (error) {
+          liveBackendMode = "static";
+          result = { answer: localAnalystAnswer(question), usedExternalApi: false, externalError: error instanceof Error ? error.message : "外部服务未连接" };
+        }
+      }
+      if (pending) {
+        pending.className = "ai-message assistant";
+        pending.textContent = result.answer || "后台未返回回答。";
+      }
+      const stateChip = $("#ai-connection-state");
+      if (stateChip) {
+        stateChip.textContent = result.usedExternalApi ? "外部 API 已回答" : "浏览器规则摘要";
+        stateChip.className = `ai-connection-chip ${result.usedExternalApi ? "external" : ""}`;
+      }
+      const note = $("#ai-side-note");
+      if (note) note.textContent = result.externalError && !result.usedExternalApi
+        ? `外部服务不可用，已用浏览器内的确定性规则摘要回答。`
+        : result.usedExternalApi ? "回答来自后台连接的外部 API，实时风险上下文已随问题发送。" : "回答来自当前风险卡的确定性规则摘要。";
+    } catch (error) {
+      if (pending) {
+        pending.className = "ai-message assistant";
+        pending.textContent = error instanceof Error ? error.message : "AI 请求失败";
+      }
+    } finally {
+      submit.disabled = false;
+      input.focus();
+    }
+  });
+
+  $("#start-live-test")?.addEventListener("click", async () => {
+    const button = $("#start-live-test");
+    button.disabled = true;
+    text("#live-test-help", "正在启动实时测试并生成第一批数据…");
+    try {
+      await simulatorRequest("start");
+      await pollLiveAnalysis();
+      $("#live-analysis")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (error) {
+      updateLiveTestControls(false, true);
+      text("#live-test-help", error instanceof Error ? error.message : "后台启动失败");
+      $("#live-test-help")?.classList.add("error");
+    } finally {
+      button.disabled = Boolean($("#live-analysis-state")?.classList.contains("running"));
+    }
+  });
+
+  $("#stop-live-test")?.addEventListener("click", async () => {
+    const button = $("#stop-live-test");
+    button.disabled = true;
+    try {
+      await simulatorRequest("stop");
+      await pollLiveAnalysis();
+    } catch (error) {
+      updateLiveTestControls(true, true);
+      text("#live-test-help", error instanceof Error ? error.message : "后台停止失败");
+      $("#live-test-help")?.classList.add("error");
+    }
   });
 
   $("#reset-baseline").addEventListener("click", () => {
@@ -1535,12 +2287,21 @@ async function load() {
     // asset must never silently produce a mixed Python/JavaScript conclusion.
     authoritativeAnalysis(state.cards.risk, state.results.risk);
     authoritativeAnalysis(state.cards.baseline, state.results.baseline);
+    try {
+      await loadRelationCases();
+      bindRelationCaseInteractions();
+    } catch (relationError) {
+      text("#relation-case-status", relationError instanceof Error ? relationError.message : "关系案卷读取失败");
+      text("#relation-case-boundary", "关系案卷暂不可用，主风险分析仍可复现；请检查公开数据资产。");
+    }
     installAdminWorkbench();
     renderGraph();
     renderMetrics();
     renderScenarioMetrics();
     bindInteractions();
     render();
+    await pollLiveAnalysis();
+    scheduleLiveAnalysisPoll();
     selectAdminDemoStep(0, false);
     document.documentElement.classList.add("ready");
     if (window.location.hash) {

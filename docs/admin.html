@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="质控前哨公开管理员工作台，在线查看风险、证据和人工门禁。" />
+    <title>质控前哨 · 公开管理员工作台</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body class="admin-public">
+    <header class="admin-topbar">
+      <a class="admin-brand" href="./admin.html"><span class="brand-mark">QG</span><span><strong>质控前哨</strong><small>INTERNAL CONTROL DESK</small></span></a>
+      <div class="topbar-actions"><span class="local-indicator"><i></i> ONLINE PREVIEW</span><span id="health-label">正在读取合成资产</span><a href="./index.html" target="_blank" rel="noreferrer">打开公开演示</a></div>
+    </header>
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <div class="side-context"><span>WORKSPACE</span><strong>公开管理员工作台</strong><small>ST-FAS-07 / P03 · 无需登录</small></div>
+        <nav aria-label="后台导航">
+          <a class="nav-link active" href="#overview">总览</a>
+          <a class="nav-link" href="#capabilities">能力与缺口</a>
+          <a class="nav-link" href="#analysis">分析运行</a>
+          <a class="nav-link" href="#workflow">风险与工作流</a>
+          <a class="nav-link" href="#data">数据与知识</a>
+          <a class="nav-link" href="#monitor">实时 API 监测</a>
+          <a class="nav-link" href="#simulator">临时数据模拟</a>
+          <a class="nav-link" href="#integration">集成与 API</a>
+          <a class="nav-link" href="#audit">操作审计</a>
+        </nav>
+        <div class="side-boundary"><strong>安全边界</strong><p>页面交互只改变当前浏览器中的演示状态，不会自动停线、修改 PLC 或向飞书真实租户写入。</p></div>
+      </aside>
+      <main class="admin-main">
+        <section class="page-heading" id="overview">
+          <div><span class="eyebrow">OPERATE / PUBLIC ADMIN</span><h1>公开管理员工作台</h1><p>评委可直接在网页中查看分析、证据、人工门禁和模拟数据，所有按钮都使用可复现的浏览器演示状态。</p></div>
+          <div class="heading-actions"><button class="button primary" id="refresh-button" type="button">刷新状态</button><a class="button secondary" href="#analysis">运行分析</a></div>
+        </section>
+
+        <div class="notice"><strong>当前运行模式：公开浏览器预览</strong><span>数据来自仓库中的合成资产；评委无需安装、登录或启动服务即可完成完整验收。</span><code id="api-base">browser_static_preview</code></div>
+
+        <section class="metric-grid" aria-label="系统摘要">
+          <article class="metric"><span>风险等级</span><strong id="metric-risk">—</strong><small id="metric-risk-note">等待风险卡</small></article>
+          <article class="metric"><span>当前工作流</span><strong id="metric-workflow">—</strong><small id="metric-workflow-note">门禁状态</small></article>
+          <article class="metric"><span>证据 / 调用轨迹</span><strong id="metric-evidence">—</strong><small id="metric-trace">完整性检查</small></article>
+          <article class="metric"><span>知识修订</span><strong id="metric-knowledge">—</strong><small id="metric-revision">SHA-256 指纹</small></article>
+        </section>
+
+        <section class="panel-section" id="capabilities">
+          <div class="section-title"><div><span class="eyebrow">SYSTEM MAP</span><h2>后端能力与未完成项</h2></div><span class="section-note">来自真实代码路径与运行契约</span></div>
+          <div class="capability-grid" id="capability-grid"><div class="empty-state">正在读取能力目录…</div></div>
+        </section>
+
+        <section class="panel-section" id="analysis">
+          <div class="section-title"><div><span class="eyebrow">ANALYSIS RUNNER</span><h2>运行一次风险分析</h2></div><span class="section-note">调用现有 DigitalEmployee 管线</span></div>
+          <div class="analysis-layout">
+            <form class="control-form" id="analysis-form">
+              <label>事件文件<input name="input" value="data/tightening_events_demo.csv" required /></label>
+              <label>紧固点<select name="point"><option>P03</option><option>P01</option><option>P02</option><option>P04</option><option>P05</option></select></label>
+              <label>基线窗口<input name="baselineCount" type="number" min="2" max="10000" value="100" required /></label>
+              <label>近期窗口<input name="recentCount" type="number" min="1" max="10000" value="24" required /></label>
+              <button class="button primary" type="submit" id="run-analysis">运行风险分析回放</button>
+              <p class="form-help">页面会读取同一份权威风险卡并更新右侧摘要，不会覆盖仓库数据。</p>
+            </form>
+            <div class="run-output" aria-live="polite"><div class="output-head"><strong>最近一次运行</strong><span id="run-state">尚未运行</span></div><pre id="run-output">选择参数后运行；服务会返回风险卡、证据链和工作流状态。</pre></div>
+          </div>
+        </section>
+
+        <section class="panel-section" id="workflow">
+          <div class="section-title"><div><span class="eyebrow">CASE CONTROL</span><h2>风险卡与人工工作流</h2></div><span class="section-note">动作由后端状态机校验</span></div>
+          <div class="workflow-layout">
+            <div class="case-summary" id="case-summary"><div class="empty-state">正在读取当前风险卡…</div></div>
+            <form class="control-form workflow-form" id="workflow-form">
+              <label>工作流动作<select name="action" id="workflow-action"></select></label>
+              <label>责任人<input name="actor" placeholder="quality.owner" required /></label>
+              <label>依据 / 备注<textarea name="note" rows="4" placeholder="审批、拒绝、验证或结案必须填写依据"></textarea></label>
+              <label>证据 ID（逗号分隔）<input name="evidenceIds" placeholder="E-SPC-01,E-EQP-02" /></label>
+              <label>任务 ID（逗号分隔）<input name="taskIds" placeholder="ACT-CAL-01" /></label>
+              <button class="button primary" type="submit">提交工作流动作</button>
+              <p class="form-help">审批前不能建任务；验证通过必须携带现场证据；自动停线始终禁用。</p>
+            </form>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>时间</th><th>动作</th><th>责任人</th><th>状态变化</th><th>依据</th></tr></thead><tbody id="workflow-events"><tr><td colspan="5" class="empty-state">尚无事件</td></tr></tbody></table></div>
+        </section>
+
+        <section class="panel-section" id="data">
+          <div class="section-title"><div><span class="eyebrow">DATA STEWARD</span><h2>数据与知识资产</h2></div><button class="button secondary" id="reload-data" type="button">重新读取资产</button></div>
+          <div class="data-grid"><article class="subpanel"><div class="subpanel-head"><h3>知识库状态</h3><span id="knowledge-status" class="status-chip">读取中</span></div><dl class="detail-list" id="knowledge-details"></dl></article><article class="subpanel"><div class="subpanel-head"><h3>事件与输出文件</h3><span id="event-count" class="status-chip">读取中</span></div><div class="table-wrap compact"><table><thead><tr><th>文件</th><th>类型</th><th>大小</th><th>更新时间</th></tr></thead><tbody id="data-files"></tbody></table></div></article></div>
+        </section>
+
+        <section class="panel-section" id="monitor">
+          <div class="section-title"><div><span class="eyebrow">LIVE DATA CONNECTOR</span><h2>实时数据源回放</h2></div><span class="section-note">在线演示使用合成连接，按钮可直接运行</span></div>
+          <div class="monitor-layout">
+            <form class="control-form" id="monitor-form">
+              <label>数据源名称<input name="name" maxlength="100" value="项目实时数据" required /></label>
+              <label>完整 API 地址<input name="apiUrl" type="url" maxlength="2048" placeholder="https://api.example.com/v1/project/status" required /></label>
+              <label>AI 对话接口（可选）<input name="chatUrl" type="url" maxlength="2048" placeholder="留空则尝试使用上面的 API 地址" /></label>
+              <label>鉴权方式<select name="authType" id="monitor-auth"><option value="bearer">Bearer Token</option><option value="x-api-key">X-API-Key</option><option value="none">无需鉴权</option></select></label>
+              <label id="monitor-key-field">API Key<input name="apiKey" type="password" maxlength="4096" autocomplete="off" placeholder="演示页面不会提交此字段" /></label>
+              <div class="form-row"><label>轮询间隔（秒）<input name="intervalSeconds" type="number" min="2" max="3600" value="10" required /></label><label>请求超时（秒）<input name="timeoutSeconds" type="number" min="1" max="30" value="8" required /></label></div>
+              <div class="button-row"><button class="button primary" id="monitor-save" type="submit">保存连接</button><button class="button secondary" id="monitor-test" type="button">测试连接</button><button class="button secondary" id="monitor-start" type="button">开始监测</button><button class="button secondary" id="monitor-stop" type="button">停止</button></div>
+              <p class="form-help">在线预览只记录连接名称和合成响应；真实 API Key 不应填写到公开页面。</p>
+            </form>
+            <div class="monitor-console">
+              <div class="monitor-status-bar"><div><span class="live-dot" id="monitor-dot"></span><strong id="monitor-state">未配置</strong><small id="monitor-endpoint">等待填写 API 地址</small></div><div><span>最近响应</span><strong id="monitor-latency">—</strong></div><div><span>最近更新</span><strong id="monitor-updated">—</strong></div></div>
+              <div class="monitor-error" id="monitor-error" hidden></div>
+              <div class="output-head"><strong>最新 JSON 数据</strong><span id="monitor-sample-count">0 条样本</span></div>
+              <pre id="monitor-output">保存并测试连接后，这里显示上游 API 返回的最新项目数据。</pre>
+              <div class="table-wrap compact"><table><thead><tr><th>时间</th><th>HTTP</th><th>耗时</th><th>结果</th></tr></thead><tbody id="monitor-samples"><tr><td colspan="4" class="empty-state">尚无实时样本</td></tr></tbody></table></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-section" id="simulator">
+          <div class="section-title"><div><span class="eyebrow">SYNTHETIC FEED</span><h2>临时拧紧数据模拟器</h2></div><span class="section-note">在当前浏览器内生成一批可追溯数据</span></div>
+          <div class="simulator-layout">
+            <form class="control-form" id="simulator-form">
+              <label>场景<select name="scenario"><option value="hidden_torque_drift">规格内扭矩漂移</option><option value="normal">稳定窗口</option><option value="sensor_zero_drift">传感器零漂</option><option value="repeated_alarm">重复报警</option></select></label>
+              <label>异常强度<input name="strength" type="number" min="0.25" max="3" step="0.25" value="1" required /></label>
+              <label>生成间隔（秒）<input name="intervalSeconds" type="number" min="2" max="60" value="4" required /></label>
+              <div class="button-row"><button class="button primary" id="simulator-generate" type="submit">立即生成一批</button><button class="button secondary" id="simulator-start" type="button">开始持续生成</button><button class="button secondary" id="simulator-stop" type="button">停止生成</button></div>
+              <p class="form-help">每批沿用 RiskAnalyzer、SPC、知识检索和证据链的公开数据契约；不会修改仓库文件或真实系统。</p>
+            </form>
+            <div class="simulator-console">
+              <div class="monitor-status-bar"><div><span class="live-dot" id="simulator-dot"></span><strong id="simulator-state">尚未生成</strong><small id="simulator-scenario">等待选择模拟场景</small></div><div><span>风险结果</span><strong id="simulator-risk">—</strong></div><div><span>批次序号</span><strong id="simulator-sequence">0</strong></div></div>
+              <div class="monitor-error" id="simulator-error" hidden></div>
+              <div class="simulator-result-grid"><div><span>风险卡</span><strong id="simulator-card-id">—</strong></div><div><span>工作流</span><strong id="simulator-workflow">—</strong></div><div><span>最新扭矩</span><strong id="simulator-torque">—</strong></div><div><span>最新时间</span><strong id="simulator-updated">—</strong></div></div>
+              <p class="simulator-public-note">生成结果会立即出现在本页的状态区；公开演示首页也提供同样的浏览器回放入口。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-section" id="integration">
+          <div class="section-title"><div><span class="eyebrow">INTEGRATION / API</span><h2>外部集成与接口目录</h2></div><span class="section-note">默认 preview，不在浏览器发起外部写入</span></div>
+          <div class="integration-layout"><article class="subpanel"><div class="subpanel-head"><h3>飞书连接状态</h3><span id="feishu-status" class="status-chip">读取中</span></div><dl class="detail-list" id="feishu-details"></dl></article><article class="subpanel"><div class="subpanel-head"><h3>Terra 受控文书</h3><span id="terra-status" class="status-chip">读取中</span></div><dl class="detail-list" id="terra-details"></dl><p class="form-help">公开页面不加载密钥。若进入企业部署，Terra 仍只应由服务端受控调用。</p></article><article class="subpanel integration-api-panel"><div class="subpanel-head"><h3>接口契约</h3><a href="./openapi.json" target="_blank" rel="noreferrer">查看静态 JSON 目录</a></div><div class="table-wrap compact"><table><thead><tr><th>方法</th><th>路径</th><th>用途</th></tr></thead><tbody id="api-catalog"></tbody></table></div></article></div>
+        </section>
+
+        <section class="panel-section" id="audit">
+          <div class="section-title"><div><span class="eyebrow">AUDIT TRAIL</span><h2>管理员操作审计</h2></div><button class="button secondary" id="reload-audit" type="button">刷新审计</button></div>
+          <div class="table-wrap"><table><thead><tr><th>时间</th><th>动作</th><th>详情</th></tr></thead><tbody id="audit-events"><tr><td colspan="3" class="empty-state">尚无后台操作</td></tr></tbody></table></div>
+        </section>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./admin.js"></script>
+  </body>
+</html>

@@ -1,5 +1,4 @@
-# The package uses Python 3.10+ type syntax. Override, e.g. `make PYTHON=python3.11 all`.
-PYTHON ?= python3.12
+PYTHON ?= python
 
 .PHONY: build demo evaluate evaluate-scenarios test serve all
 
@@ -24,7 +23,6 @@ test:
 	node --test tests/web-engine.test.mjs
 	node --check docs/risk-engine.js
 	node --check docs/app.js
-	node --check docs/round2.js
 	PYTHONPATH=src $(PYTHON) scripts/audit_repository.py
 
 serve:

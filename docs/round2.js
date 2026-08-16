@@ -8,12 +8,15 @@ const escapeHtml = (value) => String(value)
   .replaceAll("'", "&#039;");
 
 const strengthLabel = { direct: "直接事实", candidate: "关联候选", gap: "信息缺口" };
+let publicPayload = null;
+let activeReport = null;
 
 function evidenceItem(item) {
   return `<li><strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.detail)}</span><small>${escapeHtml(strengthLabel[item.strength])} · ${escapeHtml(item.evidence_id)}</small></li>`;
 }
 
 function renderCase(report) {
+  activeReport = report;
   const { case: record, facts, gaps, tasks, disposition, confidence_label: confidence, boundary, terra } = report;
   $("#case-title").textContent = record.title;
   $("#case-meta").textContent = `${record.case_id} · ${record.source_group} · ${record.status_group}`;
@@ -38,6 +41,65 @@ function renderCase(report) {
     public_demo_mode: terra.mode,
   };
   $("#model-preview").textContent = JSON.stringify(compactPayload, null, 2);
+  $("#case-feedback").textContent = `已读取 ${record.case_id}，页面未写入外部系统。`;
+}
+
+function dossierText(report = activeReport) {
+  if (!report) return "暂无案卷";
+  const { case: record, facts, gaps, tasks } = report;
+  return [
+    `案卷：${record.case_id}｜${record.title}`,
+    `关系层级：${record.relation_tier}；完整度：${record.completeness_grade}`,
+    `直接事实：${facts.filter((item) => item.strength === "direct").map((item) => item.label).join("、") || "无"}`,
+    `待核验关联：${facts.filter((item) => item.strength === "candidate").map((item) => item.label).join("、") || "无"}`,
+    `信息缺口：${gaps.map((item) => item.label).join("、") || "无"}`,
+    `任务：${tasks.map((task) => task.title).join("；") || "无"}`,
+    "公开演示：只生成本地预览，不创建飞书任务。",
+  ].join("\n");
+}
+
+function getCompactPayload(report = activeReport) {
+  if (!report) return null;
+  const { case: record, facts, gaps, tasks, terra } = report;
+  return {
+    case: { case_id: record.case_id, title: record.title, relation_tier: record.relation_tier, completeness_grade: record.completeness_grade },
+    evidence: [...facts, ...gaps].map(({ evidence_id, strength, label }) => ({ evidence_id, strength, label })),
+    task_ids: tasks.map(({ task_id }) => task_id),
+    public_demo_mode: terra.mode,
+  };
+}
+
+function generateTaskPreview() {
+  const feedback = $("#task-feedback");
+  const payload = getCompactPayload();
+  if (!payload) {
+    feedback.textContent = "案卷尚未读取，无法生成预览。";
+    feedback.className = "error";
+    return null;
+  }
+  feedback.textContent = `已生成 ${payload.task_ids.length} 项本地任务预览。公开演示没有发起飞书写入，正式写入仍需具名审批与授权租户。`;
+  feedback.className = "success";
+  return payload;
+}
+
+function selectCase(index) {
+  if (!publicPayload?.reports?.length) return null;
+  const safeIndex = Math.max(0, Math.min(Number(index) || 0, publicPayload.reports.length - 1));
+  $("#case-select").value = String(safeIndex);
+  renderCase(publicPayload.reports[safeIndex]);
+  history.replaceState(null, "", `?case=${safeIndex}#top`);
+  return publicPayload.reports[safeIndex];
+}
+
+async function copyDossier() {
+  const feedback = $("#case-feedback");
+  const text = dossierText();
+  try {
+    await navigator.clipboard.writeText(text);
+    feedback.textContent = "案卷摘要已复制，可粘贴到评审记录或飞书任务草稿。";
+  } catch {
+    feedback.textContent = "浏览器未授权剪贴板，请使用模型输入边界中的 JSON 预览。";
+  }
 }
 
 function connectInteractions() {
@@ -48,11 +110,21 @@ function connectInteractions() {
     $("#model-toggle").setAttribute("aria-expanded", String(expanded));
     $("#model-toggle").textContent = expanded ? "收起模型输入边界" : "查看模型输入边界";
   });
-  $("#task-preview").addEventListener("click", () => {
-    const feedback = $("#task-feedback");
-    feedback.textContent = "已生成本地预览。公开演示没有发起飞书写入，正式写入仍需具名审批与授权租户。";
-    feedback.className = "success";
+  $("#task-preview").addEventListener("click", generateTaskPreview);
+  $("#copy-dossier").addEventListener("click", copyDossier);
+  $("#run-case").addEventListener("click", () => {
+    const current = $("#case-select").value;
+    selectCase(current);
+    $("#case-feedback").textContent = "已重新运行关系核验：事实、候选和缺口已重新分栏。";
   });
+  $("#retry-data").addEventListener("click", init);
+  window.round2Demo = {
+    selectCase,
+    generateTaskPreview,
+    getModelPayload: getCompactPayload,
+    getDossierText: dossierText,
+    reload: init,
+  };
 }
 
 async function init() {
@@ -61,6 +133,7 @@ async function init() {
     if (!response.ok) throw new Error(`无法读取公开演示资产：${response.status}`);
     const payload = await response.json();
     if (payload.schema_version !== "2.0" || payload.data_boundary !== "schema_and_relationship_reference_only" || !Array.isArray(payload.reports)) throw new Error("公开演示资产不符合第二轮数据边界合同");
+    publicPayload = payload;
     const select = $("#case-select");
     payload.reports.forEach((report, index) => {
       const option = document.createElement("option");
@@ -68,13 +141,17 @@ async function init() {
       option.textContent = `${report.case.case_id} · ${report.case.title}`;
       select.append(option);
     });
-    const show = () => renderCase(payload.reports[Number(select.value)]);
-    select.addEventListener("change", show);
-    show();
+    const requested = Number(new URLSearchParams(location.search).get("case"));
+    const initialIndex = Number.isInteger(requested) && requested >= 0 && requested < payload.reports.length ? requested : 0;
+    select.addEventListener("change", () => selectCase(select.value));
+    selectCase(initialIndex);
     connectInteractions();
   } catch (error) {
     $("#case-title").textContent = "公开演示资产加载失败";
     $("#case-meta").textContent = error instanceof Error ? error.message : "未知错误";
+    $("#case-feedback").textContent = "页面未写入任何外部系统，可点击“重试读取”。";
+    $("#case-feedback").className = "case-feedback error";
+    $("#retry-data").hidden = false;
   }
 }
 

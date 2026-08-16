@@ -17,13 +17,15 @@
 第二轮以赛题提供的对象、字段和关系结构为边界，重点解决“关联关系尚未核验时，数字员工如何安全地发起补证与协同”。它不把脱敏快照用于知识抽取、时序分析或真实状态推断。
 
 - [打开第二轮关系证据演示](https://gikemj.github.io/tightening-quality-guardian/round2.html)
-- [观看 4 分 25 秒演示视频](https://gikemj.github.io/tightening-quality-guardian/video/quality-guardian-v2.mp4)
+- [观看带中文字幕的 4 分 25 秒演示视频](https://gikemj.github.io/tightening-quality-guardian/video/quality-guardian-v2.mp4)
 - [第二轮完整提交稿](docs/round2-submission.md)
 - [数据使用与公开边界](docs/data-boundary-round2.html)
 - [关系证据数字员工实现](src/torque_guard/round2.py)
 - [Terra 的服务端受控接入](src/torque_guard/integrations/codekey.py)
 
 第一轮的拧紧工位/SPC 原型仍保留在根目录演示页，用于展示早期方案的可复现工程底座；第二轮材料与演示统一以“关系证据闭环”为准。
+
+第二轮页面支持切换三个公开合成案卷、重新运行关系核验、复制案卷摘要、展开受控模型输入和生成飞书任务预览。页面所有操作都在浏览器本地完成，不携带企业凭证，也不会创建真实飞书任务；页面加载失败时可用“重试读取”恢复。浏览器端可通过 `window.round2Demo.selectCase(0)`、`window.round2Demo.generateTaskPreview()` 和 `window.round2Demo.getModelPayload()` 调用同一套演示接口。
 
 ## 四十强提交材料
 

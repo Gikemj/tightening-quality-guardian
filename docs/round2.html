@@ -31,7 +31,15 @@
 
       <section class="case-bar" aria-label="选择演示案例">
         <div><span>当前案卷</span><strong id="case-title">正在读取…</strong><small id="case-meta">正在读取公开演示资产</small></div>
-        <label>切换合成案例<select id="case-select" aria-label="切换合成案例"></select></label>
+        <div class="case-actions">
+          <label>切换合成案例<select id="case-select" aria-label="切换合成案例"></select></label>
+          <div class="case-action-row">
+            <button class="outline-button" id="run-case" type="button">重新运行案卷</button>
+            <button class="outline-button" id="copy-dossier" type="button">复制案卷摘要</button>
+            <button class="outline-button" id="retry-data" type="button" hidden>重试读取</button>
+          </div>
+          <span id="case-feedback" class="case-feedback" role="status" aria-live="polite"></span>
+        </div>
       </section>
 
       <section class="summary-grid" aria-label="当前案卷摘要">
@@ -42,7 +50,7 @@
       </section>
 
       <section class="section" id="relationship" aria-labelledby="relationship-title">
-        <div class="section-head"><div><p class="eyebrow">关系路径</p><h2 id="relationship-title">案卷从哪里来，能走到哪里</h2></div><p>关系链描述的是可用的检索范围。链路存在，不代表历史关联已被确认。</p></div>
+        <div class="section-head"><div><p class="eyebrow">关系路径</p><h2 id="relationship-title">案卷从哪里来，能走到哪里</h2></div><p>关系链先限定检索范围。历史关联仍要回到工单和现场记录核验。</p></div>
         <div class="relation-board" aria-label="设备质量关系路径">
           <div class="relation-node"><small>对象</small><strong>设备实例</strong><span id="node-equipment">—</span></div>
           <div class="relation-arrow"><span>所属类别</span><i aria-hidden="true">→</i></div>
@@ -56,7 +64,7 @@
       </section>
 
       <section class="section evidence-section" id="evidence" aria-labelledby="evidence-title">
-        <div class="section-head"><div><p class="eyebrow">证据分级</p><h2 id="evidence-title">事实、候选关联和缺口分开处理</h2></div><p>系统没有“默认相信历史关联”的捷径。每条任务都要回到具体证据。</p></div>
+        <div class="section-head"><div><p class="eyebrow">证据分级</p><h2 id="evidence-title">事实、候选关联和缺口分开处理</h2></div><p>历史关联只用于检索。每项任务都要回到具体证据。</p></div>
         <div class="evidence-grid">
           <article class="ledger"><header><span class="dot direct"></span><h3>已证实的结构事实</h3></header><ul id="fact-list"></ul></article>
           <article class="ledger"><header><span class="dot candidate"></span><h3>可检索但待核验的关联</h3></header><ul id="candidate-list"></ul></article>
@@ -65,7 +73,7 @@
       </section>
 
       <section class="section agent-section" id="agent" aria-labelledby="agent-title">
-        <div class="section-head"><div><p class="eyebrow">受控智能体</p><h2 id="agent-title">分析不越过证据与权限边界</h2></div><p>Terra 只在服务端、经显式配置后参与文书整理。无凭证或输出不合规时，系统回退为确定性案卷。</p></div>
+        <div class="section-head"><div><p class="eyebrow">服务端文书整理</p><h2 id="agent-title">模型不替现场下工程结论</h2></div><p>Terra 只在服务端、经显式配置后整理案卷。无凭证或输出不合规时，系统回退为确定性案卷。</p></div>
         <div class="agent-layout">
           <ol class="agent-steps" aria-label="数字员工执行步骤">
             <li><span>01</span><div><strong>读取业务事件</strong><p>接收工单、巡检、复机确认或失效模式更新，不读取真实时序。</p></div></li>
@@ -90,7 +98,7 @@
       </section>
 
       <section class="boundary-strip" aria-labelledby="boundary-title">
-        <div><p class="eyebrow">部署说明</p><h2 id="boundary-title">公开演示的结论到此为止</h2></div>
+        <div><p class="eyebrow">部署说明</p><h2 id="boundary-title">这份演示不替现场下结论</h2></div>
         <p id="boundary-text">正在读取…</p>
         <a href="./data-boundary-round2.html">查看数据使用说明</a>
       </section>
